@@ -17,6 +17,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import android.view.inputmethod.InputMethodManager
 import com.google.gson.Gson
 import com.sameerasw.essentials.domain.diy.Automation
 import com.sameerasw.essentials.domain.diy.DIYRepository
@@ -118,13 +119,62 @@ class AppFlowHandler(
     private val ignoredSystemPackages = listOf(
         "android",
         "com.android.systemui",
-        "com.google.android.inputmethod.latin"
+        "com.google.android.inputmethod.latin",
+        "com.google.android.gms"
     )
+
+    private fun isIgnoredPackage(packageName: String): Boolean {
+        if (ignoredSystemPackages.contains(packageName)) return true
+        
+        val lowerPkg = packageName.lowercase()
+        if (lowerPkg.contains("systemui") ||
+            lowerPkg.contains("keyguard") ||
+            lowerPkg.contains("volume") ||
+            lowerPkg.contains("soundassistant") ||
+            lowerPkg.contains("dialer") ||
+            lowerPkg.contains("telecom") ||
+            lowerPkg.contains("phone") ||
+            lowerPkg.contains("incallui") ||
+            lowerPkg.contains("packageinstaller") ||
+            lowerPkg.contains("permissioncontroller")
+        ) {
+            return true
+        }
+
+        // Check active call state via AudioManager mode
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+        if (audioManager != null) {
+            val mode = audioManager.mode
+            if (mode == AudioManager.MODE_IN_CALL ||
+                mode == AudioManager.MODE_IN_COMMUNICATION ||
+                mode == AudioManager.MODE_RINGTONE
+            ) {
+                return true
+            }
+        }
+
+        return try {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val ims = imm?.enabledInputMethodList
+            ims?.any { it.packageName == packageName } == true
+        } catch (_: Exception) {
+            false
+        }
+    }
 
     fun onPackageChanged(packageName: String, isFromUsageStats: Boolean = false) {
         val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val useUsageAccess = prefs.getBoolean("use_usage_access", false)
 
+        Log.d("AppFlowHandler", "onPackageChanged: packageName=$packageName, isFromUsageStats=$isFromUsageStats, useUsageAccess=$useUsageAccess, currentPackage=$currentPackage")
+
+        // If the new foreground window belongs to a system overlay (status bar, quick settings,
+        // notifications), a keyboard (IME), a volume dialog, or a phone call, completely ignore it.
+        // We do NOT update currentPackage so that state-dependent features remain stable.
+        if (isIgnoredPackage(packageName)) {
+            Log.d("AppFlowHandler", "onPackageChanged: Ignoring system/IME/volume/call package $packageName")
+            return
+        }
         val oldPackage = currentPackage
         if (isFromUsageStats == useUsageAccess) {
             currentPackage = packageName
@@ -250,7 +300,7 @@ class AppFlowHandler(
 
         pendingNLRunnable?.let { handler.removeCallbacks(it) }
 
-        if (ignoredSystemPackages.contains(packageName)) {
+        if (isIgnoredPackage(packageName)) {
             Log.d("NightLight", "Ignoring system package $packageName")
             return
         }
@@ -322,6 +372,10 @@ class AppFlowHandler(
     }
 
     private fun checkAppAutomations(packageName: String) {
+        if (isIgnoredPackage(packageName)) {
+            Log.d("AppFlowHandler", "checkAppAutomations: Ignoring system/IME package $packageName")
+            return
+        }
         scope.launch {
             val automations = DIYRepository.automations.value
             val appAutomations =
