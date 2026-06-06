@@ -84,6 +84,9 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+
     <application
         android:name=".EssentialsApp"
         android:allowBackup="true"
@@ -547,6 +550,10 @@
                 android:name="android.app.property.FOREGROUND_SERVICE_TYPE_SPECIAL_USE_DESCRIPTION"
                 android:value="Battery Notification Service" />
         </service>
+        <service
+            android:name=".services.AudioRecordService"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
         <service
             android:name=".services.tiles.SoundModeTileService"
             android:exported="true"
