@@ -140,6 +140,12 @@ class MainViewModel : ViewModel() {
     val isPocketModeUseLightSensor = mutableStateOf(false)
     val pocketModeTriggerDelay = mutableFloatStateOf(3f) // seconds
     val isPocketModeLockScreenOnly = mutableStateOf(false)
+    val isWifiOptimizerEnabled = mutableStateOf(false)
+    val isWifiSoftwarePnoEnabled = mutableStateOf(false)
+    val wifiHealthMonitorMinRssi = mutableFloatStateOf(-60f)
+    val wifiLowScoreThreshold = mutableFloatStateOf(55f)
+    val isWifiAutoOffEnabled = mutableStateOf(false)
+    val wifiAutoOffTimeout = mutableFloatStateOf(60f) // seconds
     val isAutoAccessibilityEnabled = mutableStateOf(false)
     val isNotificationGlanceSameAsLightingEnabled = mutableStateOf(true)
     val isOnboardingCompleted =
@@ -612,6 +618,24 @@ class MainViewModel : ViewModel() {
 
                     SettingsRepository.KEY_POCKET_MODE_LOCK_SCREEN_ONLY -> isPocketModeLockScreenOnly.value =
                         settingsRepository.getBoolean(key)
+
+                    SettingsRepository.KEY_WIFI_OPTIMIZER_ENABLED -> isWifiOptimizerEnabled.value =
+                        settingsRepository.getBoolean(key, false)
+
+                    SettingsRepository.KEY_WIFI_SOFTWARE_PNO_ENABLED -> isWifiSoftwarePnoEnabled.value =
+                        settingsRepository.getBoolean(key, false)
+
+                    SettingsRepository.KEY_WIFI_HEALTH_MONITOR_MIN_RSSI -> wifiHealthMonitorMinRssi.floatValue =
+                        settingsRepository.getFloat(key, -60f)
+
+                    SettingsRepository.KEY_WIFI_LOW_SCORE_THRESHOLD -> wifiLowScoreThreshold.floatValue =
+                        settingsRepository.getFloat(key, 55f)
+
+                    SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED -> isWifiAutoOffEnabled.value =
+                        settingsRepository.getBoolean(key, false)
+
+                    SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT -> wifiAutoOffTimeout.floatValue =
+                        settingsRepository.getFloat(key, 60f)
 
                     SettingsRepository.KEY_NOTIFICATION_GLANCE_SAME_AS_LIGHTING -> isNotificationGlanceSameAsLightingEnabled.value =
                         settingsRepository.getBoolean(key, true)
@@ -1493,6 +1517,18 @@ class MainViewModel : ViewModel() {
             settingsRepository.getFloat(SettingsRepository.KEY_POCKET_MODE_TRIGGER_DELAY, 3f)
         isPocketModeLockScreenOnly.value =
             settingsRepository.getBoolean(SettingsRepository.KEY_POCKET_MODE_LOCK_SCREEN_ONLY)
+        isWifiOptimizerEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_WIFI_OPTIMIZER_ENABLED, false)
+        isWifiSoftwarePnoEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_WIFI_SOFTWARE_PNO_ENABLED, false)
+        wifiHealthMonitorMinRssi.floatValue =
+            settingsRepository.getFloat(SettingsRepository.KEY_WIFI_HEALTH_MONITOR_MIN_RSSI, -60f)
+        wifiLowScoreThreshold.floatValue =
+            settingsRepository.getFloat(SettingsRepository.KEY_WIFI_LOW_SCORE_THRESHOLD, 55f)
+        isWifiAutoOffEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED, false)
+        wifiAutoOffTimeout.floatValue =
+            settingsRepository.getFloat(SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT, 60f)
         isNotificationGlanceSameAsLightingEnabled.value = settingsRepository.getBoolean(
             SettingsRepository.KEY_NOTIFICATION_GLANCE_SAME_AS_LIGHTING,
             true
@@ -3917,6 +3953,50 @@ class MainViewModel : ViewModel() {
     fun setPocketModeLockScreenOnly(enabled: Boolean) {
         settingsRepository.putBoolean(SettingsRepository.KEY_POCKET_MODE_LOCK_SCREEN_ONLY, enabled)
         isPocketModeLockScreenOnly.value = enabled
+    }
+
+    fun setWifiOptimizerEnabled(enabled: Boolean, context: Context) {
+        settingsRepository.putBoolean(SettingsRepository.KEY_WIFI_OPTIMIZER_ENABLED, enabled)
+        isWifiOptimizerEnabled.value = enabled
+        if (enabled) {
+            com.sameerasw.essentials.utils.WifiOptimizationManager.applyAllConfigs(context)
+        } else {
+            com.sameerasw.essentials.utils.WifiOptimizationManager.resetAllConfigs(context)
+        }
+    }
+
+    fun setWifiSoftwarePnoEnabled(enabled: Boolean, context: Context) {
+        settingsRepository.putBoolean(SettingsRepository.KEY_WIFI_SOFTWARE_PNO_ENABLED, enabled)
+        isWifiSoftwarePnoEnabled.value = enabled
+        if (isWifiOptimizerEnabled.value) {
+            com.sameerasw.essentials.utils.WifiOptimizationManager.applySoftwarePno(context, enabled)
+        }
+    }
+
+    fun setWifiHealthMonitorMinRssi(rssi: Float, context: Context) {
+        wifiHealthMonitorMinRssi.floatValue = rssi
+        settingsRepository.putFloat(SettingsRepository.KEY_WIFI_HEALTH_MONITOR_MIN_RSSI, rssi)
+        if (isWifiOptimizerEnabled.value) {
+            com.sameerasw.essentials.utils.WifiOptimizationManager.applyHealthMonitorMinRssi(context, rssi.toInt())
+        }
+    }
+
+    fun setWifiLowScoreThreshold(threshold: Float, context: Context) {
+        wifiLowScoreThreshold.floatValue = threshold
+        settingsRepository.putFloat(SettingsRepository.KEY_WIFI_LOW_SCORE_THRESHOLD, threshold)
+        if (isWifiOptimizerEnabled.value) {
+            com.sameerasw.essentials.utils.WifiOptimizationManager.applyLowScoreThreshold(context, threshold.toInt())
+        }
+    }
+
+    fun setWifiAutoOffEnabled(enabled: Boolean) {
+        settingsRepository.putBoolean(SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED, enabled)
+        isWifiAutoOffEnabled.value = enabled
+    }
+
+    fun setWifiAutoOffTimeout(seconds: Float) {
+        wifiAutoOffTimeout.floatValue = seconds
+        settingsRepository.putFloat(SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT, seconds)
     }
 
     fun setNotificationGlanceSameAsLightingEnabled(enabled: Boolean) {

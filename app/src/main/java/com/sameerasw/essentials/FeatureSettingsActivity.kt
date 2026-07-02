@@ -78,6 +78,7 @@ import com.sameerasw.essentials.ui.composables.configs.PerAppRefreshRateSettings
 import com.sameerasw.essentials.ui.composables.configs.ShutUpSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.RemoteLockSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.PocketModeSettingsUI
+import com.sameerasw.essentials.ui.composables.configs.WifiOptimizationSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.ScreenLockedSecuritySettingsUI
 import com.sameerasw.essentials.ui.composables.configs.ScreenOffWidgetSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.SnoozeNotificationsSettingsUI
@@ -699,6 +700,14 @@ class FeatureSettingsActivity : AppCompatActivity() {
 
                                     "Pocket mode" -> {
                                         PocketModeSettingsUI(
+                                            viewModel = viewModel,
+                                            modifier = Modifier.padding(top = 16.dp),
+                                            highlightSetting = highlightSetting
+                                        )
+                                    }
+
+                                    "Wi-Fi Battery Optimizer" -> {
+                                        WifiOptimizationSettingsUI(
                                             viewModel = viewModel,
                                             modifier = Modifier.padding(top = 16.dp),
                                             highlightSetting = highlightSetting

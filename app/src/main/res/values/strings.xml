@@ -371,6 +371,25 @@
     <string name="smart_wifi_title">Smart WiFi</string>
     <string name="smart_wifi_desc">Hide mobile data when WiFi is connected</string>
     <string name="smart_data_desc">Hide mobile data in certain modes</string>
+
+    <!-- Wi-Fi Battery Optimizer -->
+    <string name="feat_wifi_optimizer_title">Wi-Fi Battery Optimizer</string>
+    <string name="feat_wifi_optimizer_desc">Tweak Wi-Fi thresholds and automate shutdown to prevent idle battery drain</string>
+    <string name="about_desc_wifi_optimizer">Optimize your Wi-Fi battery consumption with advanced tweaks and automated status controls.\n\nEnable/disable Preferred Network Offload (PNO), adjust minimum RSSI thresholds for health monitoring, and configure auto Wi-Fi disable when disconnected.</string>
+    <string name="wifi_optimizer_title">Wi-Fi Battery Optimizer</string>
+    <string name="wifi_optimizer_enable">Enable Wi-Fi Optimizer</string>
+    <string name="wifi_optimizer_enable_desc">Apply optimized Wi-Fi namespace overrides via adb/root</string>
+    <string name="wifi_software_pno_title">Software PNO Scanning</string>
+    <string name="wifi_software_pno_desc">Force PNO scanning in software instead of hardware (may increase drain depending on firmware quality)</string>
+    <string name="wifi_health_monitor_min_rssi_title">Health Monitor Min RSSI</string>
+    <string name="wifi_health_monitor_min_rssi_desc">Signal strength threshold below which system runs connectivity diagnostic scans. Lower values reduce scan frequency on weak Wi-Fi to save battery: %1$d dBm</string>
+    <string name="wifi_low_score_threshold_title">Low Score Scan Threshold</string>
+    <string name="wifi_low_score_threshold_desc">Connection score (0-60) below which background searches for other networks are triggered. Lowering this stops constant battery-draining searches: %1$d</string>
+    <string name="wifi_auto_off_title">Auto Turn Off Wi-Fi</string>
+    <string name="wifi_auto_off_desc">Automatically turn off Wi-Fi when disconnected from any network</string>
+    <string name="wifi_auto_off_timeout_title">Auto Turn Off Timeout</string>
+    <string name="wifi_auto_off_timeout_desc">Delay before Wi-Fi turns off: %1$d seconds</string>
+    <string name="wifi_optimizer_requires_shizuku">This feature requires Shizuku or Root permission to execute shell commands.</string>
     <string name="action_reset_all_icons">Reset All Icons</string>
     <string name="status_bar_section_advanced">More Settings</string>
     <string name="stb_advanced_flags_title">Advanced (Requires Shizuku/Root)</string>

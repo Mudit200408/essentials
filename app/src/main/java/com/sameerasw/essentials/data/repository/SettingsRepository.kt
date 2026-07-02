@@ -283,6 +283,13 @@ class SettingsRepository(private val context: Context) {
         const val KEY_POCKET_MODE_EXCLUDED_APPS = "pocket_mode_excluded_apps"
         const val KEY_POCKET_MODE_TRIGGER_DELAY = "pocket_mode_trigger_delay"
         const val KEY_POCKET_MODE_LOCK_SCREEN_ONLY = "pocket_mode_lock_screen_only"
+
+        const val KEY_WIFI_OPTIMIZER_ENABLED = "wifi_optimizer_enabled"
+        const val KEY_WIFI_SOFTWARE_PNO_ENABLED = "wifi_software_pno_enabled"
+        const val KEY_WIFI_HEALTH_MONITOR_MIN_RSSI = "wifi_health_monitor_min_rssi"
+        const val KEY_WIFI_LOW_SCORE_THRESHOLD = "wifi_low_score_threshold"
+        const val KEY_WIFI_AUTO_OFF_ENABLED = "wifi_auto_off_enabled"
+        const val KEY_WIFI_AUTO_OFF_TIMEOUT = "wifi_auto_off_timeout"
     }
 
     // Observe changes

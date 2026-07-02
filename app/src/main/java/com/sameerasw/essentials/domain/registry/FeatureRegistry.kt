@@ -983,6 +983,26 @@ object FeatureRegistry {
 
 
         object : Feature(
+            id = "Wi-Fi Battery Optimizer",
+            title = R.string.feat_wifi_optimizer_title,
+            iconRes = R.drawable.rounded_android_wifi_4_bar_plus_24,
+            category = R.string.cat_system,
+            description = R.string.feat_wifi_optimizer_desc,
+            aboutDescription = R.string.about_desc_wifi_optimizer,
+            permissionKeys = if (ShellUtils.isRootEnabled(EssentialsApp.context)) listOf("ROOT") else listOf("SHIZUKU"),
+            hasMoreSettings = true,
+        ) {
+            override fun isEnabled(viewModel: MainViewModel) = viewModel.isWifiOptimizerEnabled.value
+
+            override fun isToggleEnabled(viewModel: MainViewModel, context: Context) =
+                ShellUtils.hasPermission(context)
+
+            override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) =
+                viewModel.setWifiOptimizerEnabled(enabled, context)
+        },
+
+
+        object : Feature(
             id = "Location reached",
             title = R.string.feat_location_reached_title,
             iconRes = R.drawable.rounded_navigation_24,
