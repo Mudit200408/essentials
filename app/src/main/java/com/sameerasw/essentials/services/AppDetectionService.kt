@@ -54,7 +54,7 @@ class AppDetectionService : Service() {
     override fun onCreate() {
         super.onCreate()
         isRunning = true
-        appFlowHandler = AppFlowHandler(this)
+        appFlowHandler = AppFlowHandler.getInstance(this)
         createNotificationChannel()
 
         val filter = IntentFilter().apply {
@@ -150,7 +150,6 @@ class AppDetectionService : Service() {
     override fun onDestroy() {
         isRunning = false
         isPolling = false
-        appFlowHandler.destroy()
         handler.removeCallbacksAndMessages(null)
         try {
             unregisterReceiver(authReceiver)

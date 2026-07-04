@@ -34,12 +34,17 @@ object ServiceUtils {
         val isPerAppRefreshRateEnabled =
             settingsRepository.getBoolean(SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED)
 
+        val isPocketModeEnabled =
+            settingsRepository.getBoolean(SettingsRepository.KEY_POCKET_MODE_ENABLED)
+        val pocketModeExcludedApps = settingsRepository.loadPocketModeExcludedApps()
+        val hasPocketModeExcludedApps = isPocketModeEnabled && pocketModeExcludedApps.any { it.isEnabled }
+
         val hasAppAutomations = DIYRepository.automations.value.any {
             it.isEnabled && it.type == Automation.Type.APP
         }
 
         val shouldRun =
-            isUseUsageAccess && (isAppLockEnabled || isDynamicNightLightEnabled || isHideGestureBarOnLauncherEnabled || hasAppAutomations || isPerAppRefreshRateEnabled)
+            isUseUsageAccess && (isAppLockEnabled || isDynamicNightLightEnabled || isHideGestureBarOnLauncherEnabled || hasAppAutomations || isPerAppRefreshRateEnabled || hasPocketModeExcludedApps)
 
         val intent = Intent(context, AppDetectionService::class.java)
         if (shouldRun) {

@@ -38,10 +38,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AppFlowHandler(
-    private val context: Context,
-    private val service: AccessibilityService? = null
+class AppFlowHandler private constructor(
+    context: Context
 ) {
+    private val context = context.applicationContext
     private val handler = Handler(Looper.getMainLooper())
     private var lastOrientation = context.resources.configuration.orientation
     private val componentCallbacks = object : android.content.ComponentCallbacks2 {
@@ -71,32 +71,24 @@ class AppFlowHandler(
     }
 
     init {
-        context.registerComponentCallbacks(componentCallbacks)
+        this.context.registerComponentCallbacks(componentCallbacks)
         val filter = IntentFilter("com.sameerasw.essentials.MEDIA_PLAYBACK_CHANGED")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            context.registerReceiver(mediaReceiver, filter, Context.RECEIVER_EXPORTED)
+            this.context.registerReceiver(mediaReceiver, filter, Context.RECEIVER_EXPORTED)
         } else {
-            context.registerReceiver(mediaReceiver, filter)
+            this.context.registerReceiver(mediaReceiver, filter)
         }
     }
 
-    fun destroy() {
-        try {
-            context.unregisterComponentCallbacks(componentCallbacks)
-        } catch (_: Exception) {}
-        try {
-            context.unregisterReceiver(mediaReceiver)
-        } catch (_: Exception) {}
-    }
     private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
     private val authenticatedPackages = mutableSetOf<String>()
     private val lastLeaveTimes = mutableMapOf<String, Long>()
 
-
     // App Lock State
     private var lockingPackage: String? = null
     private var lastLockRequestTime: Long = 0
+    @Volatile
     var currentPackage: String? = null
         private set
     private var currentUsageStatsPackage: String? = null
@@ -124,6 +116,7 @@ class AppFlowHandler(
     )
 
     private fun isIgnoredPackage(packageName: String): Boolean {
+        if (packageName == context.packageName) return true
         if (ignoredSystemPackages.contains(packageName)) return true
         
         val lowerPkg = packageName.lowercase()
@@ -164,7 +157,8 @@ class AppFlowHandler(
 
     fun onPackageChanged(packageName: String, isFromUsageStats: Boolean = false) {
         val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
-        val useUsageAccess = prefs.getBoolean("use_usage_access", false)
+        val useUsageAccess = prefs.getBoolean("use_usage_access", false) &&
+                com.sameerasw.essentials.services.AppDetectionService.isRunning
 
         Log.d("AppFlowHandler", "onPackageChanged: packageName=$packageName, isFromUsageStats=$isFromUsageStats, useUsageAccess=$useUsageAccess, currentPackage=$currentPackage")
 
@@ -176,14 +170,21 @@ class AppFlowHandler(
             return
         }
         val oldPackage = currentPackage
+        currentPackage = packageName
+        if (oldPackage != null && oldPackage != packageName) {
+            lastLeaveTimes[oldPackage] = System.currentTimeMillis()
+        }
+        if (packageName != context.packageName && packageName != lockingPackage) {
+            lockingPackage = null
+        }
+
+        // Dismiss pocket mode if the new foreground package is bypassed/excluded (fast path)
+        val serviceInstance = com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService.instance
+        if (serviceInstance != null && serviceInstance.isAppBypassedForPocketMode(packageName)) {
+            serviceInstance.dismissPocketMode()
+        }
+
         if (isFromUsageStats == useUsageAccess) {
-            currentPackage = packageName
-            if (oldPackage != null && oldPackage != packageName) {
-                lastLeaveTimes[oldPackage] = System.currentTimeMillis()
-            }
-            if (packageName != context.packageName && packageName != lockingPackage) {
-                lockingPackage = null
-            }
             Log.d("AppFlowHandler", "onPackageChanged: Processing package change because isFromUsageStats matches useUsageAccess")
             checkAppLock(packageName)
             checkHighlightNightLight(packageName)
@@ -607,5 +608,13 @@ class AppFlowHandler(
     }
 
     companion object {
+        @Volatile
+        private var INSTANCE: AppFlowHandler? = null
+
+        fun getInstance(context: Context): AppFlowHandler {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: AppFlowHandler(context.applicationContext).also { INSTANCE = it }
+            }
+        }
     }
 }
