@@ -167,7 +167,8 @@ class AppFlowHandler private constructor(
         "android",
         "com.android.systemui",
         "com.google.android.inputmethod.latin",
-        "com.google.android.gms"
+        "com.google.android.gms",
+        "com.android.pixeldisplayservice"
     )
 
     private fun isIgnoredPackage(packageName: String): Boolean {
@@ -184,7 +185,9 @@ class AppFlowHandler private constructor(
             lowerPkg.contains("phone") ||
             lowerPkg.contains("incallui") ||
             lowerPkg.contains("packageinstaller") ||
-            lowerPkg.contains("permissioncontroller")
+            lowerPkg.contains("permissioncontroller") ||
+            lowerPkg.contains("displayservice") ||
+            lowerPkg.contains("pixeldisplay")
         ) {
             return true
         }
@@ -223,6 +226,12 @@ class AppFlowHandler private constructor(
             Log.d("AppFlowHandler", "onPackageChanged: Ignoring system/IME/volume/call package $packageName")
             return
         }
+
+        if (isFromUsageStats != useUsageAccess) {
+            Log.d("AppFlowHandler", "onPackageChanged: Ignoring package change because isFromUsageStats ($isFromUsageStats) does not match useUsageAccess ($useUsageAccess)")
+            return
+        }
+
         val oldPackage = currentPackage
         currentPackage = packageName
         if (oldPackage != null && oldPackage != packageName) {
@@ -238,15 +247,13 @@ class AppFlowHandler private constructor(
             serviceInstance.dismissPocketMode()
         }
 
-        if (isFromUsageStats == useUsageAccess) {
-            Log.d("AppFlowHandler", "onPackageChanged: Processing package change because isFromUsageStats matches useUsageAccess")
-            checkAppLock(packageName)
-            checkHighlightNightLight(packageName)
-            checkAppAutomations(packageName)
-            checkGestureBarAutomation(packageName)
-            checkShutUp(packageName)
-            checkPerAppRefreshRate(packageName)
-        }
+        Log.d("AppFlowHandler", "onPackageChanged: Processing package change because isFromUsageStats matches useUsageAccess")
+        checkAppLock(packageName)
+        checkHighlightNightLight(packageName)
+        checkAppAutomations(packageName)
+        checkGestureBarAutomation(packageName)
+        checkShutUp(packageName)
+        checkPerAppRefreshRate(packageName)
     }
 
     fun onAuthenticated(packageName: String) {
