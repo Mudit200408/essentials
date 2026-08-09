@@ -23,8 +23,11 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.content.res.Configuration
+import android.hardware.display.DisplayManager
 import android.os.Build
 import android.util.Log
+import android.view.Display
+import android.view.Surface
 import androidx.core.app.NotificationCompat
 import android.view.inputmethod.InputMethodManager
 import com.google.gson.Gson
@@ -52,12 +55,12 @@ class AppFlowHandler private constructor(
 ) {
     private val context = context.applicationContext
     private val handler = Handler(Looper.getMainLooper())
-    private var lastOrientation = context.resources.configuration.orientation
+    private var lastIsLandscape = isDeviceInLandscape()
     private val componentCallbacks = object : android.content.ComponentCallbacks2 {
         override fun onConfigurationChanged(newConfig: Configuration) {
-            val newOrientation = newConfig.orientation
-            if (newOrientation != lastOrientation) {
-                lastOrientation = newOrientation
+            val isLandscape = isDeviceInLandscape()
+            if (isLandscape != lastIsLandscape) {
+                lastIsLandscape = isLandscape
                 val currentPkg = currentPackage
                 if (currentPkg != null) {
                     checkPerAppRefreshRate(currentPkg)
@@ -548,10 +551,21 @@ class AppFlowHandler private constructor(
         }
     }
 
+    private fun isDeviceInLandscape(): Boolean {
+        return try {
+            val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as? DisplayManager
+            val display = displayManager?.getDisplay(Display.DEFAULT_DISPLAY)
+            val rotation = display?.rotation ?: Surface.ROTATION_0
+            rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270
+        } catch (_: Exception) {
+            context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        }
+    }
+
     private fun getTargetRefreshRateForConfig(config: AppRefreshRateConfig): Float {
         val landscapeRate = config.landscapeRefreshRate
         if (landscapeRate != null) {
-            val isLandscape = lastOrientation == Configuration.ORIENTATION_LANDSCAPE
+            val isLandscape = isDeviceInLandscape()
             if (isLandscape) {
                 if (config.onlyOnMediaPlaying) {
                     return if (isMediaPlaying(config.packageName)) landscapeRate else config.refreshRate
@@ -563,7 +577,7 @@ class AppFlowHandler private constructor(
     }
 
     private fun applyRefreshRateForConfig(config: AppRefreshRateConfig, targetRate: Float) {
-        if (config.isFixed || targetRate <= 60f) {
+        if (config.isFixed) {
             RefreshRateUtils.applyFixedRefreshRate(context, targetRate)
         } else {
             RefreshRateUtils.applyDynamicRefreshRate(context, targetRate)
