@@ -1104,6 +1104,11 @@ object FeatureRegistry {
                     R.string.search_smart_pixels_intensity_title,
                     R.string.search_smart_pixels_intensity_desc,
                     "smart_pixels_intensity_slider"
+                ),
+                SearchSetting(
+                    R.string.search_smart_pixels_on_battery_saver_title,
+                    R.string.search_smart_pixels_on_battery_saver_desc,
+                    "smart_pixels_on_battery_saver_toggle"
                 )
             ),
             showToggle = true,

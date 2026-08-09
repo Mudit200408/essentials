@@ -1330,10 +1330,14 @@
     <string name="about_desc_smart_pixels">Overlay a customizable checkered pattern of blacked-out pixels across the screen using accessibility service to save display power on OLED screens.</string>
     <string name="smart_pixels_enable_title">Enable smart pixels</string>
     <string name="smart_pixels_intensity_title">Intensity</string>
+    <string name="smart_pixels_on_battery_saver_title">Auto-enable on Battery Saver</string>
+    <string name="smart_pixels_on_battery_saver_desc">Automatically turn on Smart Pixels when Battery Saver is enabled, and turn off when disabled</string>
     <string name="search_smart_pixels_enable_title">Enable smart pixels</string>
     <string name="search_smart_pixels_enable_desc">Black out pixels to save power</string>
     <string name="search_smart_pixels_intensity_title">Smart pixels intensity</string>
     <string name="search_smart_pixels_intensity_desc">Adjust pattern density of blacked out pixels</string>
+    <string name="search_smart_pixels_on_battery_saver_title">Auto-enable Smart Pixels on Battery Saver</string>
+    <string name="search_smart_pixels_on_battery_saver_desc">Turn on Smart Pixels automatically when Battery Saver is enabled</string>
 
 
     <string name="instruction_section_lighting_title">Notification lighting does not work</string>

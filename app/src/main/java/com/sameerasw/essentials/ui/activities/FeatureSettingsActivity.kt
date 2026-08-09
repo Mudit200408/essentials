@@ -559,11 +559,12 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                                 "Per app refresh rate",
                                                 "Navigation"
                                             ),
-                                            listOf(
-                                                "Caffeinate",
-                                                "Dynamic night light",
-                                                "Smart pixels"
-                                            ),
+                                             listOf(
+                                                 "Caffeinate",
+                                                 "Dynamic night light",
+                                                 "Smart pixels",
+                                                 "Pocket mode"
+                                             ),
                                             listOf(
                                                 "Other customizations"
                                             )
@@ -711,10 +712,29 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                                             context
                                                         )
 
-                                                        "Disable safe volume warning" -> !isWriteSecureSettingsEnabled
-                                                        "Notification snoozing" -> !isWriteSecureSettingsEnabled
-                                                        else -> false
-                                                    }
+                                                         "Pocket mode" -> !isAccessibilityEnabled
+                                                         "Disable safe volume warning" -> !isWriteSecureSettingsEnabled
+                                                         "Notification snoozing" -> !isWriteSecureSettingsEnabled
+                                                         else -> false
+                                                     }
+
+                                                     if (missingPermission) {
+                                                         childFeatureForPermissions = child.id
+                                                         showPermissionSheet = true
+                                                     } else {
+                                                         BiometricSecurityHelper.runWithAuth(
+                                                             activity = this@FeatureSettingsActivity,
+                                                             feature = child,
+                                                             isToggle = true,
+                                                             action = {
+                                                                 child.onToggle(
+                                                                     viewModel,
+                                                                     context,
+                                                                     enabled
+                                                                 )
+                                                             }
+                                                         )
+                                                     }
                                                 }
 
                                             FeatureCard(
@@ -989,13 +1009,6 @@ class FeatureSettingsActivity : AppCompatActivity() {
 
                                     "Screen refresh rate" -> {
                                         RefreshRateSettingsUI(
-                                            viewModel = viewModel,
-                                            modifier = Modifier.padding(top = 16.dp),
-                                            highlightSetting = highlightSetting
-                                        )
-                                    }
-                                      "Shut-Up!" -> {
-                                        ShutUpSettingsUI(
                                             viewModel = viewModel,
                                             modifier = Modifier.padding(top = 16.dp),
                                             highlightSetting = highlightSetting

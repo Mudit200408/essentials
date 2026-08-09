@@ -118,6 +118,7 @@ class MainViewModel : ViewModel() {
     val remapHapticType = mutableStateOf(HapticFeedbackType.DOUBLE)
     val isDynamicNightLightEnabled = mutableStateOf(false)
     val isSmartPixelsEnabled = mutableStateOf(false)
+    val isSmartPixelsOnBatterySaverEnabled = mutableStateOf(false)
     val smartPixelsIntensity = mutableFloatStateOf(50f)
     val snoozeChannels =
         mutableStateOf<List<com.sameerasw.essentials.domain.model.SnoozeChannel>>(emptyList())
@@ -471,6 +472,9 @@ class MainViewModel : ViewModel() {
 
                     SettingsRepository.KEY_SMART_PIXELS_INTENSITY -> smartPixelsIntensity.floatValue =
                         settingsRepository.getFloat(key, 50f)
+
+                    SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER -> isSmartPixelsOnBatterySaverEnabled.value =
+                        settingsRepository.getBoolean(key)
 
                     SettingsRepository.KEY_SCREEN_LOCKED_SECURITY_ENABLED -> isScreenLockedSecurityEnabled.value =
                         settingsRepository.getBoolean(key)
@@ -1606,6 +1610,8 @@ class MainViewModel : ViewModel() {
             settingsRepository.getBoolean(SettingsRepository.KEY_SMART_PIXELS_ENABLED)
         smartPixelsIntensity.floatValue =
             settingsRepository.getFloat(SettingsRepository.KEY_SMART_PIXELS_INTENSITY, 50f)
+        isSmartPixelsOnBatterySaverEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER)
         loadSnoozeChannels(context)
         loadMapsChannels(context)
         isSnoozeHeadsUpEnabled.value =
@@ -3643,6 +3649,11 @@ class MainViewModel : ViewModel() {
     fun setSmartPixelsIntensity(context: Context, intensity: Float) {
         smartPixelsIntensity.floatValue = intensity
         settingsRepository.putFloat(SettingsRepository.KEY_SMART_PIXELS_INTENSITY, intensity)
+    }
+
+    fun setSmartPixelsOnBatterySaverEnabled(context: Context, enabled: Boolean) {
+        isSmartPixelsOnBatterySaverEnabled.value = enabled
+        settingsRepository.putBoolean(SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER, enabled)
     }
 
     /**
