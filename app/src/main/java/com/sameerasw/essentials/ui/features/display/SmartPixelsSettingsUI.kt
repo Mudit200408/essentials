@@ -83,5 +83,22 @@ fun SmartPixelsSettingsUI(
                 modifier = Modifier.highlight(highlightSetting == "smart_pixels_intensity_slider")
             )
         }
+
+        RoundedCardContainer(
+            spacing = 2.dp,
+            cornerRadius = 24.dp
+        ) {
+            IconToggleItem(
+                iconRes = R.drawable.rounded_battery_android_frame_plus_24,
+                title = stringResource(R.string.smart_pixels_on_battery_saver_title),
+                description = stringResource(R.string.smart_pixels_on_battery_saver_desc),
+                isChecked = viewModel.isSmartPixelsOnBatterySaverEnabled.value,
+                onCheckedChange = { checked ->
+                    HapticUtil.performUIHaptic(view)
+                    viewModel.setSmartPixelsOnBatterySaverEnabled(context, checked)
+                },
+                modifier = Modifier.highlight(highlightSetting == "smart_pixels_on_battery_saver_toggle")
+            )
+        }
     }
 }
