@@ -545,11 +545,12 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                                 "Screen refresh rate",
                                                 "Navigation"
                                             ),
-                                            listOf(
-                                                "Caffeinate",
-                                                "Dynamic night light",
-                                                "Smart pixels"
-                                            ),
+                                             listOf(
+                                                 "Caffeinate",
+                                                 "Dynamic night light",
+                                                 "Smart pixels",
+                                                 "Pocket mode"
+                                             ),
                                             listOf(
                                                 "Other customizations"
                                             )

@@ -23,6 +23,7 @@ import android.hardware.SensorManager
 import android.media.session.MediaSessionManager
 import android.os.Handler
 import android.os.Looper
+import android.os.PowerManager
 import android.os.Vibrator
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
@@ -210,7 +211,7 @@ class ScreenOffAccessibilityService : AccessibilityService(), SensorEventListene
                 updatePocketModeSensors()
             } else if (key == "pocket_mode_excluded_apps") {
                 updatePocketModeExcludedAppsSet()
-            } else if (key == SettingsRepository.KEY_SMART_PIXELS_ENABLED || key == SettingsRepository.KEY_SMART_PIXELS_INTENSITY) {
+            } else if (key == SettingsRepository.KEY_SMART_PIXELS_ENABLED || key == SettingsRepository.KEY_SMART_PIXELS_INTENSITY || key == SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER) {
                 smartPixelsHandler.updateState()
             }
         }
@@ -281,6 +282,10 @@ class ScreenOffAccessibilityService : AccessibilityService(), SensorEventListene
                         aodForceTurnOffHandler.forceTurnOff()
                     }
 
+                    PowerManager.ACTION_POWER_SAVE_MODE_CHANGED -> {
+                        smartPixelsHandler.updateState()
+                    }
+
                     FlashlightActionReceiver.ACTION_TOGGLE,
                     FlashlightActionReceiver.ACTION_OFF,
                     FlashlightActionReceiver.ACTION_SET_INTENSITY,
@@ -304,6 +309,7 @@ class ScreenOffAccessibilityService : AccessibilityService(), SensorEventListene
             addAction(FlashlightActionReceiver.ACTION_SET_INTENSITY)
             addAction(FlashlightActionReceiver.ACTION_INCREASE)
             addAction(FlashlightActionReceiver.ACTION_DECREASE)
+            addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         }
         registerReceiver(screenReceiver, filter, RECEIVER_EXPORTED)
 

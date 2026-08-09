@@ -41,9 +41,15 @@ class SmartPixelsHandler(private val service: AccessibilityService) {
 
     fun updateState() {
         val enabled = prefs.getBoolean(SettingsRepository.KEY_SMART_PIXELS_ENABLED, false)
+        val autoBatterySaver = prefs.getBoolean(SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER, false)
         val intensity = prefs.getFloat(SettingsRepository.KEY_SMART_PIXELS_INTENSITY, 50f)
 
-        if (enabled) {
+        val powerManager = service.getSystemService(AccessibilityService.POWER_SERVICE) as? android.os.PowerManager
+        val isPowerSaveMode = powerManager?.isPowerSaveMode ?: false
+
+        val shouldEnable = enabled || (autoBatterySaver && isPowerSaveMode)
+
+        if (shouldEnable) {
             showOverlay(intensity)
         } else {
             hideOverlay()
