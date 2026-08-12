@@ -215,6 +215,8 @@ object ShutUpManager {
     }
 
     suspend fun restoreOriginalSettings(context: Context, repository: SettingsRepository) {
+        // Drop any fire-and-forget writes from an older apply before restoring values.
+        cancelPendingShellJobs()
         val originalSettings = repository.getShutUpOriginalSettings()
         if (originalSettings.isEmpty()) {
             Log.d(TAG, "No original settings to restore (backup empty)")

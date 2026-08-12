@@ -39,6 +39,7 @@ import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.services.automation.executors.CombinedActionExecutor
 import com.sameerasw.essentials.utils.FreezeManager
 import com.sameerasw.essentials.services.NotificationListener
+import com.sameerasw.essentials.services.ShutUpForegroundService
 import com.sameerasw.essentials.utils.StatusBarManager
 import com.sameerasw.essentials.utils.ShutUpManager
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
@@ -268,6 +269,10 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkShutUp(packageName: String) {
+        // Foreground service owns auto Shut-Up transitions. Avoid duplicate async apply,
+        // which can race restoration after the target app closes.
+        if (ShutUpForegroundService.isRunning) return
+
         val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val serviceEnabled = prefs.getBoolean("shutup_service_enabled", false)
         if (!serviceEnabled) return

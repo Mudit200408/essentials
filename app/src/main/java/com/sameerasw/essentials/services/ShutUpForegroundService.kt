@@ -26,7 +26,7 @@ class ShutUpForegroundService : Service() {
     private val serviceScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private lateinit var settingsRepository: SettingsRepository
     @Volatile private var monitorJob: Job? = null
-    private var lastPackageName: String? = null
+    @Volatile private var lastPackageName: String? = null
     private var lastQueryTime = System.currentTimeMillis() - 5000
 
     @Volatile private var pendingRestoreJob: Job? = null
@@ -95,24 +95,23 @@ class ShutUpForegroundService : Service() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE else 0
         )
 
-        // If there's a leftover backup from a previous cycle (e.g., service was killed while
-        // waiting to restore settings), restore it now if no shut-up app is currently running.
+        // Recover backup before monitoring starts. Avoid startup restore/apply race.
         serviceScope.launch {
             val backup = settingsRepository.getShutUpOriginalSettings()
             if (backup.isNotEmpty()) {
                 Log.d(TAG, "Found pending ShutUp backup on startup — checking if restore is needed")
-                val configs = settingsRepository.loadShutUpConfigs()
-                val anyShutUpRunning = configs.any {
-                    it.isEnabled && ShutUpManager.isAppRunning(this@ShutUpForegroundService, it.packageName)
+                val now = System.currentTimeMillis()
+                val foregroundPackage = getForegroundPackage(now - 5000, now)
+                val foregroundShutUp = settingsRepository.loadShutUpConfigs().any {
+                    it.isEnabled && it.packageName == foregroundPackage
                 }
-                if (!anyShutUpRunning) {
+                if (!foregroundShutUp) {
                     Log.d(TAG, "No shut-up app running — restoring backup on startup")
                     ShutUpManager.restoreOriginalSettings(this@ShutUpForegroundService, settingsRepository)
                 }
             }
+            startMonitoring()
         }
-
-        startMonitoring()
         return START_STICKY
     }
 
@@ -180,10 +179,11 @@ class ShutUpForegroundService : Service() {
             pendingRestoreJob = serviceScope.launch {
                 var shouldContinue = true
                 while (shouldContinue) {
-                    delay(3000) // 3 seconds debounce / check interval
+                    delay(settingsRepository.getShutUpRestoreDelay().coerceAtLeast(0) * 1000L)
                     val config = settingsRepository.loadShutUpConfigs().find { it.packageName == oldPkg }
                     if (config != null && config.isEnabled) {
-                        if (!ShutUpManager.isAppRunning(this@ShutUpForegroundService, oldPkg)) {
+                        // Process may remain alive after app leaves foreground.
+                        if (lastPackageName != oldPkg) {
                             if (activeTargetConfig != null) {
                                 // A different Shut-Up app is now active; skip restoration to avoid
                                 // re-enabling settings (USB debugging, dev options, etc.) while it is running
@@ -201,7 +201,7 @@ class ShutUpForegroundService : Service() {
                                 shouldContinue = false
                             }
                         } else {
-                            Log.d(TAG, "$oldPkg is still running in the background, delaying revert settings...")
+                            Log.d(TAG, "$oldPkg is still foreground, delaying restore...")
                         }
                     } else {
                         shouldContinue = false
