@@ -145,6 +145,8 @@ class MainViewModel : ViewModel() {
     val isUsageStatsPermissionGranted = mutableStateOf(false)
     val appLanguage = mutableStateOf("en")
     val isShutUpServiceEnabled = mutableStateOf(false)
+    val isWifiAutoOffEnabled = mutableStateOf(false)
+    val wifiAutoOffTimeout = mutableFloatStateOf(60f) // seconds
 
     val isBluetoothDevicesEnabled = mutableStateOf(false)
     val isCallVibrationsEnabled = mutableStateOf(false)
@@ -626,6 +628,12 @@ class MainViewModel : ViewModel() {
                     SettingsRepository.KEY_SNOOZE_HEADS_UP_ENABLED -> {
                         isSnoozeHeadsUpEnabled.value = settingsRepository.getBoolean(key)
                     }
+
+                    SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED -> isWifiAutoOffEnabled.value =
+                        settingsRepository.getBoolean(key, false)
+
+                    SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT -> wifiAutoOffTimeout.floatValue =
+                        settingsRepository.getFloat(key, 60f)
 
                     SettingsRepository.KEY_PINNED_FEATURES -> {
                         pinnedFeatureKeys.value = settingsRepository.getPinnedFeatures()
@@ -1612,6 +1620,10 @@ class MainViewModel : ViewModel() {
             settingsRepository.getFloat(SettingsRepository.KEY_SMART_PIXELS_INTENSITY, 50f)
         isSmartPixelsOnBatterySaverEnabled.value =
             settingsRepository.getBoolean(SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER)
+        isWifiAutoOffEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED, false)
+        wifiAutoOffTimeout.floatValue =
+            settingsRepository.getFloat(SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT, 60f)
         loadSnoozeChannels(context)
         loadMapsChannels(context)
         isSnoozeHeadsUpEnabled.value =
@@ -3654,6 +3666,16 @@ class MainViewModel : ViewModel() {
     fun setSmartPixelsOnBatterySaverEnabled(context: Context, enabled: Boolean) {
         isSmartPixelsOnBatterySaverEnabled.value = enabled
         settingsRepository.putBoolean(SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER, enabled)
+    }
+
+    fun setWifiAutoOffEnabled(enabled: Boolean) {
+        settingsRepository.putBoolean(SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED, enabled)
+        isWifiAutoOffEnabled.value = enabled
+    }
+
+    fun setWifiAutoOffTimeout(seconds: Float) {
+        wifiAutoOffTimeout.floatValue = seconds
+        settingsRepository.putFloat(SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT, seconds)
     }
 
     /**
