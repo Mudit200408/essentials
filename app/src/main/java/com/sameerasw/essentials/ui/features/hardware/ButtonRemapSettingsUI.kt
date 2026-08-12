@@ -56,6 +56,9 @@ import com.sameerasw.essentials.ui.core.cards.IconToggleItem
 import com.sameerasw.essentials.ui.core.containers.RoundedCardContainer
 import com.sameerasw.essentials.ui.core.pickers.HapticFeedbackPicker
 import com.sameerasw.essentials.ui.core.pickers.SegmentedPicker
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import com.sameerasw.essentials.utils.PermissionUtils
 import com.sameerasw.essentials.ui.modifiers.highlight
 import com.sameerasw.essentials.utils.HapticUtil
 import com.sameerasw.essentials.viewmodels.MainViewModel
@@ -86,6 +89,23 @@ fun ButtonRemapSettingsUI(
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     var shizukuStatus by remember { mutableStateOf(ShizukuStatus.NOT_RUNNING) }
     val shizukuHelper = remember { ShizukuPermissionHelper(context) }
+
+    val recordAudioPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            when (selectedScreenTab) {
+                0 -> {
+                    if (selectedButtonTab == 0) viewModel.setVolumeUpActionOff("Toggle audio recording", context)
+                    else viewModel.setVolumeDownActionOff("Toggle audio recording", context)
+                }
+                1 -> {
+                    if (selectedButtonTab == 0) viewModel.setVolumeUpActionOn("Toggle audio recording", context)
+                    else viewModel.setVolumeDownActionOn("Toggle audio recording", context)
+                }
+            }
+        }
+    }
 
     // Check Shizuku status on resume
     androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
@@ -412,6 +432,18 @@ fun ButtonRemapSettingsUI(
                         isSelected = currentAction == "Circle to Search",
                         onClick = { onActionSelected("Circle to Search") },
                         iconRes = R.drawable.frame_inspect_24px,
+                    )
+                    RemapActionItem(
+                        title = stringResource(R.string.action_toggle_audio_recording),
+                        isSelected = currentAction == "Toggle audio recording",
+                        onClick = {
+                            if (PermissionUtils.hasRecordAudioPermission(context)) {
+                                onActionSelected("Toggle audio recording")
+                            } else {
+                                recordAudioPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+                            }
+                        },
+                        iconRes = R.drawable.rounded_mic_24,
                     )
                     if (selectedScreenTab == 1) {
                         RemapActionItem(
