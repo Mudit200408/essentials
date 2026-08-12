@@ -337,6 +337,14 @@ class SettingsRepository(private val context: Context) {
         const val KEY_SHUT_UP_SERVICE_ENABLED = "shutup_service_enabled"
     }
 
+    fun isWifiAutoOffEnabled(): Boolean = getBoolean(KEY_WIFI_AUTO_OFF_ENABLED, false)
+
+    fun setWifiAutoOffEnabled(enabled: Boolean) = putBoolean(KEY_WIFI_AUTO_OFF_ENABLED, enabled)
+
+    fun getWifiAutoOffTimeout(): Float = getFloat(KEY_WIFI_AUTO_OFF_TIMEOUT, 60f)
+
+    fun setWifiAutoOffTimeout(timeout: Float) = putFloat(KEY_WIFI_AUTO_OFF_TIMEOUT, timeout)
+
     /**
      * Executes the is translation mode warning suppressed operation.
      * @return The resulting Boolean data.

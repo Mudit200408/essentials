@@ -7,7 +7,7 @@
  * Description: Composable screen for DNS presets and network tiles.
  */
 
-package com.sameerasw.essentials.ui.features.system
+package com.sameerasw.essentials.ui.features.network
 
 import android.content.Intent
 import android.net.Uri
@@ -39,6 +39,7 @@ import com.sameerasw.essentials.ui.core.sheets.PermissionItem
 import com.sameerasw.essentials.ui.core.sheets.PermissionsBottomSheet
 import com.sameerasw.essentials.ui.modifiers.highlight
 import com.sameerasw.essentials.utils.HapticUtil
+import com.sameerasw.essentials.utils.PermissionUtils
 import com.sameerasw.essentials.viewmodels.MainViewModel
 import kotlin.math.roundToInt
 
@@ -46,6 +47,7 @@ private enum class NetworkPermissionModule {
     RATE_LIMIT,
     MOBILE_DATA_ALWAYS_ON,
     WIRELESS_DISPLAY_CERTIFICATION,
+    WIFI_AUTO_OFF,
     NONE
 }
 
@@ -125,6 +127,23 @@ fun NetworksSettingsUI(
     }
 
     if (requestingPermissionFor != NetworkPermissionModule.NONE) {
+        val permissionsList = mutableListOf<PermissionItem>()
+
+        if (requestingPermissionFor == NetworkPermissionModule.WIFI_AUTO_OFF) {
+            val accessibilityPermission = PermissionItem(
+                iconRes = R.drawable.rounded_accessibility_new_24,
+                title = R.string.perm_accessibility_title,
+                description = R.string.perm_accessibility_desc_common,
+                dependentFeatures = listOf(R.string.wifi_auto_off_title),
+                actionLabel = if (viewModel.isAccessibilityEnabled.value) R.string.perm_action_granted else R.string.perm_action_grant,
+                action = {
+                    PermissionUtils.openAccessibilitySettings(context)
+                },
+                isGranted = viewModel.isAccessibilityEnabled.value
+            )
+            permissionsList.add(accessibilityPermission)
+        }
+
         val shizukuPermission = PermissionItem(
             iconRes = R.drawable.rounded_adb_24,
             title = if (!isShizukuAvailable) R.string.perm_shizuku_title else R.string.perm_shizuku_grant_title,
@@ -132,7 +151,8 @@ fun NetworksSettingsUI(
             dependentFeatures = listOf(
                 R.string.feat_network_download_rate_limit_title,
                 R.string.feat_mobile_data_always_on_title,
-                R.string.feat_wireless_display_certification_title
+                R.string.feat_wireless_display_certification_title,
+                R.string.wifi_auto_off_title
             ),
             actionLabel = if (!isShizukuAvailable) R.string.perm_shizuku_install_action else if (isShellGranted) R.string.perm_action_granted else R.string.perm_action_grant,
             action = {
@@ -149,11 +169,12 @@ fun NetworksSettingsUI(
             },
             isGranted = isShellGranted
         )
+        permissionsList.add(shizukuPermission)
 
         PermissionsBottomSheet(
             onDismissRequest = { requestingPermissionFor = NetworkPermissionModule.NONE },
             featureTitle = R.string.feat_networks_title,
-            permissions = listOf(shizukuPermission)
+            permissions = permissionsList
         )
     }
 
@@ -188,20 +209,15 @@ fun NetworksSettingsUI(
                         HapticUtil.performSliderHaptic(view)
                         if (isHasWritePermission) {
                             viewModel.setNetworkDownloadRateLimit(presetValues[newIndex], context)
-                        } else {
-                            requestingPermissionFor = NetworkPermissionModule.RATE_LIMIT
                         }
                     }
                 },
-                valueRange = 0f..(presetValues.lastIndex.toFloat()),
+                valueRange = 0f..presetValues.lastIndex.toFloat(),
                 steps = presetValues.size - 2,
                 increment = 1f,
-                valueFormatter = { floatVal ->
-                    val idx = floatVal.roundToInt().coerceIn(0, presetLabels.lastIndex)
-                    presetLabels[idx]
-                },
-                iconRes = R.drawable.rounded_cell_wifi_24,
-                enabled = true,
+                valueFormatter = { presetLabels.getOrNull(it.toInt()) ?: disabledLabel },
+                enabled = isHasWritePermission,
+                iconRes = R.drawable.rounded_downloading_24,
                 modifier = Modifier.highlight(highlightSetting == "network_download_rate_limit_slider")
             )
 
@@ -211,18 +227,17 @@ fun NetworksSettingsUI(
                 isChecked = viewModel.isMobileDataAlwaysOnEnabled.value,
                 onCheckedChange = { enabled ->
                     if (isHasWritePermission) {
+                        HapticUtil.performUIHaptic(view)
                         viewModel.setMobileDataAlwaysOnEnabled(enabled, context)
-                    } else {
-                        requestingPermissionFor = NetworkPermissionModule.MOBILE_DATA_ALWAYS_ON
                     }
                 },
-                enabled = true,
+                enabled = isHasWritePermission,
                 onDisabledClick = {
                     if (!isHasWritePermission) {
                         requestingPermissionFor = NetworkPermissionModule.MOBILE_DATA_ALWAYS_ON
                     }
                 },
-                iconRes = R.drawable.rounded_mobile_24,
+                iconRes = R.drawable.rounded_signal_cellular_alt_24,
                 modifier = Modifier.highlight(highlightSetting == "mobile_data_always_on_toggle")
             )
 
@@ -232,13 +247,11 @@ fun NetworksSettingsUI(
                 isChecked = viewModel.isWirelessDisplayCertificationEnabled.value,
                 onCheckedChange = { enabled ->
                     if (isHasWritePermission) {
+                        HapticUtil.performUIHaptic(view)
                         viewModel.setWirelessDisplayCertificationEnabled(enabled, context)
-                    } else {
-                        requestingPermissionFor =
-                            NetworkPermissionModule.WIRELESS_DISPLAY_CERTIFICATION
                     }
                 },
-                enabled = true,
+                enabled = isHasWritePermission,
                 onDisabledClick = {
                     if (!isHasWritePermission) {
                         requestingPermissionFor =
@@ -247,6 +260,41 @@ fun NetworksSettingsUI(
                 },
                 iconRes = R.drawable.rounded_cast_24,
                 modifier = Modifier.highlight(highlightSetting == "wireless_display_certification_toggle")
+            )
+
+            val isAccessibilityGranted = viewModel.isAccessibilityEnabled.value
+            val isWifiAutoOffToggleEnabled = isAccessibilityGranted && isShellGranted
+
+            IconToggleItem(
+                title = stringResource(R.string.wifi_auto_off_title),
+                description = stringResource(R.string.wifi_auto_off_desc),
+                isChecked = viewModel.isWifiAutoOffEnabled.value,
+                onCheckedChange = { enabled ->
+                    HapticUtil.performUIHaptic(view)
+                    viewModel.setWifiAutoOffEnabled(enabled)
+                },
+                enabled = isWifiAutoOffToggleEnabled,
+                onDisabledClick = {
+                    requestingPermissionFor = NetworkPermissionModule.WIFI_AUTO_OFF
+                },
+                iconRes = R.drawable.rounded_power_settings_new_24,
+                modifier = Modifier.highlight(highlightSetting == "wifi_auto_off_toggle")
+            )
+
+            ConfigSliderItem(
+                title = stringResource(R.string.wifi_auto_off_timeout_title),
+                value = viewModel.wifiAutoOffTimeout.floatValue,
+                onValueChange = { seconds ->
+                    HapticUtil.performSliderHaptic(view)
+                    viewModel.setWifiAutoOffTimeout(seconds)
+                },
+                valueRange = 10f..300f,
+                steps = 28,
+                increment = 10f,
+                valueFormatter = { "${it.toInt()}s" },
+                enabled = viewModel.isWifiAutoOffEnabled.value && isWifiAutoOffToggleEnabled,
+                iconRes = R.drawable.rounded_timer_24,
+                modifier = Modifier.highlight(highlightSetting == "wifi_auto_off_timeout_slider")
             )
         }
     }

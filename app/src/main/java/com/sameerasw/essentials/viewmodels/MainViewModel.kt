@@ -3696,13 +3696,13 @@ class MainViewModel : ViewModel() {
     }
 
     fun setWifiAutoOffEnabled(enabled: Boolean) {
-        settingsRepository.putBoolean(SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED, enabled)
         isWifiAutoOffEnabled.value = enabled
+        settingsRepository.setWifiAutoOffEnabled(enabled)
     }
 
     fun setWifiAutoOffTimeout(seconds: Float) {
         wifiAutoOffTimeout.floatValue = seconds
-        settingsRepository.putFloat(SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT, seconds)
+        settingsRepository.setWifiAutoOffTimeout(seconds)
     }
 
     /**
