@@ -41,6 +41,7 @@ import com.sameerasw.essentials.domain.model.ShutUpAppConfig
 import com.sameerasw.essentials.domain.model.disableWirelessDebugging
 import com.sameerasw.essentials.services.NotificationListener
 import com.sameerasw.essentials.services.automation.executors.CombinedActionExecutor
+import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
 import com.sameerasw.essentials.utils.FreezeManager
 import com.sameerasw.essentials.utils.RefreshRateUtils
 import com.sameerasw.essentials.utils.ShutUpManager
@@ -264,7 +265,6 @@ class AppFlowHandler private constructor(
 
     fun destroy() {
         try {
-            val prefs = this.context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
             prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
         } catch (_: Exception) {}
         try {
@@ -402,6 +402,12 @@ class AppFlowHandler private constructor(
             lockingPackage = null
         }
 
+        // Dismiss pocket mode if the new foreground package is bypassed/excluded (fast path)
+        val serviceInstance = ScreenOffAccessibilityService.instance
+        if (serviceInstance != null && serviceInstance.isAppBypassedForPocketMode(packageName)) {
+            serviceInstance.dismissPocketMode()
+        }
+
         checkAppLock(packageName)
         checkHighlightNightLight(packageName)
         checkAppAutomations(packageName)
@@ -474,7 +480,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkAppLock(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("app_lock_enabled", false)
         if (!isEnabled) return
 
@@ -545,7 +550,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkHighlightNightLight(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("dynamic_night_light_enabled", false)
         if (!isEnabled) return
 
@@ -565,8 +569,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun processNightLightChange(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
-
         val json = prefs.getString("dynamic_night_light_selected_apps", null)
         val selectedApps: List<AppSelection> =
             if (json != null) {
@@ -687,7 +689,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkGestureBarAutomation(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("hide_gesture_bar_on_launcher_enabled", false)
         if (!isEnabled) return
 
