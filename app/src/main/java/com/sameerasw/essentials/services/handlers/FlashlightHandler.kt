@@ -35,6 +35,7 @@ import androidx.core.content.edit
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.HapticFeedbackType
 import com.sameerasw.essentials.services.receivers.FlashlightActionReceiver
+import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
 import com.sameerasw.essentials.utils.FlashlightUtil
 import com.sameerasw.essentials.utils.performHapticFeedback
 import kotlinx.coroutines.CoroutineScope
@@ -83,8 +84,8 @@ class FlashlightHandler(
             isTorchOn = enabled
 
             val screenOffService =
-                service as? com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
-            screenOffService?.updateFlashlightProximityRegistration(enabled)
+                service as? ScreenOffAccessibilityService
+            screenOffService?.updateFlashlightProximityRegistration()
 
             val prefs = service.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
             val isGlobalEnabled = prefs.getBoolean("flashlight_global_enabled", false)

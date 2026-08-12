@@ -40,6 +40,7 @@ import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.services.automation.executors.CombinedActionExecutor
 import com.sameerasw.essentials.utils.FreezeManager
 import com.sameerasw.essentials.services.NotificationListener
+import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
 import com.sameerasw.essentials.utils.StatusBarManager
 import com.sameerasw.essentials.utils.ShutUpManager
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
@@ -60,6 +61,7 @@ class AppFlowHandler private constructor(
     private val handler = Handler(Looper.getMainLooper())
     private var lastIsLandscape = isDeviceInLandscape()
     private val settingsRepository by lazy { SettingsRepository(context) }
+    private val prefs by lazy { context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE) }
     private val notificationListenerComponent by lazy {
         ComponentName(context, NotificationListener::class.java)
     }
@@ -165,7 +167,6 @@ class AppFlowHandler private constructor(
 
     fun destroy() {
         try {
-            val prefs = this.context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
             prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
         } catch (_: Exception) {}
         try {
@@ -204,9 +205,9 @@ class AppFlowHandler private constructor(
             }
         }
     }
+
     private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
-    private val prefs by lazy { context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE) }
     private val authenticatedPackages = mutableSetOf<String>()
     private val lastLeaveTimes = mutableMapOf<String, Long>()
 
@@ -315,6 +316,12 @@ class AppFlowHandler private constructor(
             lockingPackage = null
         }
 
+        // Dismiss pocket mode if the new foreground package is bypassed/excluded (fast path)
+        val serviceInstance = ScreenOffAccessibilityService.instance
+        if (serviceInstance != null && serviceInstance.isAppBypassedForPocketMode(packageName)) {
+            serviceInstance.dismissPocketMode()
+        }
+
         if (isFromUsageStats == useUsageAccess) {
             Log.d("AppFlowHandler", "onPackageChanged: Processing package change because isFromUsageStats matches useUsageAccess")
             checkAppLock(packageName)
@@ -342,7 +349,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkShutUp(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val serviceEnabled = prefs.getBoolean("shutup_service_enabled", false)
         if (!serviceEnabled) return
 
@@ -362,7 +368,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkAppLock(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("app_lock_enabled", false)
         if (!isEnabled) return
 
@@ -430,7 +435,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkHighlightNightLight(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("dynamic_night_light_enabled", false)
         if (!isEnabled) return
 
@@ -449,8 +453,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun processNightLightChange(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
-
         val json = prefs.getString("dynamic_night_light_selected_apps", null)
         val selectedApps: List<AppSelection> = if (json != null) {
             try {
@@ -568,7 +570,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkGestureBarAutomation(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("hide_gesture_bar_on_launcher_enabled", false)
         if (!isEnabled) return
 
