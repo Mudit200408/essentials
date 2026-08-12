@@ -38,11 +38,9 @@ object PermissionUIHelper {
                 description = R.string.perm_accessibility_desc_common,
                 dependentFeatures = PermissionRegistry.getFeatures("ACCESSIBILITY"),
                 actionLabel = if (viewModel.isAccessibilityEnabled.value) R.string.label_enabled else R.string.perm_action_enable,
-                action = {
-                    val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    context.startActivity(intent)
-                },
+                action = { PermissionUtils.openAccessibilitySettings(context) },
+                secondaryActionLabel = if (!viewModel.isAccessibilityEnabled.value) R.string.action_app_info else null,
+                secondaryAction = if (!viewModel.isAccessibilityEnabled.value) { { PermissionUtils.openAppDetailsSettings(context) } } else null,
                 isGranted = viewModel.isAccessibilityEnabled.value
             )
 
@@ -90,6 +88,8 @@ object PermissionUIHelper {
                 dependentFeatures = PermissionRegistry.getFeatures("NOTIFICATION_LISTENER"),
                 actionLabel = if (viewModel.isNotificationListenerEnabled.value) R.string.perm_action_granted else R.string.perm_action_grant,
                 action = { viewModel.requestNotificationListenerPermission(context) },
+                secondaryActionLabel = if (!viewModel.isNotificationListenerEnabled.value) R.string.action_app_info else null,
+                secondaryAction = if (!viewModel.isNotificationListenerEnabled.value) { { PermissionUtils.openAppDetailsSettings(context) } } else null,
                 isGranted = viewModel.isNotificationListenerEnabled.value
             )
 
@@ -255,6 +255,24 @@ object PermissionUIHelper {
                 isGranted = viewModel.isCalendarPermissionGranted.value
             )
 
+            "RECORD_AUDIO" -> PermissionItem(
+                iconRes = R.drawable.rounded_mic_24,
+                title = R.string.permission_record_audio_title,
+                description = R.string.permission_record_audio_desc,
+                dependentFeatures = PermissionRegistry.getFeatures("RECORD_AUDIO"),
+                actionLabel = if (PermissionUtils.hasRecordAudioPermission(context)) R.string.perm_action_granted else R.string.perm_action_grant,
+                action = {
+                    if (activity != null) {
+                        ActivityCompat.requestPermissions(
+                            activity,
+                            arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                            106
+                        )
+                    }
+                },
+                isGranted = PermissionUtils.hasRecordAudioPermission(context)
+            )
+
             "USAGE_STATS" -> PermissionItem(
                 iconRes = R.drawable.rounded_data_usage_24,
                 title = R.string.perm_usage_stats_title,
@@ -263,6 +281,8 @@ object PermissionUIHelper {
                 dependentFeatures = PermissionRegistry.getFeatures("USAGE_STATS"),
                 actionLabel = if (viewModel.isUsageStatsPermissionGranted.value) R.string.perm_action_granted else R.string.perm_action_grant,
                 action = { PermissionUtils.openUsageStatsSettings(context) },
+                secondaryActionLabel = if (!viewModel.isUsageStatsPermissionGranted.value) R.string.action_app_info else null,
+                secondaryAction = if (!viewModel.isUsageStatsPermissionGranted.value) { { PermissionUtils.openAppDetailsSettings(context) } } else null,
                 isGranted = viewModel.isUsageStatsPermissionGranted.value
             )
 
