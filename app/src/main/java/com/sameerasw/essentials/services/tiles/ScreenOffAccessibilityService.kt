@@ -42,6 +42,7 @@ import com.sameerasw.essentials.services.handlers.OmniGestureOverlayHandler
 import com.sameerasw.essentials.services.handlers.PocketModeHandler
 import com.sameerasw.essentials.services.handlers.SmartPixelsHandler
 import com.sameerasw.essentials.services.handlers.StatusBarIconHandler
+import com.sameerasw.essentials.services.handlers.WifiAutoOffHandler
 import com.sameerasw.essentials.services.receivers.FlashlightActionReceiver
 import com.sameerasw.essentials.utils.AppUtil
 import com.sameerasw.essentials.utils.FreezeManager
@@ -71,6 +72,7 @@ class ScreenOffAccessibilityService :
     private lateinit var statusBarIconHandler: StatusBarIconHandler
     private lateinit var pocketModeHandler: PocketModeHandler
     private lateinit var smartPixelsHandler: SmartPixelsHandler
+    private lateinit var wifiAutoOffHandler: WifiAutoOffHandler
 
     private var lightSensor: Sensor? = null
     private var lightSensorLux: Float = 100f
@@ -282,10 +284,12 @@ class ScreenOffAccessibilityService :
         statusBarIconHandler = StatusBarIconHandler(this)
         pocketModeHandler = PocketModeHandler(this)
         smartPixelsHandler = SmartPixelsHandler(this)
+        wifiAutoOffHandler = WifiAutoOffHandler(this)
 
         flashlightHandler.register()
         statusBarIconHandler.register()
         smartPixelsHandler.init()
+        wifiAutoOffHandler.register()
 
         // Screen Receiver
         screenReceiver = object : BroadcastReceiver() {
@@ -465,6 +469,10 @@ class ScreenOffAccessibilityService :
         prefs.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
         try {
             appFlowHandler.destroy()
+        } catch (_: Exception) {
+        }
+        try {
+            wifiAutoOffHandler.unregister()
         } catch (_: Exception) {
         }
         instance = null

@@ -80,7 +80,7 @@ import com.sameerasw.essentials.ui.features.system.LocationReachedSettingsUI
 import com.sameerasw.essentials.ui.features.system.LockScreenClockSettingsUI
 import com.sameerasw.essentials.ui.features.system.MapsPowerSavingSettingsUI
 import com.sameerasw.essentials.ui.features.system.NavigationSettingsUI
-import com.sameerasw.essentials.ui.features.system.NetworksSettingsUI
+import com.sameerasw.essentials.ui.features.network.NetworksSettingsUI
 import com.sameerasw.essentials.ui.features.system.NotificationLightingSettingsUI
 import com.sameerasw.essentials.ui.features.system.NotificationSnoozingSettingsUI
 import com.sameerasw.essentials.ui.features.system.OtherCustomizationsSettingsUI
