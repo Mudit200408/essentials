@@ -59,6 +59,7 @@ class AppFlowHandler private constructor(
     private val handler = Handler(Looper.getMainLooper())
     private var lastIsLandscape = isDeviceInLandscape()
     private val settingsRepository by lazy { SettingsRepository(context) }
+    private val prefs by lazy { context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE) }
     private val notificationListenerComponent by lazy {
         ComponentName(context, NotificationListener::class.java)
     }
@@ -164,7 +165,6 @@ class AppFlowHandler private constructor(
 
     fun destroy() {
         try {
-            val prefs = this.context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
             prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
         } catch (_: Exception) {}
         try {
@@ -205,11 +205,6 @@ class AppFlowHandler private constructor(
     }
     private val scope = CoroutineScope(Dispatchers.Main.immediate)
 
-    private val settingsRepository by lazy { SettingsRepository(context) }
-    private val prefs by lazy { context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE) }
-    private val notificationListenerComponent by lazy {
-        ComponentName(context, NotificationListener::class.java)
-    }
     private val authenticatedPackages = mutableSetOf<String>()
     private val lastLeaveTimes = mutableMapOf<String, Long>()
 
@@ -345,7 +340,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkShutUp(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val serviceEnabled = prefs.getBoolean("shutup_service_enabled", false)
         if (!serviceEnabled) return
 
@@ -365,7 +359,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkAppLock(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("app_lock_enabled", false)
         if (!isEnabled) return
 
@@ -433,7 +426,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkHighlightNightLight(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("dynamic_night_light_enabled", false)
         if (!isEnabled) return
 
@@ -452,8 +444,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun processNightLightChange(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
-
         val json = prefs.getString("dynamic_night_light_selected_apps", null)
         val selectedApps: List<AppSelection> = if (json != null) {
             try {
@@ -571,7 +561,6 @@ class AppFlowHandler private constructor(
     }
 
     private fun checkGestureBarAutomation(packageName: String) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("hide_gesture_bar_on_launcher_enabled", false)
         if (!isEnabled) return
 

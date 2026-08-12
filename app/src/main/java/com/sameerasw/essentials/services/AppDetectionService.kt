@@ -13,6 +13,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.BroadcastReceiver
@@ -111,13 +112,14 @@ class AppDetectionService : Service() {
         val usageStatsManager = getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
         val time = System.currentTimeMillis()
 
+        // 1. Try to find the last resumed activity using queryEvents (real-time & accurate)
         try {
             val events = usageStatsManager.queryEvents(time - 1000 * 15, time)
-            val event = android.app.usage.UsageEvents.Event()
+            val event = UsageEvents.Event()
             var lastResumedPackage: String? = null
             while (events.hasNextEvent()) {
                 events.getNextEvent(event)
-                if (event.eventType == android.app.usage.UsageEvents.Event.ACTIVITY_RESUMED) {
+                if (event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
                     lastResumedPackage = event.packageName
                 }
             }
@@ -128,6 +130,7 @@ class AppDetectionService : Service() {
             android.util.Log.e("AppDetectionService", "Failed to query usage events", e)
         }
 
+        // 2. Fallback to queryUsageStats if no events found in the window
         val stats = usageStatsManager.queryUsageStats(
             UsageStatsManager.INTERVAL_DAILY,
             time - 1000 * 10,
@@ -156,7 +159,6 @@ class AppDetectionService : Service() {
     override fun onDestroy() {
         isRunning = false
         isPolling = false
-        appFlowHandler.destroy()
         handler.removeCallbacksAndMessages(null)
         try {
             unregisterReceiver(authReceiver)
