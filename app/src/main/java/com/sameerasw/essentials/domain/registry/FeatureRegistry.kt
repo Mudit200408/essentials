@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import com.sameerasw.essentials.EssentialsApp
 import com.sameerasw.essentials.R
+import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.domain.model.Feature
 import com.sameerasw.essentials.domain.model.SearchSetting
 import com.sameerasw.essentials.ui.activities.PixelSearchbarSettingsActivity
@@ -266,6 +267,30 @@ object FeatureRegistry {
         ) {
             override fun isEnabled(viewModel: MainViewModel) = true
             override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {}
+        },
+        object : Feature(
+            id = "Per app refresh rate",
+            title = R.string.refresh_rate_per_app_enable_title,
+            iconRes = R.drawable.ic_per_app_refresh_rate,
+            category = R.string.cat_interface,
+            description = R.string.refresh_rate_per_app_enable_desc,
+            aboutDescription = R.string.refresh_rate_per_app_enable_desc,
+            showToggle = false,
+            parentFeatureId = "Display",
+        ) {
+            override val permissionKeys: List<String>
+                get() = (if (SettingsRepository(EssentialsApp.context)
+                        .getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS))
+                    listOf("USAGE_STATS") else listOf("ACCESSIBILITY")) + listOf("SHIZUKU")
+
+            override fun isEnabled(viewModel: MainViewModel): Boolean = viewModel.isPerAppRefreshRateEnabled.value
+
+            override fun isToggleEnabled(viewModel: MainViewModel, context: Context): Boolean =
+                (if (viewModel.isUseUsageAccess.value) viewModel.isUsageStatsPermissionGranted.value else viewModel.isAccessibilityEnabled.value) && viewModel.isShizukuPermissionGranted.value
+
+            override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {
+                viewModel.setPerAppRefreshRateEnabled(enabled, context)
+            }
         },
         object : Feature(
             id = "Screen refresh rate",
@@ -1002,7 +1027,7 @@ object FeatureRegistry {
                         "ACCESSIBILITY",
                         "ROOT"
                     ) else listOf("ACCESSIBILITY", "SHIZUKU")
-                    val repository = com.sameerasw.essentials.data.repository.SettingsRepository(EssentialsApp.context)
+                    val repository = SettingsRepository(EssentialsApp.context)
                     val needsRecordAudio = repository.getString("button_remap_vol_up_action_off", "None") == "Toggle audio recording" ||
                             repository.getString("button_remap_vol_down_action_off", "None") == "Toggle audio recording" ||
                             repository.getString("button_remap_vol_up_action_on", "None") == "Toggle audio recording" ||
@@ -1038,11 +1063,7 @@ object FeatureRegistry {
             animationRes = R.raw.night_animation
         ) {
             override val permissionKeys: List<String>
-                get() = if (com.sameerasw.essentials.data.repository.SettingsRepository(
-                        EssentialsApp.context
-                    )
-                        .getBoolean(com.sameerasw.essentials.data.repository.SettingsRepository.KEY_USE_USAGE_ACCESS)
-                )
+                get() = if (SettingsRepository(EssentialsApp.context).getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS))
                     listOf("USAGE_STATS", "WRITE_SECURE_SETTINGS") else listOf(
                     "ACCESSIBILITY",
                     "WRITE_SECURE_SETTINGS"
@@ -1175,11 +1196,7 @@ object FeatureRegistry {
             animationRes = R.raw.applock_animation
         ) {
             override val permissionKeys: List<String>
-                get() = if (com.sameerasw.essentials.data.repository.SettingsRepository(
-                        EssentialsApp.context
-                    )
-                        .getBoolean(com.sameerasw.essentials.data.repository.SettingsRepository.KEY_USE_USAGE_ACCESS)
-                )
+                get() = if (SettingsRepository(EssentialsApp.context).getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS))
                     listOf("USAGE_STATS", "ACCESSIBILITY") else listOf("ACCESSIBILITY")
 
             override fun isEnabled(viewModel: MainViewModel) = viewModel.isAppLockEnabled.value
@@ -1236,7 +1253,7 @@ object FeatureRegistry {
             override fun isEnabled(viewModel: MainViewModel) = viewModel.isPocketModeEnabled.value
 
             override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) =
-                viewModel.setPocketModeEnabled(enabled)
+                viewModel.setPocketModeEnabled(enabled, context)
 
             override fun isDeviceSupported(context: Context) = !DeviceUtils.isGoogleDevice()
         },
