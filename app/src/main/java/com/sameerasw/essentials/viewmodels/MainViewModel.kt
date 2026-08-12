@@ -50,6 +50,8 @@ import com.sameerasw.essentials.domain.diy.Action
 import com.sameerasw.essentials.domain.model.AppSelection
 import com.sameerasw.essentials.domain.model.AppStandbyInfo
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
+import com.sameerasw.essentials.domain.model.AppRefreshRateConfig
+
 import com.sameerasw.essentials.domain.model.DnsPreset
 import com.sameerasw.essentials.domain.model.NotificationApp
 import com.sameerasw.essentials.domain.model.NotificationLightingColorMode
@@ -118,6 +120,7 @@ class MainViewModel : ViewModel() {
     val remapHapticType = mutableStateOf(HapticFeedbackType.DOUBLE)
     val isDynamicNightLightEnabled = mutableStateOf(false)
     val isSmartPixelsEnabled = mutableStateOf(false)
+    val isSmartPixelsOnBatterySaverEnabled = mutableStateOf(false)
     val smartPixelsIntensity = mutableFloatStateOf(50f)
     val isSmartPixelsDisableOnCastEnabled = mutableStateOf(true)
     val snoozeChannels =
@@ -145,6 +148,9 @@ class MainViewModel : ViewModel() {
     val isUsageStatsPermissionGranted = mutableStateOf(false)
     val appLanguage = mutableStateOf("en")
     val isShutUpServiceEnabled = mutableStateOf(false)
+    val isWifiAutoOffEnabled = mutableStateOf(false)
+    val wifiAutoOffTimeout = mutableFloatStateOf(60f) // seconds
+
 
     val isBluetoothDevicesEnabled = mutableStateOf(false)
     val isCallVibrationsEnabled = mutableStateOf(false)
@@ -221,6 +227,9 @@ class MainViewModel : ViewModel() {
     val shizukuAuthToken = mutableStateOf("")
     val edgeLightingSweepSelectedShapes = mutableStateOf<Set<String>>(emptySet())
 
+    val isPerAppRefreshRateEnabled = mutableStateOf(false)
+    val perAppRefreshRateConfigs =
+        mutableStateOf<List<com.sameerasw.essentials.domain.model.AppRefreshRateConfig>>(emptyList())
     data class CalendarAccount(
         val id: Long,
         val name: String,
@@ -483,6 +492,10 @@ class MainViewModel : ViewModel() {
                         isSmartPixelsDisableOnCastEnabled.value =
                             settingsRepository.getBoolean(key, true)
 
+                    SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER ->
+                        isSmartPixelsOnBatterySaverEnabled.value =
+                            settingsRepository.getBoolean(key)
+
                     SettingsRepository.KEY_SCREEN_LOCKED_SECURITY_ENABLED ->
                         isScreenLockedSecurityEnabled.value =
                             settingsRepository.getBoolean(key)
@@ -665,6 +678,12 @@ class MainViewModel : ViewModel() {
                         isSnoozeHeadsUpEnabled.value = settingsRepository.getBoolean(key)
                     }
 
+                    SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED -> isWifiAutoOffEnabled.value =
+                        settingsRepository.getBoolean(key, false)
+
+                    SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT -> wifiAutoOffTimeout.floatValue =
+                        settingsRepository.getFloat(key, 60f)
+
                     SettingsRepository.KEY_PINNED_FEATURES -> {
                         pinnedFeatureKeys.value = settingsRepository.getPinnedFeatures()
                     }
@@ -812,6 +831,15 @@ class MainViewModel : ViewModel() {
                     SettingsRepository.KEY_HIDE_GESTURE_BAR_ON_LAUNCHER_ENABLED -> {
                         isHideGestureBarOnLauncherEnabled.value = settingsRepository.getBoolean(key)
                         appContext?.let { updateAppDetectionService(it) }
+                    }
+
+                    SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED -> {
+                        isPerAppRefreshRateEnabled.value = settingsRepository.getBoolean(key)
+                        appContext?.let { updateAppDetectionService(it) }
+                    }
+
+                    SettingsRepository.KEY_PER_APP_REFRESH_RATE_CONFIGS -> {
+                        loadPerAppRefreshRateConfigs()
                     }
 
                     SettingsRepository.KEY_LIVE_WALLPAPER_SELECTED_VIDEO -> {
@@ -984,6 +1012,27 @@ class MainViewModel : ViewModel() {
         loadShutUpConfigs()
     }
 
+    fun loadPerAppRefreshRateConfigs() {
+        perAppRefreshRateConfigs.value = settingsRepository.loadPerAppRefreshRateConfigs()
+    }
+
+    fun updatePerAppRefreshRateConfig(config: AppRefreshRateConfig) {
+        settingsRepository.updatePerAppRefreshRateConfig(config)
+        loadPerAppRefreshRateConfigs()
+    }
+
+    fun removePerAppRefreshRateConfig(packageName: String) {
+        val current = perAppRefreshRateConfigs.value.toMutableList()
+        current.removeAll { it.packageName == packageName }
+        settingsRepository.savePerAppRefreshRateConfigs(current)
+        loadPerAppRefreshRateConfigs()
+    }
+
+    fun setPerAppRefreshRateEnabled(enabled: Boolean, context: Context) {
+        isPerAppRefreshRateEnabled.value = enabled
+        settingsRepository.putBoolean(SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED, enabled)
+        updateAppDetectionService(context)
+    }
 
 
     /**
@@ -1240,6 +1289,9 @@ class MainViewModel : ViewModel() {
         isShutUpServiceEnabled.value = settingsRepository.isShutUpServiceEnabled()
         isShutUpAttemptShizukuRestart.value = settingsRepository.isShutUpAttemptShizukuRestartEnabled()
         loadShutUpConfigs()
+        isPerAppRefreshRateEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED, false)
+        loadPerAppRefreshRateConfigs()
         recentSearches.value = settingsRepository.getRecentSearches()
         loadCachedWallpaper()
         isDailyWallpaperAutoUpdateEnabled.value =
@@ -1651,6 +1703,12 @@ class MainViewModel : ViewModel() {
             settingsRepository.getFloat(SettingsRepository.KEY_SMART_PIXELS_INTENSITY, 50f)
         isSmartPixelsDisableOnCastEnabled.value =
             settingsRepository.getBoolean(SettingsRepository.KEY_SMART_PIXELS_DISABLE_ON_CAST, true)
+        isSmartPixelsOnBatterySaverEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER)
+        isWifiAutoOffEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED, false)
+        wifiAutoOffTimeout.floatValue =
+            settingsRepository.getFloat(SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT, 60f)
         loadSnoozeChannels(context)
         loadMapsChannels(context)
         isSnoozeHeadsUpEnabled.value =
@@ -4041,6 +4099,21 @@ class MainViewModel : ViewModel() {
     ) {
         smartPixelsIntensity.floatValue = intensity
         settingsRepository.putFloat(SettingsRepository.KEY_SMART_PIXELS_INTENSITY, intensity)
+    }
+
+    fun setSmartPixelsOnBatterySaverEnabled(context: Context, enabled: Boolean) {
+        isSmartPixelsOnBatterySaverEnabled.value = enabled
+        settingsRepository.putBoolean(SettingsRepository.KEY_SMART_PIXELS_ON_BATTERY_SAVER, enabled)
+    }
+
+    fun setWifiAutoOffEnabled(enabled: Boolean) {
+        settingsRepository.putBoolean(SettingsRepository.KEY_WIFI_AUTO_OFF_ENABLED, enabled)
+        isWifiAutoOffEnabled.value = enabled
+    }
+
+    fun setWifiAutoOffTimeout(seconds: Float) {
+        wifiAutoOffTimeout.floatValue = seconds
+        settingsRepository.putFloat(SettingsRepository.KEY_WIFI_AUTO_OFF_TIMEOUT, seconds)
     }
 
     /**
@@ -6842,9 +6915,10 @@ class MainViewModel : ViewModel() {
      * @param enabled [Boolean] Target enabled.
      * @param context [Context] Target context.
      */
-    fun setPocketModeEnabled(enabled: Boolean) {
+    fun setPocketModeEnabled(enabled: Boolean, context: Context) {
         settingsRepository.putBoolean(SettingsRepository.KEY_POCKET_MODE_ENABLED, enabled)
         isPocketModeEnabled.value = enabled
+        updateAppDetectionService(context)
     }
 
     /**
@@ -6938,6 +7012,7 @@ class MainViewModel : ViewModel() {
         apps: List<AppSelection>,
     ) {
         settingsRepository.savePocketModeExcludedApps(apps)
+        updateAppDetectionService(context)
     }
 
     fun updatePocketModeExcludedAppEnabled(
@@ -6946,6 +7021,7 @@ class MainViewModel : ViewModel() {
         enabled: Boolean,
     ) {
         settingsRepository.updatePocketModeExcludedAppSelection(packageName, enabled)
+        updateAppDetectionService(context)
     }
 
     override fun onCleared() {
