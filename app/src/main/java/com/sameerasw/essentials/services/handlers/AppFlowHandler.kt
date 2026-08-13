@@ -18,17 +18,25 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.media.AudioManager
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import androidx.core.app.NotificationCompat
 import com.google.gson.Gson
+import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.domain.diy.Automation
 import com.sameerasw.essentials.domain.diy.DIYRepository
 import com.sameerasw.essentials.domain.model.AppSelection
+import com.sameerasw.essentials.domain.model.ShutUpAppConfig
+import com.sameerasw.essentials.services.NotificationListener
 import com.sameerasw.essentials.services.automation.executors.CombinedActionExecutor
 import com.sameerasw.essentials.utils.FreezeManager
+import com.sameerasw.essentials.utils.RefreshRateUtils
 import com.sameerasw.essentials.utils.StatusBarManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,16 +45,57 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AppFlowHandler(
-    private val context: Context,
-    private val service: AccessibilityService? = null,
+class AppFlowHandler private constructor(
+    context: Context
 ) {
+    private val context = context.applicationContext
     private val handler = Handler(Looper.getMainLooper())
-    private val scope = CoroutineScope(Dispatchers.Main)
+    private val scope = CoroutineScope(Dispatchers.Main.immediate)
+
+    private var lastOrientation = context.resources.configuration.orientation
+    private val componentCallbacks = object : android.content.ComponentCallbacks2 {
+        override fun onConfigurationChanged(newConfig: Configuration) {
+            val newOrientation = newConfig.orientation
+            if (newOrientation != lastOrientation) {
+                lastOrientation = newOrientation
+            }
+        }
+        override fun onLowMemory() {}
+        override fun onTrimMemory(level: Int) {}
+    }
+
+    private val prefsChangeListener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ -> }
+
+    private val mediaReceiver = object : android.content.BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {}
+    }
+
+    private val settingsRepository by lazy { SettingsRepository(context) }
+    private val prefs by lazy { context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE) }
+    private val notificationListenerComponent by lazy {
+        ComponentName(context, NotificationListener::class.java)
+    }
 
     private val authenticatedPackages = mutableSetOf<String>()
     private val lastLeaveTimes = mutableMapOf<String, Long>()
     private val activeCountdowns = mutableMapOf<String, Job>()
+
+    // App Lock State
+    private var lockingPackage: String? = null
+    private var lastLockRequestTime: Long = 0
+    @Volatile
+    var currentPackage: String? = null
+        private set
+    private var currentUsageStatsPackage: String? = null
+
+    // App Automation State
+    private val activeAppAutomationIds = mutableSetOf<String>()
+
+    // Night Light State
+    private var wasNightLightOnBeforeAutoToggle = false
+    private var isNightLightAutoToggledOff = false
+    private var pendingNLRunnable: Runnable? = null
+    private val nlDebounceDelay = 500L
 
     private val shutUpReceiver =
         object : BroadcastReceiver() {
@@ -91,64 +140,129 @@ class AppFlowHandler(
         }
 
     init {
-        val filter =
+        this.context.registerComponentCallbacks(componentCallbacks)
+        val mediaFilter = IntentFilter("com.sameerasw.essentials.MEDIA_PLAYBACK_CHANGED")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            this.context.registerReceiver(mediaReceiver, mediaFilter, Context.RECEIVER_EXPORTED)
+        } else {
+            this.context.registerReceiver(mediaReceiver, mediaFilter)
+        }
+
+        val shutUpFilter =
             IntentFilter().apply {
                 addAction(ACTION_FREEZE_NOW)
                 addAction(ACTION_ABORT_FREEZE)
                 addAction(ACTION_RESTORE_NOW)
             }
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            context.registerReceiver(shutUpReceiver, filter, Context.RECEIVER_EXPORTED)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            this.context.registerReceiver(shutUpReceiver, shutUpFilter, Context.RECEIVER_EXPORTED)
         } else {
-            context.registerReceiver(shutUpReceiver, filter)
+            this.context.registerReceiver(shutUpReceiver, shutUpFilter)
+        }
+
+        val prefs = this.context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener)
+    }
+
+    fun destroy() {
+        try {
+            val prefs = this.context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.unregisterOnSharedPreferenceChangeListener(prefsChangeListener)
+        } catch (_: Exception) {}
+        try {
+            context.unregisterComponentCallbacks(componentCallbacks)
+        } catch (_: Exception) {}
+        try {
+            context.unregisterReceiver(mediaReceiver)
+        } catch (_: Exception) {}
+        try {
+            context.unregisterReceiver(shutUpReceiver)
+        } catch (_: Exception) {}
+        synchronized(AppFlowHandler::class.java) {
+            if (INSTANCE === this) {
+                INSTANCE = null
+            }
         }
     }
 
-    // App Lock State
-    private var lockingPackage: String? = null
-    private var lastLockRequestTime: Long = 0
-    var currentPackage: String? = null
-        private set
-    private var currentUsageStatsPackage: String? = null
+    private val ignoredSystemPackages = listOf(
+        "android",
+        "com.android.systemui",
+        "com.google.android.inputmethod.latin",
+        "com.google.android.gms"
+    )
 
-    // App Automation State
-    private val activeAppAutomationIds = mutableSetOf<String>()
-
-    // Night Light State
-    private var wasNightLightOnBeforeAutoToggle = false
-    private var isNightLightAutoToggledOff = false
-    private var pendingNLRunnable: Runnable? = null
-    private val nlDebounceDelay = 500L
-
-    private val ignoredSystemPackages =
-        listOf(
-            "android",
-            "com.android.systemui",
-            "com.google.android.inputmethod.latin",
-        )
-
-    fun onPackageChanged(
-        packageName: String,
-        isFromUsageStats: Boolean = false,
-    ) {
-        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
-        val useUsageAccess = prefs.getBoolean("use_usage_access", false)
-
-        val oldPackage = currentPackage
-        if (isFromUsageStats == useUsageAccess) {
-            currentPackage = packageName
-            if (oldPackage != null && oldPackage != packageName) {
-                lastLeaveTimes[oldPackage] = System.currentTimeMillis()
-                checkShutUpRestore(oldPackage, packageName)
-            }
-            if (packageName != context.packageName && packageName != lockingPackage) {
-                lockingPackage = null
-            }
-            checkAppLock(packageName)
-            checkHighlightNightLight(packageName)
-            checkAppAutomations(packageName)
-            checkGestureBarAutomation(packageName)
+    private fun isIgnoredPackage(packageName: String): Boolean {
+        if (packageName == context.packageName) return true
+        if (ignoredSystemPackages.contains(packageName)) return true
+        
+        val lowerPkg = packageName.lowercase()
+        if (lowerPkg.contains("systemui") ||
+            lowerPkg.contains("keyguard") ||
+            lowerPkg.contains("volume") ||
+            lowerPkg.contains("soundassistant") ||
+            lowerPkg.contains("dialer") ||
+            lowerPkg.contains("telecom") ||
+            lowerPkg.contains("phone") ||
+            lowerPkg.contains("incallui") ||
+            lowerPkg.contains("packageinstaller") ||
+            lowerPkg.contains("permissioncontroller")
+        ) {
+            return true
         }
+
+        // Check active call state via AudioManager mode
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+        if (audioManager != null) {
+            val mode = audioManager.mode
+            if (mode == AudioManager.MODE_IN_CALL ||
+                mode == AudioManager.MODE_IN_COMMUNICATION ||
+                mode == AudioManager.MODE_RINGTONE
+            ) {
+                return true
+            }
+        }
+
+        return try {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val ims = imm?.enabledInputMethodList
+            ims?.any { it.packageName == packageName } == true
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    fun onPackageChanged(packageName: String, isFromUsageStats: Boolean = false) {
+        val useUsageAccess = settingsRepository.getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS, false) &&
+                com.sameerasw.essentials.services.AppDetectionService.isRunning
+
+        if (isFromUsageStats != useUsageAccess) {
+            return
+        }
+
+        Log.d("AppFlowHandler", "onPackageChanged: packageName=$packageName, isFromUsageStats=$isFromUsageStats, useUsageAccess=$useUsageAccess, currentPackage=$currentPackage")
+
+        // If the new foreground window belongs to a system overlay (status bar, quick settings,
+        // notifications), a keyboard (IME), a volume dialog, or a phone call, completely ignore it.
+        // We do NOT update currentPackage so that state-dependent features remain stable.
+        if (isIgnoredPackage(packageName)) {
+            Log.d("AppFlowHandler", "onPackageChanged: Ignoring system/IME/volume/call package $packageName")
+            return
+        }
+        val oldPackage = currentPackage
+        currentPackage = packageName
+        if (oldPackage != null && oldPackage != packageName) {
+            lastLeaveTimes[oldPackage] = System.currentTimeMillis()
+            checkShutUpRestore(oldPackage, packageName)
+        }
+        if (packageName != context.packageName && packageName != lockingPackage) {
+            lockingPackage = null
+        }
+
+        checkAppLock(packageName)
+        checkHighlightNightLight(packageName)
+        checkAppAutomations(packageName)
+        checkGestureBarAutomation(packageName)
     }
 
     fun onAuthenticated(packageName: String) {
@@ -240,7 +354,7 @@ class AppFlowHandler(
 
         pendingNLRunnable?.let { handler.removeCallbacks(it) }
 
-        if (ignoredSystemPackages.contains(packageName)) {
+        if (isIgnoredPackage(packageName)) {
             Log.d("NightLight", "Ignoring system package $packageName")
             return
         }
@@ -313,6 +427,10 @@ class AppFlowHandler(
     }
 
     private fun checkAppAutomations(packageName: String) {
+        if (isIgnoredPackage(packageName)) {
+            Log.d("AppFlowHandler", "checkAppAutomations: Ignoring system/IME package $packageName")
+            return
+        }
         scope.launch {
             val automations = DIYRepository.automations.value
             val appAutomations =
@@ -902,6 +1020,19 @@ class AppFlowHandler(
         }
     }
 
+    private fun isMediaPlaying(packageName: String): Boolean {
+        return try {
+            val msm = context.getSystemService(Context.MEDIA_SESSION_SERVICE) as? android.media.session.MediaSessionManager
+            val sessions = msm?.getActiveSessions(notificationListenerComponent)
+            sessions?.any {
+                it.packageName == packageName &&
+                it.playbackState?.state == android.media.session.PlaybackState.STATE_PLAYING
+            } ?: false
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     companion object {
         const val ACTION_FREEZE_NOW = "com.sameerasw.essentials.ACTION_FREEZE_NOW"
         const val ACTION_ABORT_FREEZE = "com.sameerasw.essentials.ACTION_ABORT_FREEZE"
@@ -909,5 +1040,14 @@ class AppFlowHandler(
         const val EXTRA_PACKAGE_NAME = "package_name"
         const val EXTRA_AUTO_ARCHIVE_PACKAGE = "auto_archive_package"
         const val NOTIFICATION_ID_SHUTUP_RESTORE = 9999
+
+        @Volatile
+        private var INSTANCE: AppFlowHandler? = null
+
+        fun getInstance(context: Context): AppFlowHandler {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: AppFlowHandler(context.applicationContext).also { INSTANCE = it }
+            }
+        }
     }
 }
