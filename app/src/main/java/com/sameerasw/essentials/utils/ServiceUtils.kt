@@ -33,7 +33,7 @@ object ServiceUtils {
      */
     fun startRequiredServices(context: Context) {
         val settingsRepository = SettingsRepository(context)
-
+        startShutUpServiceIfNeeded(context, settingsRepository)
         startAppDetectionServiceIfNeeded(context, settingsRepository)
         startBatteryNotificationServiceIfNeeded(context, settingsRepository)
         schedulePeriodicAppUpdateCheck(context, settingsRepository)
@@ -100,6 +100,7 @@ object ServiceUtils {
         }
     }
 
+
     fun schedulePeriodicAppUpdateCheck(
         context: Context,
         settingsRepository: SettingsRepository,
@@ -127,6 +128,24 @@ object ServiceUtils {
                 ExistingPeriodicWorkPolicy.KEEP,
                 workRequest,
             )
+        }
+    }
+    private fun startShutUpServiceIfNeeded(
+        context: Context,
+        settingsRepository: SettingsRepository
+    ) {
+        val isShutUpEnabled = settingsRepository.isShutUpServiceEnabled()
+        val intent = Intent(context, com.sameerasw.essentials.services.ShutUpForegroundService::class.java)
+        if (isShutUpEnabled) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
