@@ -959,6 +959,19 @@
     <string name="diy_end_time_label">End Time</string>
     <string name="diy_repeat_days_label">Repeat on</string>
 
+    <string name="diy_discard_warning_title">Discard changes?</string>
+    <string name="diy_discard_warning_desc">You have unsaved changes. Are you sure you want to exit without saving?</string>
+
+    <string name="diy_category_connectivity">Connectivity &amp; Network</string>
+    <string name="diy_category_display">Display &amp; Screen</string>
+    <string name="diy_category_apps">Apps</string>
+    <string name="diy_category_system">System</string>
+    <string name="diy_category_sound_media">Sound &amp; Media</string>
+    <string name="diy_category_essentials">Essentials Tweaks</string>
+    <string name="diy_category_system_screen">System &amp; Screen</string>
+    <string name="diy_category_battery_power">Battery &amp; Power</string>
+    <string name="diy_category_time_schedule">Time &amp; Schedule</string>
+
     <string name="diy_state_charging">Charging</string>
     <string name="diy_state_screen_on">Screen On</string>
     <string name="diy_state_power_saving">Power Saving</string>
@@ -993,7 +1006,7 @@
     <string name="diy_action_circle_to_search">Circle to Search</string>
     <string name="diy_action_pin_app">Pin Foreground App</string>
     <string name="diy_action_sometimes_essentials">Sometimes Essential</string>
-    <string name="diy_action_freeze_tag">Freeze</string>
+    <string name="diy_action_freeze_tag">Freeze by Tags</string>
     <string name="diy_action_open_app">Open App</string>
     <string name="diy_action_hotspot_on">Turn On Hotspot</string>
     <string name="diy_action_hotspot_off">Turn Off Hotspot</string>
