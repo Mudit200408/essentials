@@ -545,6 +545,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                                 "Essentials On Display",
                                                 "Always on Display",
                                                 "Statusbar icons",
+                                                "Maps power saving mode",
                                                 "Lock screen clock"
                                             ),
                                             listOf(

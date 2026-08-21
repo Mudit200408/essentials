@@ -122,7 +122,11 @@ fun FeatureCard(
     androidx.compose.material3.ListItem(
         onClick = {
             HapticUtil.performVirtualKeyHaptic(view)
-            onClick()
+            if (!isToggleEnabled && !hasMoreSettings && onDisabledToggleClick != null) {
+                onDisabledToggleClick()
+            } else {
+                onClick()
+            }
         },
         onLongClick = if (onPinToggle != null || onHelpClick != null || additionalMenuItems != null) {
             {
@@ -154,23 +158,19 @@ fun FeatureCard(
                             )
                         } else if (iconRes != null) {
                             val context = LocalContext.current
-                            val isValid = remember(iconRes) {
+                            val validIconRes = remember(iconRes) {
                                 try {
-                                    val value = android.util.TypedValue()
-                                    context.resources.getValue(iconRes, value, true)
-                                    val path = value.string?.toString() ?: ""
-                                    !path.endsWith(".gif", ignoreCase = true)
+                                    if (iconRes != 0 && context.resources.getResourceTypeName(iconRes) == "drawable") {
+                                        iconRes
+                                    } else {
+                                        R.drawable.rounded_settings_24
+                                    }
                                 } catch (e: Throwable) {
-                                    false
+                                    R.drawable.rounded_settings_24
                                 }
                             }
-                            val painter = if (isValid) {
-                                painterResource(id = iconRes)
-                            } else {
-                                painterResource(id = R.drawable.rounded_settings_accessibility_24)
-                            }
                             Icon(
-                                painter = painter,
+                                painter = painterResource(id = validIconRes),
                                 contentDescription = resolvedTitle,
                                 modifier = Modifier.size(24.dp),
                                 tint = ColorUtil.getVibrantColorFor(resolvedTitle)

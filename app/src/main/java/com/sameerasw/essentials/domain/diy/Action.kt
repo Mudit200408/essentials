@@ -71,7 +71,7 @@ sealed interface Action {
     ) : Action {
         override val title: Int get() = R.string.diy_action_dim_wallpaper
         override val icon: Int get() = R.drawable.rounded_mobile_screensaver_24
-        override val permissions: List<String> = listOf("shizuku", "root")
+        override val permissions: List<String> = listOf("SHIZUKU", "ROOT")
         override val isConfigurable: Boolean = true
     }
 
@@ -85,7 +85,7 @@ sealed interface Action {
     ) : Action {
         override val title: Int get() = R.string.diy_action_device_effects
         override val icon: Int get() = R.drawable.rounded_bed_24
-        override val permissions: List<String> = listOf("notification_policy")
+        override val permissions: List<String> = listOf("NOTIFICATION_POLICY")
         override val isConfigurable: Boolean = true
     }
 
@@ -112,7 +112,7 @@ sealed interface Action {
                 SoundModeType.VIBRATE -> R.drawable.rounded_mobile_vibrate_24
                 SoundModeType.SILENT -> R.drawable.rounded_volume_off_24
             }
-        override val permissions: List<String> = listOf("notification_policy")
+        override val permissions: List<String> = listOf("NOTIFICATION_POLICY")
         override val isConfigurable: Boolean = true
     }
 
@@ -274,4 +274,118 @@ sealed interface Action {
         override val isConfigurable: Boolean = true
         override val permissions: List<String> = listOf("shizuku", "root")
     }
+
+    @Keep
+    data object TurnOnWifi : Action {
+        override val title: Int = R.string.diy_action_wifi_on
+        override val icon: Int = R.drawable.rounded_android_wifi_4_bar_plus_24
+        override val permissions: List<String> = listOf("SHIZUKU", "ROOT")
+    }
+
+    @Keep
+    data object TurnOffWifi : Action {
+        override val title: Int = R.string.diy_action_wifi_off
+        override val icon: Int = R.drawable.rounded_android_wifi_4_bar_plus_24
+        override val permissions: List<String> = listOf("SHIZUKU", "ROOT")
+    }
+
+    @Keep
+    data object TurnOnCellularData : Action {
+        override val title: Int = R.string.diy_action_cellular_on
+        override val icon: Int = R.drawable.rounded_signal_cellular_alt_24
+        override val permissions: List<String> = listOf("SHIZUKU", "ROOT")
+    }
+
+    @Keep
+    data object TurnOffCellularData : Action {
+        override val title: Int = R.string.diy_action_cellular_off
+        override val icon: Int = R.drawable.rounded_signal_cellular_alt_24
+        override val permissions: List<String> = listOf("SHIZUKU", "ROOT")
+    }
+
+    @Keep
+    data object TurnOnAutoBrightness : Action {
+        override val title: Int = R.string.diy_action_auto_brightness_on
+        override val icon: Int = R.drawable.rounded_brightness_auto_24
+        override val permissions: List<String> = listOf("WRITE_SETTINGS")
+    }
+
+    @Keep
+    data object TurnOffAutoBrightness : Action {
+        override val title: Int = R.string.diy_action_auto_brightness_off
+        override val icon: Int = R.drawable.rounded_brightness_auto_24
+        override val permissions: List<String> = listOf("WRITE_SETTINGS")
+    }
+
+    @Keep
+    data class FreezeApps(
+        @SerializedName("packageNames") val packageNames: List<String> = emptyList()
+    ) : Action {
+        override val title: Int get() = R.string.diy_action_freeze_apps
+        override val icon: Int get() = R.drawable.rounded_mode_cool_24
+        override val permissions: List<String> = listOf("SHIZUKU", "ROOT")
+        override val isConfigurable: Boolean = true
+    }
+
+    @Keep
+    data class UnfreezeApps(
+        @SerializedName("packageNames") val packageNames: List<String> = emptyList()
+    ) : Action {
+        override val title: Int get() = R.string.diy_action_unfreeze_apps
+        override val icon: Int get() = R.drawable.rounded_mode_cool_off_24
+        override val permissions: List<String> = listOf("SHIZUKU", "ROOT")
+        override val isConfigurable: Boolean = true
+    }
+
+    @Keep
+    data class Keyboard(
+        @SerializedName("inputMethodId") val inputMethodId: String? = null
+    ) : Action {
+        override val title: Int = R.string.diy_set_keyboard_title
+        override val icon: Int = R.drawable.rounded_keyboard_24
+        override val permissions: List<String> = listOf("WRITE_SECURE_SETTINGS")
+        override val isConfigurable: Boolean = true
+    }
+
+    @Keep
+    enum class SettingsTable {
+        @SerializedName("SYSTEM")
+        SYSTEM,
+
+        @SerializedName("SECURE")
+        SECURE,
+
+        @SerializedName("GLOBAL")
+        GLOBAL
+    }
+
+    @Keep
+    data class SettingsEntry(
+        @SerializedName("table") val table: SettingsTable = SettingsTable.SYSTEM,
+        @SerializedName("key") val key: String = "",
+        @SerializedName("value") val value: String = ""
+    )
+
+    @Keep
+    data class CustomSettings(
+        @SerializedName("entries") val entries: List<SettingsEntry> = emptyList()
+    ) : Action {
+        override val title: Int get() = R.string.diy_action_custom_settings
+        override val icon: Int get() = R.drawable.rounded_settings_24
+        override val isConfigurable: Boolean = true
+        override val permissions: List<String>
+            get() {
+                val perms = mutableSetOf<String>()
+                for (entry in entries) {
+                    when (entry.table) {
+                        SettingsTable.SYSTEM -> perms.add("WRITE_SETTINGS")
+                        SettingsTable.SECURE -> perms.add("WRITE_SECURE_SETTINGS")
+                        SettingsTable.GLOBAL -> perms.add("WRITE_SECURE_SETTINGS")
+                    }
+                }
+                return perms.toList()
+            }
+    }
 }
+
+

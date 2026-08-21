@@ -56,6 +56,8 @@ android {
             "it",
             "iw",
             "ja",
+            "kk",
+            "kk-rKZ",
             "ko",
             "ml",
             "ml-rIN",
@@ -94,15 +96,13 @@ android {
 
         val whatsNewCounter = 2
         buildConfigField("int", "WHATS_NEW_COUNTER", whatsNewCounter.toString())
-        buildConfigField("int", "REQUIRED_WEAR_VERSION_CODE", "5")
+        buildConfigField("int", "REQUIRED_WEAR_VERSION_CODE", "6")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-
 //        optimized dev build
-
 //           debug {
 //              isMinifyEnabled = true
 //              isShrinkResources = true
@@ -112,9 +112,7 @@ android {
 //                  "proguard-rules.pro"
 //              )
 //           }
-
-        // end
-
+//        end
 
         release {
             isMinifyEnabled = true
@@ -132,6 +130,7 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+        aidl = true
     }
     packaging {
         jniLibs {
@@ -141,6 +140,7 @@ android {
 }
 
 dependencies {
+    compileOnly(project(":stub"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

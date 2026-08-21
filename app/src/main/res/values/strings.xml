@@ -950,6 +950,19 @@
     <string name="diy_end_time_label">End Time</string>
     <string name="diy_repeat_days_label">Repeat on</string>
 
+    <string name="diy_discard_warning_title">Discard changes?</string>
+    <string name="diy_discard_warning_desc">You have unsaved changes. Are you sure you want to exit without saving?</string>
+
+    <string name="diy_category_connectivity">Connectivity &amp; Network</string>
+    <string name="diy_category_display">Display &amp; Screen</string>
+    <string name="diy_category_apps">Apps</string>
+    <string name="diy_category_system">System</string>
+    <string name="diy_category_sound_media">Sound &amp; Media</string>
+    <string name="diy_category_essentials">Essentials Tweaks</string>
+    <string name="diy_category_system_screen">System &amp; Screen</string>
+    <string name="diy_category_battery_power">Battery &amp; Power</string>
+    <string name="diy_category_time_schedule">Time &amp; Schedule</string>
+
     <string name="diy_state_charging">Charging</string>
     <string name="diy_state_screen_on">Screen On</string>
     <string name="diy_state_power_saving">Power Saving</string>
@@ -962,10 +975,16 @@
     <string name="diy_action_flashlight_toggle">Toggle Flashlight</string>
     <string name="diy_action_low_power_on">Turn On Low Power Mode</string>
     <string name="diy_action_low_power_off">Turn Off Low Power Mode</string>
+    <string name="diy_action_wifi_on">Turn On WiFi</string>
+    <string name="diy_action_wifi_off">Turn Off WiFi</string>
     <string name="diy_action_cellular_on">Turn On Cellular Data</string>
     <string name="diy_action_cellular_off">Turn Off Cellular Data</string>
     <string name="diy_action_auto_brightness_on">Turn On Auto Brightness</string>
     <string name="diy_action_auto_brightness_off">Turn Off Auto Brightness</string>
+    <string name="diy_action_freeze_apps">Freeze Apps</string>
+    <string name="diy_action_unfreeze_apps">Unfreeze Apps</string>
+    <string name="diy_freeze_apps_desc">This action requires Shizuku or Root to freeze specific applications.</string>
+    <string name="diy_unfreeze_apps_desc">This action requires Shizuku or Root to unfreeze specific applications.</string>
     <string name="diy_action_dim_wallpaper">Dim Wallpaper</string>
     <string name="diy_action_screen_off">Screen Off</string>
     <string name="diy_action_media_play_pause">Media Play/Pause</string>
@@ -978,7 +997,7 @@
     <string name="diy_action_circle_to_search">Circle to Search</string>
     <string name="diy_action_pin_app">Pin Foreground App</string>
     <string name="diy_action_sometimes_essentials">Sometimes Essential</string>
-    <string name="diy_action_freeze_tag">Freeze</string>
+    <string name="diy_action_freeze_tag">Freeze by Tags</string>
     <string name="diy_action_open_app">Open App</string>
     <string name="diy_action_hotspot_on">Turn On Hotspot</string>
     <string name="diy_action_hotspot_off">Turn Off Hotspot</string>
@@ -1022,6 +1041,29 @@
     <string name="diy_device_effects_disabled">Disabled</string>
     <string name="diy_action_sound_mode">Sound Mode</string>
     <string name="diy_sound_mode_desc">This action allows switching between Sound, Vibrate, and Silent modes based on triggers. It requires Do Not Disturb access.</string>
+    <string name="diy_action_custom_settings">Custom Settings</string>
+    <string name="diy_custom_settings_desc">Capture Android system settings changes and replay them automatically as an action.</string>
+    <string name="diy_custom_settings_how_it_works">How it works</string>
+    <string name="diy_custom_settings_how_to">Tap Start Recording, adjust any system setting. And then return and tap Stop Recording. Review and edit the detected changes below.</string>
+    <string name="diy_custom_settings_start_recording">Start Recording</string>
+    <string name="diy_custom_settings_stop_recording">Stop Recording</string>
+    <string name="diy_custom_settings_recording_status">Recording active…</string>
+    <string name="diy_custom_settings_no_entries">Nothing captured yet</string>
+    <string name="diy_custom_settings_no_changes_detected">No settings changes detected during the recording session.</string>
+    <string name="diy_custom_settings_limit_reached">Maximum limit of 20 settings reached.</string>
+    <string name="diy_custom_settings_warning_title">Warning</string>
+    <string name="diy_custom_settings_warning_desc">Some captured keys might affect system behavior or require Write Secure Settings permissions. Modify with caution.</string>
+    <string name="diy_custom_settings_table_system">System</string>
+    <string name="diy_custom_settings_table_secure">Secure</string>
+    <string name="diy_custom_settings_table_global">Global</string>
+    <string name="diy_custom_settings_key_label">Setting Key</string>
+    <string name="diy_custom_settings_value_label">Value</string>
+
+    <string name="diy_set_keyboard_title">Set Keyboard</string>
+    <string name="diy_set_keyboard_sheet_title">Select Keyboard</string>
+    <string name="diy_set_keyboard_input_method_disabled">Enable input method in settings</string>
+    <string name="diy_set_keyboard_permission_required">Grant permission to change your keyboard.</string>
+    <string name="diy_set_keyboard_switch_failed">Keyboard switching failed: %1$s</string>
 
     <!-- About Section -->
     <string name="app_developer_name">Sameera Wijerathna</string>
@@ -1322,6 +1364,8 @@
     <string name="about_desc_smart_pixels">Overlay a customizable checkered pattern of blacked-out pixels across the screen using accessibility service to save display power on OLED screens.</string>
     <string name="smart_pixels_enable_title">Enable smart pixels</string>
     <string name="smart_pixels_intensity_title">Intensity</string>
+    <string name="smart_pixels_disable_on_cast_title">Disable during screen casting</string>
+    <string name="smart_pixels_disable_on_cast_desc">Automatically pause pixel grid overlay while casting or recording screen</string>
     <string name="search_smart_pixels_enable_title">Enable smart pixels</string>
     <string name="search_smart_pixels_enable_desc">Black out pixels to save power</string>
     <string name="search_smart_pixels_intensity_title">Smart pixels intensity</string>
@@ -1911,6 +1955,12 @@
     <string name="feat_mobile_data_always_on_desc">Keep mobile data active even when Wi-Fi is connected</string>
     <string name="feat_wireless_display_certification_title">Wireless display certification</string>
     <string name="feat_wireless_display_certification_desc">Show options for wireless display certification</string>
+    <string name="feat_sim_names_title">SIM names</string>
+    <string name="feat_sim_names_desc">Rename carrier display name for active SIM cards</string>
+    <string name="sim_names_slot_format">SIM %1$d (%2$s)</string>
+    <string name="sim_names_carrier_label">Carrier name</string>
+    <string name="sim_names_reset_tooltip">Reset to default</string>
+    <string name="sim_names_no_sim">No active SIM cards detected</string>
     <string name="feat_transparent_navigation_bar_title">Transparent navigation bar</string>
     <string name="feat_transparent_navigation_bar_desc">Make system navigation bar background transparent</string>
     <string name="cat_navigation">Navigation</string>
@@ -2109,9 +2159,3 @@
     <string name="watch_call_sync_title">Sync calls</string>
     <string name="watch_call_sync_desc">Sync and control calls from your watch</string>
 </resources>
-
-
-
-
-
-

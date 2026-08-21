@@ -16,12 +16,16 @@ import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.provider.Settings
 import android.view.KeyEvent
 import android.widget.Toast
+import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.HapticFeedbackType
 import com.sameerasw.essentials.domain.diy.Action
 import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
 import com.sameerasw.essentials.utils.DeviceLockUtils
+import com.sameerasw.essentials.utils.PermissionUtils
+import com.sameerasw.essentials.utils.ShellUtils
 import com.sameerasw.essentials.utils.performHapticFeedback
 import rikka.shizuku.ShizukuBinderWrapper
 import rikka.shizuku.SystemServiceHelper
@@ -634,7 +638,77 @@ object CombinedActionExecutor {
                         ).show()
                     }
                 }
+                is Action.TurnOnWifi -> setWifiEnabled(context, true)
+                is Action.TurnOffWifi -> setWifiEnabled(context, false)
+                is Action.TurnOnCellularData -> setCellularDataEnabled(context, true)
+                is Action.TurnOffCellularData -> setCellularDataEnabled(context, false)
+                is Action.TurnOnAutoBrightness -> setAutoBrightnessEnabled(context, true)
+                is Action.TurnOffAutoBrightness -> setAutoBrightnessEnabled(context, false)
+                is Action.FreezeApps -> {
+                    action.packageNames.forEach { pkg ->
+                        com.sameerasw.essentials.utils.FreezeManager.freezeApp(context, pkg)
+                    }
+                }
+                is Action.UnfreezeApps -> {
+                    action.packageNames.forEach { pkg ->
+                        com.sameerasw.essentials.utils.FreezeManager.unfreezeApp(context, pkg)
+                    }
+                }
+
+                is Action.Keyboard -> {
+                    try {
+                        if (PermissionUtils.canWriteSecureSettings(context)) {
+                            if (!action.inputMethodId.isNullOrBlank()) {
+                                Settings.Secure.putString(
+                                    context.contentResolver,
+                                    Settings.Secure.DEFAULT_INPUT_METHOD,
+                                    action.inputMethodId
+                                )
+                            }
+                            return@withContext
+                        }
+                        Toast.makeText(
+                            context,
+                            R.string.diy_set_keyboard_permission_required,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            context,
+                            context.getString(
+                                R.string.diy_set_keyboard_switch_failed,
+                                e.message ?: ""
+                            ),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                is Action.CustomSettings -> {
+                    val resolver = context.contentResolver
+                    for (entry in action.entries) {
+                        val success = try {
+                            when (entry.table) {
+                                Action.SettingsTable.SYSTEM -> Settings.System.putString(resolver, entry.key, entry.value)
+                                Action.SettingsTable.SECURE -> Settings.Secure.putString(resolver, entry.key, entry.value)
+                                Action.SettingsTable.GLOBAL -> Settings.Global.putString(resolver, entry.key, entry.value)
+                            }
+                        } catch (e: Exception) {
+                            false
+                        }
+                        if (!success) {
+                            val tableArg = when (entry.table) {
+                                Action.SettingsTable.SYSTEM -> "system"
+                                Action.SettingsTable.SECURE -> "secure"
+                                Action.SettingsTable.GLOBAL -> "global"
+                            }
+                            val safeValue = if (entry.value.contains(" ")) "\"${entry.value}\"" else entry.value
+                            ShellUtils.runCommand(context, "settings put $tableArg ${entry.key} $safeValue")
+                        }
+                    }
+                }
             }
+
         }
     }
 
@@ -680,6 +754,32 @@ object CombinedActionExecutor {
             android.provider.Settings.Global.putInt(context.contentResolver, "low_power", value)
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun setWifiEnabled(context: Context, enabled: Boolean) {
+        val state = if (enabled) "enable" else "disable"
+        com.sameerasw.essentials.utils.ShellUtils.runCommand(context, "svc wifi $state")
+    }
+
+    private fun setCellularDataEnabled(context: Context, enabled: Boolean) {
+        val state = if (enabled) "enable" else "disable"
+        com.sameerasw.essentials.utils.ShellUtils.runCommand(context, "svc data $state")
+    }
+
+    private fun setAutoBrightnessEnabled(context: Context, enabled: Boolean) {
+        val value = if (enabled) 1 else 0
+        try {
+            android.provider.Settings.System.putInt(
+                context.contentResolver,
+                android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE,
+                value
+            )
+        } catch (e: Exception) {
+            com.sameerasw.essentials.utils.ShellUtils.runCommand(
+                context,
+                "settings put system screen_brightness_mode $value"
+            )
         }
     }
 }
