@@ -148,6 +148,12 @@ class AppFlowHandler private constructor(
                     Log.d("AppFlowHandler", "AudioPlaybackCallback: playback config changed, checking refresh rate for $currentPkg")
                     checkPerAppRefreshRate(currentPkg)
                 }
+                ScreenOffAccessibilityService.instance?.let { service ->
+                    service.invalidateBypassCache()
+                    if (service.isAppBypassedForPocketMode(currentPkg)) {
+                        service.dismissPocketMode()
+                    }
+                }
             }
         }
     } else null
@@ -157,6 +163,12 @@ class AppFlowHandler private constructor(
         if (currentPkg != null) {
             Log.d("AppFlowHandler", "OnActiveSessionsChangedListener: active sessions changed, checking refresh rate for $currentPkg")
             checkPerAppRefreshRate(currentPkg)
+        }
+        ScreenOffAccessibilityService.instance?.let { service ->
+            service.invalidateBypassCache()
+            if (service.isAppBypassedForPocketMode(currentPkg)) {
+                service.dismissPocketMode()
+            }
         }
     }
 
@@ -497,6 +509,15 @@ class AppFlowHandler private constructor(
         }
         if (packageName != context.packageName && packageName != gatingPackage) {
             gatingPackage = null
+        }
+
+        // Dismiss pocket mode if the new foreground package is bypassed/excluded (fast path)
+        val serviceInstance = ScreenOffAccessibilityService.instance
+        if (serviceInstance != null) {
+            serviceInstance.invalidateBypassCache()
+            if (serviceInstance.isAppBypassedForPocketMode(packageName)) {
+                serviceInstance.dismissPocketMode()
+            }
         }
 
         checkAppLock(packageName)
