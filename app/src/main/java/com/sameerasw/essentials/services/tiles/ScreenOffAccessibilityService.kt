@@ -407,7 +407,6 @@ class ScreenOffAccessibilityService :
         super.onCreate()
         instance = this
 
-        // Initialize Handlers
         flashlightHandler = FlashlightHandler(this, serviceScope)
         notificationLightingHandler = NotificationLightingHandler(this)
         volumeStepsHandler = VolumeStepsHandler(this)
@@ -418,7 +417,7 @@ class ScreenOffAccessibilityService :
                 volumeStepsHandler,
                 cameraSessions = { cameraSessions },
             )
-        appFlowHandler = AppFlowHandler(this, this)
+        appFlowHandler = AppFlowHandler.getInstance(this)
         ambientGlanceHandler = AmbientGlanceHandler(this)
         aodForceTurnOffHandler = AodForceTurnOffHandler(this)
         aodWallpaperOverlayHandler = AodWallpaperOverlayHandler(this)
@@ -721,6 +720,12 @@ class ScreenOffAccessibilityService :
         serviceScope.cancel()
         getSharedPreferences("essentials_prefs", MODE_PRIVATE)
             .unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
+        if (!com.sameerasw.essentials.services.AppDetectionService.isRunning) {
+            try {
+                appFlowHandler.destroy()
+            } catch (_: Exception) {
+            }
+        }
         if (instance === this) instance = null
         super.onDestroy()
     }
