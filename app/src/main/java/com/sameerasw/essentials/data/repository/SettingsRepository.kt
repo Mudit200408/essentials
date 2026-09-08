@@ -286,6 +286,8 @@ class SettingsRepository(
         const val KEY_DEVELOPER_MODE_ENABLED = "developer_mode_enabled"
         const val KEY_HAPTIC_FEEDBACK_TYPE = "haptic_feedback_type"
 
+        const val KEY_WIFI_AUTO_OFF_ENABLED = "wifi_auto_off_enabled"
+        const val KEY_WIFI_AUTO_OFF_TIMEOUT = "wifi_auto_off_timeout"
         const val KEY_DEFAULT_TAB = "default_tab"
         const val KEY_APP_ICON = "app_icon_style"
         const val KEY_USE_ROOT = "use_root"
@@ -588,6 +590,14 @@ class SettingsRepository(
     fun isPowerSavingApplyOnBootEnabled(): Boolean = getBoolean(KEY_POWER_SAVING_APPLY_ON_BOOT, false)
 
     fun setPowerSavingApplyOnBootEnabled(enabled: Boolean) = putBoolean(KEY_POWER_SAVING_APPLY_ON_BOOT, enabled)
+
+    fun isWifiAutoOffEnabled(): Boolean = getBoolean(KEY_WIFI_AUTO_OFF_ENABLED, false)
+
+    fun setWifiAutoOffEnabled(enabled: Boolean) = putBoolean(KEY_WIFI_AUTO_OFF_ENABLED, enabled)
+
+    fun getWifiAutoOffTimeout(): Float = getFloat(KEY_WIFI_AUTO_OFF_TIMEOUT, 60f)
+
+    fun setWifiAutoOffTimeout(timeout: Float) = putFloat(KEY_WIFI_AUTO_OFF_TIMEOUT, timeout)
 
     /**
      * Executes the is translation mode warning suppressed operation.
