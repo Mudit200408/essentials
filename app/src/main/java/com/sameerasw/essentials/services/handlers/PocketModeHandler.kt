@@ -59,8 +59,25 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.utils.OverlayHelper
 
+import android.app.KeyguardManager
+import android.content.ComponentName
+import android.content.pm.ApplicationInfo
+import android.content.res.Configuration
+import android.hardware.display.DisplayManager
+import android.media.AudioManager
+import android.media.session.MediaSessionManager
+import android.media.session.PlaybackState
+import android.os.Build
+import android.view.Display
+import android.view.Surface
+import com.google.gson.GsonBuilder
+import com.sameerasw.essentials.domain.model.AppSelection
+import com.sameerasw.essentials.services.NotificationListener
+import java.util.concurrent.ConcurrentHashMap
+
 class PocketModeHandler(
     private val service: AccessibilityService,
+    private val isBypassedCheck: (() -> Boolean)? = null,
 ) {
     private var windowManager: WindowManager? = null
     private var overlayView: View? = null
@@ -69,12 +86,170 @@ class PocketModeHandler(
     var isBypassed = false
     var isOverlayVisible = false
 
+    val prefs by lazy { service.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE) }
+    private val keyguardManager by lazy {
+        service.getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager
+    }
+    private val notificationListenerComponent by lazy {
+        ComponentName(service, NotificationListener::class.java)
+    }
+
+    var pocketModeEnabled = false
+        private set
+    var pocketModeUseLightSensor = false
+        private set
+    var pocketModeTriggerDelayMs = 3000L
+        private set
+    var pocketModeLockScreenOnly = false
+        private set
+    var flashlightPocketTurnOffEnabled = false
+        private set
+
+    @Volatile private var pocketModeExcludedAppsSet: Set<String> = emptySet()
+    private val appCategoryCache = ConcurrentHashMap<String, Boolean>()
+
+    @Volatile private var cachedBypassedPackage: String? = null
+    @Volatile private var cachedBypassedKeyguardLocked: Boolean? = null
+    @Volatile private var cachedBypassedLandscape: Boolean? = null
+    @Volatile private var cachedBypassedResult: Boolean = false
+    @Volatile private var isMediaCurrentlyPlaying: Boolean = false
+
+    init {
+        updatePocketModePrefs()
+        updatePocketModeExcludedAppsSet()
+    }
+
+    fun updatePocketModePrefs() {
+        pocketModeEnabled = prefs.getBoolean("pocket_mode_enabled", false)
+        pocketModeUseLightSensor = prefs.getBoolean("pocket_mode_use_light_sensor", false)
+        pocketModeTriggerDelayMs = (prefs.getFloat("pocket_mode_trigger_delay", 3f) * 1000).toLong()
+        pocketModeLockScreenOnly = prefs.getBoolean("pocket_mode_lock_screen_only", false)
+        flashlightPocketTurnOffEnabled = prefs.getBoolean("flashlight_pocket_turn_off_enabled", false)
+        invalidateBypassCache()
+    }
+
+    fun updatePocketModeExcludedAppsSet() {
+        val json = prefs.getString("pocket_mode_excluded_apps", null)
+        pocketModeExcludedAppsSet =
+            if (json != null) {
+                try {
+                    val gson = GsonBuilder().create()
+                    gson.fromJson(json, Array<AppSelection>::class.java)
+                        .filter { it.isEnabled }
+                        .map { it.packageName }
+                        .toSet()
+                } catch (e: Exception) {
+                    emptySet()
+                }
+            } else {
+                emptySet()
+            }
+        invalidateBypassCache()
+    }
+
+    fun invalidateBypassCache(currentPackage: String? = null) {
+        cachedBypassedPackage = null
+        cachedBypassedKeyguardLocked = null
+        cachedBypassedLandscape = null
+        isMediaCurrentlyPlaying = if (currentPackage != null) hasActiveMediaSession(currentPackage) else false
+    }
+
+    fun isDeviceInLandscape(): Boolean {
+        return try {
+            val displayManager = service.getSystemService(Context.DISPLAY_SERVICE) as? DisplayManager
+            val display = displayManager?.getDisplay(Display.DEFAULT_DISPLAY)
+            val rotation = display?.rotation ?: Surface.ROTATION_0
+            rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270
+        } catch (_: Exception) {
+            service.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        }
+    }
+
+    fun isGameOrVideoApp(packageName: String): Boolean =
+        appCategoryCache.getOrPut(packageName) {
+            if (KNOWN_STREAMING_PACKAGES.contains(packageName)) {
+                return@getOrPut true
+            }
+            try {
+                val info = service.packageManager.getApplicationInfo(packageName, 0)
+                val isLegacyGame = (info.flags and ApplicationInfo.FLAG_IS_GAME) != 0
+                val isCategoryMatch =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val category = info.category
+                        category == ApplicationInfo.CATEGORY_GAME ||
+                            category == ApplicationInfo.CATEGORY_VIDEO
+                    } else {
+                        false
+                    }
+                isLegacyGame || isCategoryMatch
+            } catch (e: Exception) {
+                false
+            }
+        }
+
+    fun hasActiveMediaSession(packageName: String): Boolean {
+        return try {
+            val msm = service.getSystemService(Context.MEDIA_SESSION_SERVICE) as? MediaSessionManager ?: return false
+            val sessions = msm.getActiveSessions(notificationListenerComponent)
+            val hasActiveSession = sessions.any {
+                it.packageName == packageName &&
+                        it.playbackState?.state == PlaybackState.STATE_PLAYING
+            }
+            if (hasActiveSession) return true
+
+            val audioManager = service.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+            if (audioManager?.isMusicActive == true) {
+                val otherAppPlaying = sessions.any {
+                    it.packageName != packageName && it.playbackState?.state == PlaybackState.STATE_PLAYING
+                }
+                if (!otherAppPlaying) return true
+            }
+            false
+        } catch (e: SecurityException) {
+            Log.w("PocketModeHandler", "SecurityException checking media sessions for $packageName: ${e.message}")
+            val audioManager = service.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+            audioManager?.isMusicActive == true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun isAppBypassed(packageName: String?, isKeyguardLocked: Boolean = false): Boolean {
+        val isLandscape = isDeviceInLandscape()
+        if (packageName == cachedBypassedPackage &&
+            isKeyguardLocked == cachedBypassedKeyguardLocked &&
+            isLandscape == cachedBypassedLandscape
+        ) {
+            return cachedBypassedResult
+        }
+
+        val isExcluded = !isKeyguardLocked && (
+            isLandscape || (packageName != null && (
+                pocketModeExcludedAppsSet.contains(packageName) ||
+                isGameOrVideoApp(packageName) ||
+                isMediaCurrentlyPlaying
+            ))
+        )
+        val isKeyguardBypassed = pocketModeLockScreenOnly && !isKeyguardLocked
+        val result = isExcluded || isKeyguardBypassed
+
+        cachedBypassedPackage = packageName
+        cachedBypassedKeyguardLocked = isKeyguardLocked
+        cachedBypassedLandscape = isLandscape
+        cachedBypassedResult = result
+        return result
+    }
+
     private val handler = Handler(Looper.getMainLooper())
     private var isPending = false
     private val showOverlayRunnable =
         Runnable {
             isPending = false
-            if (!isBypassed) {
+            val isCurrentAppBypassed = isBypassedCheck?.invoke() ?: isAppBypassed(
+                AppFlowHandler.getInstance(service).currentPackage,
+                keyguardManager?.isKeyguardLocked ?: false,
+            )
+            if (!isBypassed && !isCurrentAppBypassed) {
                 showOverlay()
             }
         }
@@ -177,6 +352,23 @@ class PocketModeHandler(
         isBypassed = false
     }
 
+    /** Cancels a pending (not-yet-shown) overlay scheduled for this sensor tick.
+     *  Does NOT remove an already-visible overlay and does NOT reset [isBypassed]. */
+    fun cancelPending() {
+        handler.removeCallbacks(showOverlayRunnable)
+        isPending = false
+    }
+
+    /** Called when the user switches into a bypassed/excluded app.
+     *  Removes any pending timer and the active overlay, but preserves [isBypassed]
+     *  so a user-initiated volume-key bypass is not cleared. */
+    fun dismissForAppSwitch() {
+        handler.removeCallbacks(showOverlayRunnable)
+        handler.removeCallbacks(screenOffRunnable)
+        isPending = false
+        removeOverlay()
+    }
+
     private class OverlayLifecycleOwner :
         LifecycleOwner,
         SavedStateRegistryOwner,
@@ -270,5 +462,31 @@ class PocketModeHandler(
                 )
             }
         }
+    }
+
+    companion object {
+        val KNOWN_STREAMING_PACKAGES = setOf(
+            "com.google.android.youtube",
+            "com.google.android.apps.youtube.music",
+            "com.google.android.apps.youtube.kids",
+            "com.netflix.mediaclient",
+            "com.amazon.avod.thirdpartyclient",
+            "tv.twitch.android.app",
+            "com.disney.disneyplus",
+            "in.startv.hotstar",
+            "com.crunchyroll.crunchyroid",
+            "com.wbd.stream",
+            "com.hbo.hbonow",
+            "org.videolan.vlc",
+            "com.mxtech.videoplayer.ad",
+            "com.mxtech.videoplayer.pro",
+            "org.xbmc.kodi",
+            "com.plexapp.android",
+            "com.spotify.music",
+            "com.soundcloud.android",
+            "com.jio.media.ondemand",
+            "com.graymatrix.did",
+            "com.zee5.hilgard",
+        )
     }
 }
