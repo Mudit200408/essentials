@@ -1890,7 +1890,7 @@ object FeatureRegistry {
                     viewModel: MainViewModel,
                     context: Context,
                     enabled: Boolean,
-                ) = viewModel.setPocketModeEnabled(enabled)
+                ) = viewModel.setPocketModeEnabled(enabled, context)
 
                 override fun isDeviceSupported(context: Context) = !DeviceUtils.isGoogleDevice()
             },
