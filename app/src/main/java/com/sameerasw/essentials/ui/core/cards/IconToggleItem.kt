@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
@@ -52,6 +54,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sameerasw.essentials.translation.TranslationManager
 import com.sameerasw.essentials.translation.ui.TranslationBottomSheet
+import com.sameerasw.essentials.translation.ui.TranslationMenuItems
 import com.sameerasw.essentials.ui.components.menus.SegmentedDropdownMenu
 import com.sameerasw.essentials.utils.HapticUtil
 
@@ -78,6 +81,8 @@ fun IconToggleItem(
     infoText: String? = null,
     onInfoClick: (() -> Unit)? = null,
     dragHandle: (@Composable () -> Unit)? = null,
+    index: Int? = null,
+    count: Int? = null,
 ) {
     val view = LocalView.current
     val context = LocalContext.current
@@ -85,6 +90,23 @@ fun IconToggleItem(
     val finalDescription = subtitle ?: description
     val finalIsChecked = checked ?: isChecked
     val isTranslationModeActive by TranslationManager.isTranslationModeEnabled
+
+    val itemShape = if (index != null && count != null) {
+        when {
+            count == 1 -> RoundedCornerShape(24.dp)
+            index == 0 -> RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp, bottomStart = 4.dp, bottomEnd = 4.dp)
+            index == count - 1 -> RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp, bottomStart = 24.dp, bottomEnd = 24.dp)
+            else -> RoundedCornerShape(4.dp)
+        }
+    } else {
+        null
+    }
+
+    val itemModifier = if (itemShape != null) {
+        modifier.clip(itemShape)
+    } else {
+        modifier
+    }
 
     var showMenu by remember { mutableStateOf(false) }
     var translationSheetKey by remember { mutableStateOf<String?>(null) }
@@ -124,7 +146,7 @@ fun IconToggleItem(
             expanded = showMenu,
             onDismissRequest = { showMenu = false },
         ) {
-            com.sameerasw.essentials.translation.ui.TranslationMenuItems(
+            TranslationMenuItems(
                 title = title,
                 description = finalDescription,
                 onSelectKey = { key ->
@@ -135,7 +157,7 @@ fun IconToggleItem(
         }
     }
 
-    Box(modifier = modifier.fillMaxWidth()) {
+    Box(modifier = itemModifier.fillMaxWidth()) {
         if (showToggle) {
             if (onClick != null) {
                 ListItem(
@@ -423,7 +445,6 @@ fun IconToggleItem(
                 },
             )
         }
-
         if (!enabled && onDisabledClick != null) {
             Box(
                 modifier =
