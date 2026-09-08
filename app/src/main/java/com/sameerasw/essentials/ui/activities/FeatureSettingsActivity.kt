@@ -67,7 +67,7 @@ import com.sameerasw.essentials.ui.core.sheets.PermissionsBottomSheet
 import com.sameerasw.essentials.ui.features.battery.BatteriesSettingsUI
 import com.sameerasw.essentials.ui.features.consciousgate.CONSCIOUS_GATE_FEATURE_ID
 import com.sameerasw.essentials.ui.features.security.AppLockSettingsUI
-import com.sameerasw.essentials.ui.features.system.AlwaysOnDisplaySettingsUI
+import com.sameerasw.essentials.ui.features.display.AlwaysOnDisplaySettingsUI
 import com.sameerasw.essentials.ui.features.system.BatteryNotificationSettingsUI
 import com.sameerasw.essentials.ui.features.system.ActivityLauncherSearchBar
 import com.sameerasw.essentials.ui.features.system.ActivityLauncherSettingsUI
@@ -101,7 +101,7 @@ import com.sameerasw.essentials.ui.features.system.LocationReachedSettingsUI
 import com.sameerasw.essentials.ui.features.system.LockScreenClockSettingsUI
 import com.sameerasw.essentials.ui.features.system.MapsPowerSavingSettingsUI
 import com.sameerasw.essentials.ui.features.system.NavigationSettingsUI
-import com.sameerasw.essentials.ui.features.system.NetworksSettingsUI
+import com.sameerasw.essentials.ui.features.network.NetworksSettingsUI
 import com.sameerasw.essentials.ui.features.system.NotificationLightingSettingsUI
 import com.sameerasw.essentials.ui.features.system.NotificationSnoozingSettingsUI
 import com.sameerasw.essentials.ui.features.system.OtherCustomizationsSettingsUI
@@ -113,7 +113,7 @@ import com.sameerasw.essentials.ui.features.system.RefreshRateSettingsUI
 import com.sameerasw.essentials.ui.features.system.RemoteLockSettingsUI
 import com.sameerasw.essentials.ui.features.system.ScreenLockedSecuritySettingsUI
 import com.sameerasw.essentials.ui.features.system.ScreenOffWidgetSettingsUI
-import com.sameerasw.essentials.ui.features.system.ShutUpSettingsUI
+import com.sameerasw.essentials.ui.features.audio.ShutUpSettingsUI
 import com.sameerasw.essentials.ui.features.system.SnoozeNotificationsSettingsUI
 import com.sameerasw.essentials.ui.features.system.SoundModeTileSettingsUI
 import com.sameerasw.essentials.ui.features.system.StandbyAppsSettingsUI
@@ -276,6 +276,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
                     val isNotificationListenerEnabled by viewModel.isNotificationListenerEnabled
                     val isReadPhoneStateEnabled by viewModel.isReadPhoneStateEnabled
                     val isShizukuPermissionGranted by viewModel.isShizukuPermissionGranted
+                    val isWriteSettingsEnabled by viewModel.isWriteSettingsEnabled
+                    val isUsageStatsPermissionGranted by viewModel.isUsageStatsPermissionGranted
+                    val isPostNotificationsEnabled by viewModel.isPostNotificationsEnabled
 
                     var watchAdbWifiEnabled by remember {
                         mutableStateOf(prefs.getBoolean("watch_adb_wifi_enabled", false))
@@ -354,7 +357,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
                         isNotificationLightingAccessibilityEnabled,
                         isNotificationListenerEnabled,
                         isReadPhoneStateEnabled,
-                        isShizukuPermissionGranted,
+                        isWriteSettingsEnabled,
+                        isUsageStatsPermissionGranted,
+                        isPostNotificationsEnabled,
                     ) {
                         val hasMissingPermissions =
                             when (featureId) {
@@ -401,6 +406,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                     !com.sameerasw.essentials.utils.ShellUtils.hasPermission(
                                         context,
                                     )
+                                "Shut-Up!" -> !isWriteSecureSettingsEnabled || !isWriteSettingsEnabled || !isUsageStatsPermissionGranted || !isPostNotificationsEnabled
                                 // Top level checks for other features (rarely hit if they are children, but safe to add)
                                 "Essentials On Display" -> !isAccessibilityEnabled || !isNotificationListenerEnabled
                                 "Call vibrations" -> !isReadPhoneStateEnabled || !isNotificationListenerEnabled
@@ -422,7 +428,6 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                         context,
                                     )
 
-                                "Shut-Up!" -> !isWriteSecureSettingsEnabled || !viewModel.isUsageStatsPermissionGranted.value
                                 "Power and Battery" -> !isWriteSecureSettingsEnabled
                                 "Networks" ->
                                     !isWriteSecureSettingsEnabled &&
@@ -636,7 +641,6 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                     modifier = Modifier.padding(top = 16.dp),
                                 )
                             }
-
                             val children =
                                 FeatureRegistry
                                     .getFilteredFeatures(
@@ -665,20 +669,20 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                                             "Island",
                                                             "Status glance",
                                                         ),
-                                                        listOf(
-                                                            "Text and animations",
-                                                            "Screen refresh rate",
-                                                            "Navigation",
-                                                        ),
-                                                        listOf(
-                                                            "Caffeinate",
-                                                            "Dynamic night light",
-                                                            "Smart pixels",
-                                                        ),
-                                                        listOf(
-                                                            "Other customizations",
-                                                        ),
-                                                    )
+                                            listOf(
+                                                "Text and animations",
+                                                "Screen refresh rate",
+                                                "Navigation",
+                                            ),
+                                            listOf(
+                                                "Caffeinate",
+                                                "Dynamic night light",
+                                                "Smart pixels",
+                                            ),
+                                            listOf(
+                                                "Other customizations",
+                                            ),
+                                        )
 
                                                 "Notifications" ->
                                                     listOf(
@@ -884,7 +888,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
 
                                                             "Shut-Up!" ->
                                                                 !isWriteSecureSettingsEnabled ||
-                                                                    !viewModel.isUsageStatsPermissionGranted.value
+                                                                    !viewModel.isWriteSettingsEnabled.value ||
+                                                                    !viewModel.isUsageStatsPermissionGranted.value ||
+                                                                    !viewModel.isPostNotificationsEnabled.value
                                                             "Power and Battery" -> !isWriteSecureSettingsEnabled
                                                             "Networks" ->
                                                                 !isWriteSecureSettingsEnabled &&
@@ -1383,12 +1389,11 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                             highlightSetting = highlightSetting,
                                         )
                                     }
-
                                     "Shut-Up!" -> {
                                         ShutUpSettingsUI(
                                             viewModel = viewModel,
                                             modifier = Modifier.padding(top = 16.dp),
-                                            highlightKey = highlightSetting,
+                                            highlightSetting = highlightSetting,
                                         )
                                     }
 
