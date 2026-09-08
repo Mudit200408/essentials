@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.services.receivers.SecurityReceiver
 import com.sameerasw.essentials.services.widgets.BatteriesWidgetReceiver
+import com.sameerasw.essentials.services.handlers.WifiAutoOffManager
 import com.sameerasw.essentials.utils.ShizukuUtils
 import eu.darken.porter.bridge.PorterShizukuBridge
 import kotlinx.coroutines.CoroutineScope
@@ -78,6 +79,7 @@ class EssentialsApp : Application() {
             com.sameerasw.essentials.services.DeviceInfoSyncManager
                 .init(this@EssentialsApp)
         }
+        WifiAutoOffManager.init(this)
         com.sameerasw.essentials.utils.ServiceUtils
             .startRequiredServices(this)
 

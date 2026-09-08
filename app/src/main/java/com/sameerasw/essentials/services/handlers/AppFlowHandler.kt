@@ -9,8 +9,6 @@
 
 package com.sameerasw.essentials.services.handlers
 
-import com.sameerasw.essentials.R
-import android.accessibilityservice.AccessibilityService
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -48,7 +46,6 @@ import com.sameerasw.essentials.domain.model.AppRefreshRateConfig
 import com.sameerasw.essentials.domain.model.AppSelection
 import com.sameerasw.essentials.domain.model.BackGestureAppConfig
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
-import com.sameerasw.essentials.domain.model.disableWirelessDebugging
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.services.AppDetectionService
 import com.sameerasw.essentials.services.NotificationListener
@@ -63,6 +60,8 @@ import com.sameerasw.essentials.utils.StatusBarManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -74,7 +73,7 @@ class AppFlowHandler private constructor(
 ) {
     private val context = context.applicationContext
     private val handler = Handler(Looper.getMainLooper())
-    private val scope = CoroutineScope(Dispatchers.Main.immediate)
+    private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
     private var lastIsLandscape = isDeviceInLandscape()
     private val settingsRepository by lazy { SettingsRepository(context) }
     private val notificationListenerComponent by lazy {
@@ -97,7 +96,6 @@ class AppFlowHandler private constructor(
 
     private val prefsChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         when (key) {
-            SettingsRepository.KEY_SHUT_UP_SELECTED_APPS -> cachedShutUpConfigs = null
             SettingsRepository.KEY_PER_APP_REFRESH_RATE_CONFIGS -> {
                 cachedRefreshRateConfigs = null
                 currentPackage?.let { checkPerAppRefreshRate(it) }
@@ -105,6 +103,10 @@ class AppFlowHandler private constructor(
             SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED -> {
                 currentPackage?.let { checkPerAppRefreshRate(it) }
             }
+            "app_lock_selected_apps" -> cachedAppLockApps = null
+            "conscious_gate_selected_apps" -> cachedConsciousGateApps = null
+            "dynamic_night_light_selected_apps" -> cachedNightLightApps = null
+            SettingsRepository.KEY_SHUT_UP_SELECTED_APPS -> cachedShutUpConfigs = null
         }
     }
 
@@ -144,9 +146,16 @@ class AppFlowHandler private constructor(
         object : AudioManager.AudioPlaybackCallback() {
             override fun onPlaybackConfigChanged(configs: MutableList<AudioPlaybackConfiguration>?) {
                 val currentPkg = currentPackage
+                // Only re-check refresh rate when the current app has a media-conditional config.
+                // Without this guard, every notification sound / duck event triggers a binder call.
                 if (currentPkg != null) {
-                    Log.d("AppFlowHandler", "AudioPlaybackCallback: playback config changed, checking refresh rate for $currentPkg")
-                    checkPerAppRefreshRate(currentPkg)
+                    val isMediaConditional = cachedRefreshRateConfigs?.any {
+                        it.packageName == currentPkg && it.isEnabled && it.onlyOnMediaPlaying
+                    } ?: false
+                    if (isMediaConditional) {
+                        Log.d("AppFlowHandler", "AudioPlaybackCallback: media-conditional config found, checking refresh rate for $currentPkg")
+                        checkPerAppRefreshRate(currentPkg)
+                    }
                 }
                 ScreenOffAccessibilityService.instance?.let { service ->
                     service.invalidateBypassCache()
@@ -160,9 +169,15 @@ class AppFlowHandler private constructor(
 
     private val activeSessionsListener = MediaSessionManager.OnActiveSessionsChangedListener { controllers ->
         val currentPkg = currentPackage
+        // Same guard as audioPlaybackCallback — fire only for media-conditional configs.
         if (currentPkg != null) {
-            Log.d("AppFlowHandler", "OnActiveSessionsChangedListener: active sessions changed, checking refresh rate for $currentPkg")
-            checkPerAppRefreshRate(currentPkg)
+            val isMediaConditional = cachedRefreshRateConfigs?.any {
+                it.packageName == currentPkg && it.isEnabled && it.onlyOnMediaPlaying
+            } ?: false
+            if (isMediaConditional) {
+                Log.d("AppFlowHandler", "OnActiveSessionsChangedListener: active sessions changed, checking refresh rate for $currentPkg")
+                checkPerAppRefreshRate(currentPkg)
+            }
         }
         ScreenOffAccessibilityService.instance?.let { service ->
             service.invalidateBypassCache()
@@ -210,11 +225,24 @@ class AppFlowHandler private constructor(
     // App Automation State
     private val activeAppAutomationIds = mutableSetOf<String>()
 
+    // --- Config caches: avoid JSON parse + SharedPrefs read on every package switch ---
+    private val gson = Gson()
+    private var cachedAppLockApps: List<AppSelection>? = null
+    private var cachedConsciousGateApps: List<AppSelection>? = null
+    private var cachedNightLightApps: List<AppSelection>? = null
     @Volatile private var cachedShutUpConfigs: List<ShutUpAppConfig>? = null
 
     private fun getShutUpConfigs(repo: SettingsRepository = settingsRepository): List<ShutUpAppConfig> {
         return cachedShutUpConfigs ?: repo.loadShutUpConfigs().also { cachedShutUpConfigs = it }
     }
+    // Launcher package cache: rebuilt on first use, cleared in destroy()
+    @Volatile private var cachedLauncherPackages: Set<String>? = null
+    // AudioManager.mode cache (100ms TTL) to avoid blocking binder in isIgnoredPackage
+    @Volatile private var cachedAudioMode: Int = AudioManager.MODE_NORMAL
+    @Volatile private var cachedAudioModeTs: Long = 0L
+    // IME package cache (5s TTL) to avoid IPC on every accessibility event
+    @Volatile private var cachedImePackages: Set<String>? = null
+    @Volatile private var cachedImePackagesTs: Long = 0L
 
     private val shutUpReceiver =
         object : BroadcastReceiver() {
@@ -242,10 +270,7 @@ class AppFlowHandler private constructor(
                         cancelRestoreNotification()
                         val autoPkg = intent.getStringExtra(EXTRA_AUTO_ARCHIVE_PACKAGE)
                         val pkgName = intent.getStringExtra(EXTRA_PACKAGE_NAME)
-                        val settingsRepo =
-                            com.sameerasw.essentials.data.repository.SettingsRepository(
-                                context ?: return,
-                            )
+                        val settingsRepo = settingsRepository
                         val config =
                             if (pkgName != null) {
                                 getShutUpConfigs(settingsRepo).find { it.packageName == pkgName }
@@ -281,7 +306,7 @@ class AppFlowHandler private constructor(
                 addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
             }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.context.registerReceiver(mediaReceiver, mediaFilter, Context.RECEIVER_EXPORTED)
+            this.context.registerReceiver(mediaReceiver, mediaFilter, Context.RECEIVER_NOT_EXPORTED)
         } else {
             this.context.registerReceiver(mediaReceiver, mediaFilter)
         }
@@ -293,7 +318,7 @@ class AppFlowHandler private constructor(
                 addAction(ACTION_RESTORE_NOW)
             }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.context.registerReceiver(shutUpReceiver, shutUpFilter, Context.RECEIVER_EXPORTED)
+            this.context.registerReceiver(shutUpReceiver, shutUpFilter, Context.RECEIVER_NOT_EXPORTED)
         } else {
             this.context.registerReceiver(shutUpReceiver, shutUpFilter)
         }
@@ -337,6 +362,7 @@ class AppFlowHandler private constructor(
         cancelPendingRateRunnable()
         cancelPendingRestoreRunnable()
         refreshRateJob?.cancel()
+        scope.cancel()
         if (perAppRateSnapshot != null) {
             val snapshotToRestore = perAppRateSnapshot
             perAppRateSnapshot = null
@@ -348,7 +374,7 @@ class AppFlowHandler private constructor(
                 }
             }
         }
-        synchronized(AppFlowHandler::class.java) {
+        synchronized(AppFlowHandler.Companion) {
             if (INSTANCE === this) {
                 INSTANCE = null
             }
@@ -408,22 +434,38 @@ class AppFlowHandler private constructor(
             return true
         }
 
-        // Check active call state via AudioManager mode
-        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
-        if (audioManager != null) {
-            val mode = audioManager.mode
-            if (mode == AudioManager.MODE_IN_CALL ||
-                mode == AudioManager.MODE_IN_COMMUNICATION ||
-                mode == AudioManager.MODE_RINGTONE
-            ) {
-                return true
-            }
+        // Check active call state via AudioManager mode.
+        // Uses a 100ms TTL cache to avoid a blocking binder call on every accessibility event.
+        val nowMs = System.currentTimeMillis()
+        val audioMode = if (nowMs - cachedAudioModeTs > 100L) {
+            val mode = (context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager)?.mode
+                ?: AudioManager.MODE_NORMAL
+            cachedAudioMode = mode
+            cachedAudioModeTs = nowMs
+            mode
+        } else {
+            cachedAudioMode
+        }
+        if (audioMode == AudioManager.MODE_IN_CALL ||
+            audioMode == AudioManager.MODE_IN_COMMUNICATION ||
+            audioMode == AudioManager.MODE_RINGTONE
+        ) {
+            return true
         }
 
+        // Check IME packages. Uses a 5s TTL cache since IME changes are extremely rare.
         return try {
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            val ims = imm?.enabledInputMethodList
-            ims?.any { it.packageName == packageName } == true
+            val imeNow = System.currentTimeMillis()
+            val imePackages = if (imeNow - cachedImePackagesTs > 5_000L) {
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                val packages = imm?.enabledInputMethodList?.map { it.packageName }?.toSet() ?: emptySet()
+                cachedImePackages = packages
+                cachedImePackagesTs = imeNow
+                packages
+            } else {
+                cachedImePackages ?: emptySet()
+            }
+            imePackages.contains(packageName)
         } catch (_: Exception) {
             false
         }
@@ -567,7 +609,6 @@ class AppFlowHandler private constructor(
         if (now - session.startTimeMillis > session.durationMillis) return null
         return session
     }
-
     private fun checkShutUp(packageName: String) {
         val serviceEnabled = settingsRepository.isShutUpServiceEnabled()
         if (!serviceEnabled) return
@@ -613,17 +654,16 @@ class AppFlowHandler private constructor(
             return
         }
 
-        val json = prefs.getString("app_lock_selected_apps", null)
-        val selectedApps: List<AppSelection> =
-            if (json != null) {
+        val selectedApps: List<AppSelection> = cachedAppLockApps ?: run {
+            val json = prefs.getString("app_lock_selected_apps", null)
+            val parsed = if (json != null) {
                 try {
-                    Gson().fromJson(json, Array<AppSelection>::class.java).toList()
-                } catch (_: Exception) {
-                    emptyList()
-                }
-            } else {
-                emptyList()
-            }
+                    gson.fromJson(json, Array<AppSelection>::class.java).toList()
+                } catch (_: Exception) { emptyList() }
+            } else { emptyList() }
+            cachedAppLockApps = parsed
+            parsed
+        }
 
         val isLocked = selectedApps.find { it.packageName == packageName }?.isEnabled ?: false
 
@@ -676,17 +716,16 @@ class AppFlowHandler private constructor(
         val isEnabled = prefs.getBoolean("conscious_gate_enabled", false)
         if (!isEnabled || isIgnoredPackage(packageName)) return
 
-        val json = prefs.getString("conscious_gate_selected_apps", null)
-        val selectedApps: List<AppSelection> =
-            if (json != null) {
+        val selectedApps: List<AppSelection> = cachedConsciousGateApps ?: run {
+            val json = prefs.getString("conscious_gate_selected_apps", null)
+            val parsed = if (json != null) {
                 try {
-                    Gson().fromJson(json, Array<AppSelection>::class.java).toList()
-                } catch (_: Exception) {
-                    emptyList()
-                }
-            } else {
-                emptyList()
-            }
+                    gson.fromJson(json, Array<AppSelection>::class.java).toList()
+                } catch (_: Exception) { emptyList() }
+            } else { emptyList() }
+            cachedConsciousGateApps = parsed
+            parsed
+        }
 
         val isGated = selectedApps.find { it.packageName == packageName }?.isEnabled ?: false
         if (!isGated) return
@@ -718,6 +757,14 @@ class AppFlowHandler private constructor(
         }
 
         if (packageName == gatingPackage && now - lastGateRequestTime < 2500) {
+            return
+        }
+
+        // `currentPackage` is only as fresh as the last window-state-changed event we received, and closing an app
+        // can fire a stale event for its own package after the real foreground has already moved elsewhere.
+        // Cross-check against the window the accessibility service reports as actually active right now before committing.
+        val actuallyActivePackage = ScreenOffAccessibilityService.instance?.rootInActiveWindow?.packageName?.toString()
+        if (actuallyActivePackage != null && actuallyActivePackage != packageName) {
             return
         }
 
@@ -816,17 +863,16 @@ class AppFlowHandler private constructor(
     }
 
     private fun processNightLightChange(packageName: String) {
-        val json = prefs.getString("dynamic_night_light_selected_apps", null)
-        val selectedApps: List<AppSelection> =
-            if (json != null) {
+        val selectedApps: List<AppSelection> = cachedNightLightApps ?: run {
+            val json = prefs.getString("dynamic_night_light_selected_apps", null)
+            val parsed = if (json != null) {
                 try {
-                    Gson().fromJson(json, Array<AppSelection>::class.java).toList()
-                } catch (_: Exception) {
-                    emptyList()
-                }
-            } else {
-                emptyList()
-            }
+                    gson.fromJson(json, Array<AppSelection>::class.java).toList()
+                } catch (_: Exception) { emptyList() }
+            } else { emptyList() }
+            cachedNightLightApps = parsed
+            parsed
+        }
 
         val isAppSelected = selectedApps.find { it.packageName == packageName }?.isEnabled ?: false
         val isNLCurrentlyOn = isNightLightEnabled()
@@ -957,17 +1003,20 @@ class AppFlowHandler private constructor(
     private fun isLauncher(packageName: String): Boolean {
         if (packageName == "com.android.systemui") return true
 
-        val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
-        val resolveInfo =
-            context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        val defaultLauncher = resolveInfo?.activityInfo?.packageName
-
-        if (packageName == defaultLauncher) return true
-
-        // Secondary check for other launchers if not default
-        val launchers =
-            context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        return launchers.any { it.activityInfo.packageName == packageName }
+        // Cache launcher packages to avoid two PackageManager IPC calls on every package switch.
+        // Cleared in destroy(); rebuilt on first call after that.
+        val packages = cachedLauncherPackages ?: run {
+            val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
+            val resolveInfo = context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+            val launchers = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+            val set = buildSet<String> {
+                resolveInfo?.activityInfo?.packageName?.let { add(it) }
+                launchers.forEach { add(it.activityInfo.packageName) }
+            }
+            cachedLauncherPackages = set
+            set
+        }
+        return packages.contains(packageName)
     }
 
     private fun checkShutUpRestore(
@@ -1111,10 +1160,10 @@ class AppFlowHandler private constructor(
             )
 
         val title =
-            context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_notif_title)
+            context.getString(R.string.shut_up_auto_archive_notif_title)
         val text =
             context.getString(
-                com.sameerasw.essentials.R.string.shut_up_auto_archive_notif_text,
+                R.string.shut_up_auto_archive_notif_text,
                 appName,
                 secondsLeft,
             )
@@ -1125,7 +1174,7 @@ class AppFlowHandler private constructor(
                 val builder =
                     android.app.Notification
                         .Builder(context, "shutup_alerts_channel")
-                        .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_snowflake_24)
+                        .setSmallIcon(R.drawable.rounded_snowflake_24)
                         .setContentTitle(title)
                         .setContentText(text)
                         .setOngoing(true)
@@ -1144,9 +1193,9 @@ class AppFlowHandler private constructor(
                         .Builder(
                             android.graphics.drawable.Icon.createWithResource(
                                 context,
-                                com.sameerasw.essentials.R.drawable.rounded_snowflake_24,
+                                R.drawable.rounded_snowflake_24,
                             ),
-                            context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_action_freeze),
+                            context.getString(R.string.shut_up_auto_archive_action_freeze),
                             freezePendingIntent,
                         ).build(),
                 )
@@ -1155,9 +1204,9 @@ class AppFlowHandler private constructor(
                         .Builder(
                             android.graphics.drawable.Icon.createWithResource(
                                 context,
-                                com.sameerasw.essentials.R.drawable.rounded_close_24,
+                                R.drawable.rounded_close_24,
                             ),
-                            context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_action_abort),
+                            context.getString(R.string.shut_up_auto_archive_action_abort),
                             abortPendingIntent,
                         ).build(),
                 )
@@ -1170,7 +1219,10 @@ class AppFlowHandler private constructor(
                             Boolean::class.javaPrimitiveType,
                         )
                     setRequestPromotedOngoing.invoke(builder, true)
+                } catch (_: Throwable) {
+                }
 
+                try {
                     val setShortCriticalText =
                         builder.javaClass.getMethod(
                             "setShortCriticalText",
@@ -1191,7 +1243,7 @@ class AppFlowHandler private constructor(
             } else {
                 NotificationCompat
                     .Builder(context, "shutup_alerts_channel")
-                    .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_snowflake_24)
+                    .setSmallIcon(R.drawable.rounded_snowflake_24)
                     .setContentTitle(title)
                     .setContentText(text)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -1201,12 +1253,12 @@ class AppFlowHandler private constructor(
                     .setOngoing(true)
                     .setProgress(10, secondsLeft, false)
                     .addAction(
-                        com.sameerasw.essentials.R.drawable.rounded_snowflake_24,
-                        context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_action_freeze),
+                        R.drawable.rounded_snowflake_24,
+                        context.getString(R.string.shut_up_auto_archive_action_freeze),
                         freezePendingIntent,
                     ).addAction(
-                        com.sameerasw.essentials.R.drawable.rounded_close_24,
-                        context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_action_abort),
+                        R.drawable.rounded_close_24,
+                        context.getString(R.string.shut_up_auto_archive_action_abort),
                         abortPendingIntent,
                     ).addExtras(
                         android.os.Bundle().apply {
@@ -1235,7 +1287,7 @@ class AppFlowHandler private constructor(
                 android.app
                     .NotificationChannel(
                         "app_detection_service_channel",
-                        context.getString(com.sameerasw.essentials.R.string.app_detection_service_channel_name),
+                        context.getString(R.string.app_detection_service_channel_name),
                         NotificationManager.IMPORTANCE_HIGH,
                     ).apply {
                         description = context.getString(com.sameerasw.essentials.R.string.app_detection_channel_desc)
@@ -1273,7 +1325,7 @@ class AppFlowHandler private constructor(
     }
 
     private fun showRestoreNotification(
-        wasShutUpConfig: com.sameerasw.essentials.domain.model.ShutUpAppConfig?,
+        wasShutUpConfig: ShutUpAppConfig?,
         autoArchivePackage: String?,
     ) {
         createNotificationChannel()
@@ -1307,7 +1359,7 @@ class AppFlowHandler private constructor(
                 val builder =
                     android.app.Notification
                         .Builder(context, "shutup_restore_channel")
-                        .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_code_24)
+                        .setSmallIcon(R.drawable.rounded_code_24)
                         .setContentTitle(title)
                         .setContentText(text)
                         .setCategory(android.app.Notification.CATEGORY_SERVICE)
@@ -1319,7 +1371,7 @@ class AppFlowHandler private constructor(
                                 .Builder(
                                     android.graphics.drawable.Icon.createWithResource(
                                         context,
-                                        com.sameerasw.essentials.R.drawable.rounded_code_24,
+                                        R.drawable.rounded_code_24,
                                     ),
                                     criticalText,
                                     restorePendingIntent,
@@ -1344,7 +1396,7 @@ class AppFlowHandler private constructor(
             } else {
                 NotificationCompat
                     .Builder(context, "shutup_restore_channel")
-                    .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_code_24)
+                    .setSmallIcon(R.drawable.rounded_code_24)
                     .setContentTitle(title)
                     .setContentText(text)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -1374,8 +1426,8 @@ class AppFlowHandler private constructor(
     }
 
     private fun restoreShutUpSettings(
-        repository: com.sameerasw.essentials.data.repository.SettingsRepository,
-        wasShutUpConfig: com.sameerasw.essentials.domain.model.ShutUpAppConfig?,
+        repository: SettingsRepository,
+        wasShutUpConfig: ShutUpAppConfig?,
         autoArchivePackage: String? = null,
         forceRestore: Boolean = false,
     ) {
@@ -1610,9 +1662,9 @@ class AppFlowHandler private constructor(
             perAppCurrentPackage = null
 
             if (perAppRateSnapshot != null && pendingRestoreRunnable == null) {
-                Log.d("AppFlowHandler", "per-app refresh rate: scheduling delayed restoration (1000ms) for leaving $packageName")
+                Log.d("AppFlowHandler", "per-app refresh rate: scheduling restoration (150ms) for leaving $packageName")
                 refreshRateJob = scope.launch(Dispatchers.IO) {
-                    delay(1000L)
+                    delay(150L)
                     if (perAppCurrentPackage == null && perAppRateSnapshot != null) {
                         val snapshot = perAppRateSnapshot
                         perAppRateSnapshot = null
@@ -1621,6 +1673,30 @@ class AppFlowHandler private constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun onScreenOff() {
+        cancelPendingRateRunnable()
+        cancelPendingRestoreRunnable()
+        refreshRateJob?.cancel()
+        if (perAppRateSnapshot != null) {
+            val snapshot = perAppRateSnapshot
+            perAppRateSnapshot = null
+            scope.launch(Dispatchers.IO) {
+                try {
+                    snapshot?.let { restoreFromSnapshotState(it) }
+                } catch (e: Exception) {
+                    Log.e("AppFlowHandler", "Failed to restore refresh rate on screen off", e)
+                }
+            }
+        }
+    }
+
+    fun onScreenOn() {
+        val currentPkg = currentPackage
+        if (currentPkg != null) {
+            checkPerAppRefreshRate(currentPkg)
         }
     }
 

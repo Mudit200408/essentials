@@ -466,6 +466,7 @@ class ScreenOffAccessibilityService :
                             shadeExpandedNow = false
                             appFlowHandler.clearAuthenticated()
                             appFlowHandler.clearConsciousGate()
+                            appFlowHandler.onScreenOff()
                             scheduleFreeze()
                             updateInputEventListener()
                             ambientGlanceHandler.checkAndShowOnScreenOff()
@@ -492,6 +493,7 @@ class ScreenOffAccessibilityService :
                             lockscreenShortcutsHandler.onUserPresent()
                             duoOverlayHandler.onUserPresent()
                             islandOverlayHandler.updateState()
+                            appFlowHandler.onScreenOn()
                             val currentApp = appFlowHandler.currentPackage
                             if (pocketModeHandler.pocketModeLockScreenOnly || isAppBypassedForPocketMode(currentApp)) {
                                 pocketModeHandler.onScreenOff() // cancel pending timer + remove overlay + reset isBypassed

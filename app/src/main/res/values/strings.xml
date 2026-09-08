@@ -783,6 +783,15 @@
     <string name="smart_wifi_title">Smart WiFi</string>
     <string name="smart_wifi_desc">Hide mobile data when WiFi is connected</string>
     <string name="smart_data_desc">Hide mobile data in certain modes</string>
+
+    <string name="wifi_auto_off_title">Auto Turn Off Wi-Fi</string>
+    <string name="wifi_auto_off_desc">Automatically turn off Wi-Fi when disconnected from any network</string>
+    <string name="wifi_auto_off_timeout_title">Auto Turn Off Timeout</string>
+    <string name="wifi_auto_off_timeout_desc">Delay before Wi-Fi turns off: %1$d seconds</string>
+    <string name="search_wifi_auto_off_title">Auto Turn Off Wi-Fi</string>
+    <string name="search_wifi_auto_off_desc">Automatically turn off Wi-Fi when disconnected from network</string>
+    <string name="search_wifi_auto_off_timeout_title">Wi-Fi auto turn off timeout</string>
+    <string name="search_wifi_auto_off_timeout_desc">Adjust delay before Wi-Fi is automatically disabled</string>
     <string name="action_reset_all_icons">Reset All Icons</string>
     <string name="status_bar_section_advanced">More Settings</string>
     <string name="stb_advanced_flags_title">Advanced (Requires Shizuku/Root)</string>
@@ -3674,6 +3683,9 @@
     <string name="refresh_rate_per_app_portrait_desc">%1$d Hz (%2$s)</string>
     <string name="search_refresh_rate_per_app_title">Per-App Refresh Rate</string>
     <string name="search_refresh_rate_per_app_desc">Configure custom display refresh rates for individual apps</string>
+    <string name="shut_up_shortcut_pin_unsupported">Shortcut pinning not supported by launcher</string>
+    <string name="shut_up_shortcut_short_label">Shut-Up %1$s</string>
+    <string name="shut_up_shortcut_long_label">Launch %1$s with Shut-Up</string>
 
     <!-- Overcast Separation What's New -->
     <string name="whats_new_feature_tags_title">New: Feature tags and what they mean</string>
