@@ -93,7 +93,6 @@ import com.sameerasw.essentials.utils.FreezeManager
 import com.sameerasw.essentials.utils.PermissionUIHelper
 import com.sameerasw.essentials.ui.modifiers.scrollMotionBlur
 import com.sameerasw.essentials.utils.BiometricSecurityHelper
-import com.sameerasw.essentials.utils.PermissionUtils
 import com.sameerasw.essentials.utils.RootUtils
 import com.sameerasw.essentials.viewmodels.MainViewModel
 import kotlinx.coroutines.delay
