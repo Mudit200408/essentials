@@ -63,6 +63,7 @@ import com.sameerasw.essentials.domain.model.AppSelection
 import com.sameerasw.essentials.domain.model.BackGestureAppConfig
 import com.sameerasw.essentials.domain.model.AppStandbyInfo
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
+import com.sameerasw.essentials.domain.model.AppRefreshRateConfig
 
 import com.sameerasw.essentials.domain.model.DnsPreset
 import com.sameerasw.essentials.domain.model.HilightEffect
@@ -519,6 +520,9 @@ class MainViewModel : ViewModel() {
     val shizukuAuthToken = mutableStateOf("")
     val edgeLightingSweepSelectedShapes = mutableStateOf<Set<String>>(emptySet())
 
+    val isPerAppRefreshRateEnabled = mutableStateOf(false)
+    val perAppRefreshRateConfigs =
+        mutableStateOf<List<AppRefreshRateConfig>>(emptyList())
     data class CalendarAccount(
         val id: Long,
         val name: String,
@@ -1602,6 +1606,15 @@ class MainViewModel : ViewModel() {
                         appContext?.let { updateAppDetectionService(it) }
                     }
 
+                    SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED -> {
+                        isPerAppRefreshRateEnabled.value = settingsRepository.getBoolean(key)
+                        appContext?.let { updateAppDetectionService(it) }
+                    }
+
+                    SettingsRepository.KEY_PER_APP_REFRESH_RATE_CONFIGS -> {
+                        loadPerAppRefreshRateConfigs()
+                    }
+
                     SettingsRepository.KEY_LIVE_WALLPAPER_SELECTED_VIDEO -> {
                         liveWallpaperSelectedVideo.value =
                             settingsRepository.getLiveWallpaperSelectedVideo()
@@ -1775,6 +1788,29 @@ class MainViewModel : ViewModel() {
         settingsRepository.updateShutUpConfig(config)
         loadShutUpConfigs()
     }
+
+    fun loadPerAppRefreshRateConfigs() {
+        perAppRefreshRateConfigs.value = settingsRepository.loadPerAppRefreshRateConfigs()
+    }
+
+    fun updatePerAppRefreshRateConfig(config: AppRefreshRateConfig) {
+        settingsRepository.updatePerAppRefreshRateConfig(config)
+        loadPerAppRefreshRateConfigs()
+    }
+
+    fun removePerAppRefreshRateConfig(packageName: String) {
+        val current = perAppRefreshRateConfigs.value.toMutableList()
+        current.removeAll { it.packageName == packageName }
+        settingsRepository.savePerAppRefreshRateConfigs(current)
+        loadPerAppRefreshRateConfigs()
+    }
+
+    fun setPerAppRefreshRateEnabled(enabled: Boolean, context: Context) {
+        isPerAppRefreshRateEnabled.value = enabled
+        settingsRepository.putBoolean(SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED, enabled)
+        updateAppDetectionService(context)
+    }
+
 
     /**
      * Executes the remove shut up config operation.
@@ -2041,6 +2077,9 @@ class MainViewModel : ViewModel() {
         isShutUpServiceEnabled.value = settingsRepository.isShutUpServiceEnabled()
         isShutUpAttemptShizukuRestart.value = settingsRepository.isShutUpAttemptShizukuRestartEnabled()
         loadShutUpConfigs()
+        isPerAppRefreshRateEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED, false)
+        loadPerAppRefreshRateConfigs()
         recentSearches.value = settingsRepository.getRecentSearches()
         loadCachedWallpaper()
         isDailyWallpaperAutoUpdateEnabled.value =

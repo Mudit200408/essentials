@@ -125,6 +125,8 @@ import com.sameerasw.essentials.ui.features.system.NotificationLightingSettingsU
 import com.sameerasw.essentials.ui.features.system.NotificationSnoozingSettingsUI
 import com.sameerasw.essentials.ui.features.system.OtherCustomizationsSettingsUI
 import com.sameerasw.essentials.ui.features.system.FaceUnlockBrightnessSettingsUI
+import com.sameerasw.essentials.ui.features.display.PerAppRefreshRateSettingsUI
+import com.sameerasw.essentials.utils.ShellUtils
 import com.sameerasw.essentials.ui.features.system.PocketModeSettingsUI
 import com.sameerasw.essentials.ui.features.system.VolumeStepsSettingsUI
 import com.sameerasw.essentials.ui.features.system.AppVolumeSettingsUI
@@ -432,6 +434,9 @@ fun FeatureSettingsScreen(
                             )
 
                         "Shut-Up!" -> !isWriteSecureSettingsEnabled || !isWriteSettingsEnabled || !isUsageStatsPermissionGranted || !isPostNotificationsEnabled
+                        "Per app refresh rate" ->
+                            (if (viewModel.isUseUsageAccess.value) !viewModel.isUsageStatsPermissionGranted.value else !isAccessibilityEnabled) ||
+                                !ShellUtils.hasPermission(context)
                         "Power and Battery" -> !isWriteSecureSettingsEnabled
                         "Networks" ->
                             !isWriteSecureSettingsEnabled &&
@@ -684,6 +689,7 @@ fun FeatureSettingsScreen(
                                                 listOf(
                                                     "Text and animations",
                                                     "Screen refresh rate",
+                                                    "Per app refresh rate",
                                                 ),
                                                 listOf(
                                                     "Caffeinate",
@@ -898,6 +904,10 @@ fun FeatureSettingsScreen(
                                                         !com.sameerasw.essentials.utils.ShellUtils.hasPermission(
                                                             context,
                                                         )
+
+                                                    "Per app refresh rate" ->
+                                                        (if (viewModel.isUseUsageAccess.value) !viewModel.isUsageStatsPermissionGranted.value else !isAccessibilityEnabled) ||
+                                                            !ShellUtils.hasPermission(context)
 
                                                     "Shut-Up!" ->
                                                         !isWriteSecureSettingsEnabled ||
@@ -1398,6 +1408,14 @@ fun FeatureSettingsScreen(
 
                             "Screen refresh rate" -> {
                                 RefreshRateSettingsUI(
+                                    viewModel = viewModel,
+                                    modifier = Modifier.padding(top = 16.dp),
+                                    highlightSetting = highlightSetting,
+                                )
+                            }
+
+                            "Per app refresh rate" -> {
+                                PerAppRefreshRateSettingsUI(
                                     viewModel = viewModel,
                                     modifier = Modifier.padding(top = 16.dp),
                                     highlightSetting = highlightSetting,
