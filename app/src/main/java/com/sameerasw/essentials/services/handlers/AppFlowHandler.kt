@@ -34,12 +34,17 @@ import com.sameerasw.essentials.domain.diy.Automation
 import com.sameerasw.essentials.domain.diy.DIYRepository
 import com.sameerasw.essentials.domain.model.AppSelection
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
+import com.sameerasw.essentials.domain.model.disableWirelessDebugging
+import com.sameerasw.essentials.R
+import com.sameerasw.essentials.services.AppDetectionService
 import com.sameerasw.essentials.services.NotificationListener
+import com.sameerasw.essentials.services.ShutUpForegroundService
 import com.sameerasw.essentials.services.automation.executors.CombinedActionExecutor
 import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
 import com.sameerasw.essentials.utils.FreezeManager
 import com.sameerasw.essentials.utils.HapticUtil
 import com.sameerasw.essentials.utils.RefreshRateUtils
+import com.sameerasw.essentials.utils.ShutUpManager
 import com.sameerasw.essentials.utils.ShizukuUtils.toggleShizuku
 import com.sameerasw.essentials.utils.StatusBarManager
 import kotlinx.coroutines.CoroutineScope
@@ -92,6 +97,10 @@ class AppFlowHandler private constructor(
     var currentPackage: String? = null
         private set
     private var currentUsageStatsPackage: String? = null
+
+    // Shut-Up State
+    private var pendingShutUpRestoreJob: Job? = null
+    private var pendingShutUpRestorePackage: String? = null
 
     // App Automation State
     private val activeAppAutomationIds = mutableSetOf<String>()
@@ -223,7 +232,6 @@ class AppFlowHandler private constructor(
     private val nlDebounceDelay = 500L
 
     private fun isIgnoredPackage(packageName: String): Boolean {
-        if (packageName == context.packageName) return true
         if (ignoredSystemPackages.contains(packageName)) return true
         
         val lowerPkg = packageName.lowercase()
@@ -262,18 +270,24 @@ class AppFlowHandler private constructor(
         }
     }
 
-    fun onPackageChanged(packageName: String, isFromUsageStats: Boolean = false) {
+    fun onPackageChanged(
+        packageName: String,
+        isFromUsageStats: Boolean = false,
+        isAccessibilityWindowEvent: Boolean = false,
+        isFullScreenWindow: Boolean = true,
+    ) {
         val useUsageAccess = settingsRepository.getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS, false) &&
                 com.sameerasw.essentials.services.AppDetectionService.isRunning
 
-        val isAccessibilityActive = com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService.instance != null
+        val isAccessibilityActive = ScreenOffAccessibilityService.instance != null &&
+                !ShutUpManager.isAccessibilityMuted
 
         // When Usage Access mode is enabled and running, drop accessibility events to prevent race conditions.
         if (!isFromUsageStats && useUsageAccess) {
             return
         }
 
-        // When Usage Access mode is disabled, drop usage stats poll events UNLESS accessibility is inactive.
+        // When Usage Access mode is disabled, drop usage stats poll events UNLESS accessibility is inactive or muted by ShutUp.
         if (isFromUsageStats && isAccessibilityActive && !useUsageAccess) {
             return
         }
@@ -288,6 +302,12 @@ class AppFlowHandler private constructor(
             return
         }
 
+        // Note: spurious non-full-screen events from a ShutUp target (dialogs, animations)
+        // are filtered inside checkShutUp via the ShutUpManager.settingsCurrentlyApplied + currentPackage guard.
+
+        if (packageName == currentPackage) {
+            return
+        }
         val oldPackage = currentPackage
         currentPackage = packageName
 
@@ -333,6 +353,10 @@ class AppFlowHandler private constructor(
         checkHighlightNightLight(packageName)
         checkAppAutomations(packageName)
         checkGestureBarAutomation(packageName)
+
+        // Accessibility events are the fastest automatic launch signal. The manager serializes
+        // this with the foreground-service fallback and periodic enforcement.
+        checkShutUp(packageName)
     }
 
     fun onAuthenticated(packageName: String) {
@@ -365,6 +389,44 @@ class AppFlowHandler private constructor(
         val now = System.currentTimeMillis()
         if (now - session.startTimeMillis > session.durationMillis) return null
         return session
+    }
+
+    private fun checkShutUp(packageName: String) {
+        val serviceEnabled = settingsRepository.isShutUpServiceEnabled()
+        if (!serviceEnabled) return
+
+        val configs = settingsRepository.loadShutUpConfigs()
+        val config = configs.find { it.packageName == packageName && it.isEnabled } ?: return
+
+        // If settings are already applied and currentPackage hasn't transitioned to this app
+        // yet, the event is from a background dialog/animation of the ShutUp target (e.g. a
+        // DigiLocker activity finishing in the background while the user is on the launcher).
+        // Returning here preserves any pending restore job without cancelling it.
+        if (ShutUpManager.settingsCurrentlyApplied && currentPackage != packageName) {
+            Log.d(
+                "AppFlowHandler",
+                "checkShutUp: spurious background event for $packageName (currentPackage=$currentPackage), skipping",
+            )
+            return
+        }
+
+        // Cancel any pending restoration immediately when entering/returning to a Shut-Up app.
+        pendingShutUpRestoreJob?.cancel()
+        pendingShutUpRestoreJob = null
+        pendingShutUpRestorePackage = null
+
+        ShutUpManager.preApplyShutUpSettings(context, config, settingsRepository)
+
+        scope.launch(Dispatchers.IO) {
+            Log.d("AppFlowHandler", "checkShutUp: Shell reinforcement for $packageName")
+            ShutUpManager.applyShutUpSettings(
+                context,
+                config,
+                settingsRepository,
+                reinforcement = true,
+            )
+        }
+    }
     }
 
     private fun checkAppLock(packageName: String) {
@@ -749,9 +811,12 @@ class AppFlowHandler private constructor(
         Log.d("AppFlowHandler", "checkShutUpRestore: old=$oldPackage, new=$newPackage")
         if (oldPackage == null || oldPackage == newPackage) return
 
-        val settingsRepository =
-            com.sameerasw.essentials.data.repository
-                .SettingsRepository(context)
+        // Do not trigger restore if newPackage is an ignored package (system dialogs, permission controllers, etc.)
+        if (newPackage != null && (isIgnoredPackage(newPackage) || ShutUpManager.isPackageIgnored(newPackage))) {
+            Log.d("AppFlowHandler", "checkShutUpRestore: newPackage $newPackage is ignored, skipping restore")
+            return
+        }
+
         val shutUpConfigs = settingsRepository.loadShutUpConfigs()
 
         val wasShutUpConfig = shutUpConfigs.find { it.packageName == oldPackage && it.isEnabled }
@@ -762,7 +827,7 @@ class AppFlowHandler private constructor(
         // We consider the new app a Shut-Up app if it's in the list OR if it's the shortcut activity
         val isNewAppShutUp =
             shutUpConfigs.any { it.packageName == newPackage && it.isEnabled } ||
-                newPackage == "com.sameerasw.essentials.ShutUpShortcutActivity"
+                newPackage == context.packageName
 
         Log.d(
             "AppFlowHandler",
@@ -772,8 +837,12 @@ class AppFlowHandler private constructor(
         // If it's already frozen, we've already handled it
         if (isAlreadyFrozen) return
 
-        // If we are entering a Shut-Up app, cancel ANY pending countdowns for other apps
+        // If we are entering a Shut-Up app, cancel ANY pending countdowns & restorations
         if (isNewAppShutUp) {
+            pendingShutUpRestoreJob?.cancel()
+            pendingShutUpRestoreJob = null
+            pendingShutUpRestorePackage = null
+
             if (activeCountdowns.isNotEmpty()) {
                 Log.d(
                     "AppFlowHandler",
@@ -786,7 +855,17 @@ class AppFlowHandler private constructor(
         }
 
         if (wasShutUpConfig != null && !isNewAppShutUp) {
+            if (ShutUpForegroundService.isRunning) {
+                Log.d("AppFlowHandler", "checkShutUpRestore: ShutUpForegroundService is active, yielding restore & auto-archive")
+                return
+            }
+            if (ShutUpManager.restoreInProgress) {
+                Log.d("AppFlowHandler", "checkShutUpRestore: restore already in progress in ShutUpManager, skipping duplicate")
+                return
+            }
             Log.d("AppFlowHandler", "checkShutUpRestore: Triggering restoration for $oldPackage")
+            pendingShutUpRestoreJob?.cancel()
+            pendingShutUpRestorePackage = oldPackage
             restoreShutUpSettings(
                 settingsRepository,
                 wasShutUpConfig,
@@ -1108,8 +1187,8 @@ class AppFlowHandler private constructor(
                     .setOnlyAlertOnce(true)
                     .setOngoing(true)
                     .addAction(
-                        com.sameerasw.essentials.R.drawable.rounded_code_24,
-                        "Restore Now",
+                        R.drawable.rounded_code_24,
+                        context.getString(R.string.shut_up_action_restore_now),
                         restorePendingIntent,
                     ).addExtras(
                         android.os.Bundle().apply {
@@ -1144,78 +1223,54 @@ class AppFlowHandler private constructor(
 
         val mode = repository.getShutUpRestoreMode()
         if (mode == "Notify" && !forceRestore) {
-            scope.launch {
-                val delaySeconds = repository.getShutUpRestoreDelay()
-                delay((delaySeconds * 1000L).milliseconds)
-                showRestoreNotification(wasShutUpConfig, autoArchivePackage)
+            pendingShutUpRestoreJob = scope.launch {
+                val delaySeconds = repository.getShutUpRestoreDelay().coerceAtLeast(0)
+                if (delaySeconds > 0) {
+                    delay(delaySeconds * 1000L)
+                }
+                val current = currentPackage
+                val isCurrentShutUp = repository.loadShutUpConfigs().any { it.packageName == current && it.isEnabled }
+                if (!isCurrentShutUp) {
+                    showRestoreNotification(wasShutUpConfig, autoArchivePackage)
+                }
+                pendingShutUpRestoreJob = null
+                pendingShutUpRestorePackage = null
             }
             return
         }
 
-        scope.launch {
+        pendingShutUpRestoreJob = scope.launch {
             if (!forceRestore) {
                 // Delay to ensure the app has fully settled before restoring system settings
-                val delaySeconds = repository.getShutUpRestoreDelay()
-                delay((delaySeconds * 1000L).milliseconds)
-            }
-
-            val canWriteSecure =
-                com.sameerasw.essentials.utils.PermissionUtils
-                    .canWriteSecureSettings(context)
-            val canWriteSystem = Settings.System.canWrite(context)
-
-            originalSettings.forEach { (prefixedKey, value) ->
-                try {
-                    val parts = prefixedKey.split(":", limit = 2)
-                    if (parts.size < 2) return@forEach
-
-                    val table = parts[0]
-                    val key = parts[1]
-
-                    when (table) {
-                        "global" -> {
-                            if (canWriteSecure) {
-                                Settings.Global.putString(context.contentResolver, key, value)
-                            }
-                        }
-
-                        "secure" -> {
-                            if (canWriteSecure) {
-                                Settings.Secure.putString(context.contentResolver, key, value)
-                            }
-                        }
-
-                        "system" -> {
-                            if (canWriteSystem) {
-                                Settings.System.putString(context.contentResolver, key, value)
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    Log.e("AppFlowHandler", "Failed to restore setting $prefixedKey", e)
+                val delaySeconds = repository.getShutUpRestoreDelay().coerceAtLeast(0)
+                if (delaySeconds > 0) {
+                    delay(delaySeconds * 1000L)
                 }
             }
 
-            // Clear original settings after restoration
-            repository.saveShutUpOriginalSettings(emptyMap())
-
-            // Wait a bit and Restart Shizuku as ADB might have been toggled back on
-            if (wasShutUpConfig != null && wasShutUpConfig.disableWirelessDebugging && repository.isShutUpAttemptShizukuRestartEnabled()) {
-                delay(1000.milliseconds)
-                toggleShizuku(context, true)
+            // Check if user is currently inside a Shut-Up app before restoring
+            val current = currentPackage
+            val isCurrentShutUp = repository.loadShutUpConfigs().any { it.packageName == current && it.isEnabled }
+            if (isCurrentShutUp && !forceRestore) {
+                Log.d("AppFlowHandler", "restoreShutUpSettings: User is currently in Shut-Up app $current — skipping restore")
+                pendingShutUpRestoreJob = null
+                pendingShutUpRestorePackage = null
+                return@launch
             }
 
-            android.widget.Toast
-                .makeText(
-                    context,
-                    context.getString(com.sameerasw.essentials.R.string.shut_up_toast_restored),
-                    android.widget.Toast.LENGTH_SHORT,
-                ).show()
+            withContext(Dispatchers.IO) {
+                ShutUpManager.restoreOriginalSettings(context, repository)
+                if (wasShutUpConfig != null && wasShutUpConfig.attemptShizukuRestart && repository.isShutUpAttemptShizukuRestartEnabled()) {
+                    ShutUpManager.restartShizuku(context)
+                }
+            }
 
             // Start auto-archive countdown AFTER everything is restored and Shizuku is starting
             if (autoArchivePackage != null) {
                 startAutoArchiveCountdown(autoArchivePackage)
             }
+            pendingShutUpRestoreJob = null
+            pendingShutUpRestorePackage = null
         }
     }
 

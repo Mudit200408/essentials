@@ -13,6 +13,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.BroadcastReceiver
@@ -24,14 +25,17 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.services.handlers.AppFlowHandler
 import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
+import com.sameerasw.essentials.utils.ShutUpManager
 
 class AppDetectionService : Service() {
     private lateinit var appFlowHandler: AppFlowHandler
+    private lateinit var settingsRepository: SettingsRepository
     private val handler = Handler(Looper.getMainLooper())
     private var isPolling = false
     private var lastPackageName: String? = null
@@ -87,6 +91,7 @@ class AppDetectionService : Service() {
     override fun onCreate() {
         super.onCreate()
         isRunning = true
+        settingsRepository = SettingsRepository(this)
         appFlowHandler = AppFlowHandler.getInstance(this)
         createNotificationChannel()
 
@@ -130,14 +135,18 @@ class AppDetectionService : Service() {
                 override fun run() {
                     if (!isPolling) return
 
-                    val useUsageAccess = SettingsRepository(this@AppDetectionService)
-                        .getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS, false)
+                    val useUsageAccess = settingsRepository.getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS, false)
                     val accessibilityRunning = ScreenOffAccessibilityService.instance != null
 
+                    // If Accessibility is temporarily muted by Shut-Up, ShutUpForegroundService is the sole polling watchdog.
+                    // AppDetectionService must yield completely to avoid double polling.
+                    val shouldYieldToShutUp = ShutUpManager.isAccessibilityMuted
+
                     // Poll UsageStats if:
-                    // 1) User explicitly configured "Use Usage Access instead of Accessibility", OR
-                    // 2) Accessibility Service is not active to provide window events.
-                    if (useUsageAccess || !accessibilityRunning) {
+                    // 1) Not yielding to ShutUpForegroundService, AND
+                    // 2) (User explicitly configured "Use Usage Access instead of Accessibility", OR
+                    //     Accessibility Service is not active to provide window events).
+                    if (!shouldYieldToShutUp && (useUsageAccess || !accessibilityRunning)) {
                         val currentPackage = getForegroundPackage()
                         if (currentPackage != null && currentPackage != lastPackageName) {
                             lastPackageName = currentPackage
@@ -155,23 +164,52 @@ class AppDetectionService : Service() {
     private fun getForegroundPackage(): String? {
         val usageStatsManager = getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
         val time = System.currentTimeMillis()
-        val stats =
-            usageStatsManager.queryUsageStats(
-                UsageStatsManager.INTERVAL_DAILY,
-                time - 1000 * 10,
-                time,
-            )
 
-        if (stats == null || stats.isEmpty()) return null
-
-        var recentStats: UsageStats? = null
-        for (usageStats in stats) {
-            if (recentStats == null || usageStats.lastTimeUsed > recentStats.lastTimeUsed) {
-                recentStats = usageStats
+        // 1. Try to find the last resumed activity using queryEvents (real-time & accurate)
+        try {
+            val events = usageStatsManager.queryEvents(time - 1000 * 30, time)
+            val event = UsageEvents.Event()
+            var lastResumedPackage: String? = null
+            var lastEventTime = 0L
+            while (events.hasNextEvent()) {
+                events.getNextEvent(event)
+                val type = event.eventType
+                if (type == UsageEvents.Event.ACTIVITY_RESUMED ||
+                    type == UsageEvents.Event.MOVE_TO_FOREGROUND
+                ) {
+                    if (event.timeStamp >= lastEventTime) {
+                        lastResumedPackage = event.packageName
+                        lastEventTime = event.timeStamp
+                    }
+                }
             }
+            if (lastResumedPackage != null) {
+                return lastResumedPackage
+            }
+        } catch (e: Exception) {
+            Log.e("AppDetectionService", "Failed to query usage events", e)
         }
 
-        return recentStats?.packageName
+        // 2. Fallback to queryUsageStats
+        try {
+            val stats =
+                usageStatsManager.queryUsageStats(
+                    UsageStatsManager.INTERVAL_BEST,
+                    time - 1000 * 30,
+                    time,
+                )
+
+            if (!stats.isNullOrEmpty()) {
+                val recentStats = stats.maxByOrNull { it.lastTimeUsed }
+                if (recentStats != null && recentStats.lastTimeUsed > 0) {
+                    return recentStats.packageName
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("AppDetectionService", "Failed to query usage stats fallback", e)
+        }
+
+        return null
     }
 
     private fun goHome() {

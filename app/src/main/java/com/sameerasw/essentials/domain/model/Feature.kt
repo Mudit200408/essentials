@@ -11,9 +11,12 @@ package com.sameerasw.essentials.domain.model
 
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.ArrayRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import com.sameerasw.essentials.FeatureSettingsActivity
+import com.sameerasw.essentials.R
 import com.sameerasw.essentials.viewmodels.MainViewModel
 
 /**
@@ -23,7 +26,7 @@ data class SearchSetting(
     @StringRes val title: Int,
     @StringRes val description: Int,
     val targetSettingHighlightKey: String,
-    @androidx.annotation.ArrayRes val keywordRes: Int = 0,
+    @ArrayRes val keywordRes: Int = 0,
     @StringRes val category: Int? = null,
 )
 
@@ -47,9 +50,10 @@ abstract class Feature(
     @StringRes val authTitle: Int = 0,
     @StringRes val authSubtitle: Int = 0,
     @StringRes val aboutDescription: Int? = null,
-    @androidx.annotation.RawRes val animationRes: Int = 0,
+    @RawRes val animationRes: Int = 0,
 ) {
-    val requiresAuth: Boolean = category == com.sameerasw.essentials.R.string.cat_protection
+    open val requiresAuth: Boolean
+        get() = category == R.string.cat_protection
 
     abstract fun isEnabled(viewModel: MainViewModel): Boolean
 

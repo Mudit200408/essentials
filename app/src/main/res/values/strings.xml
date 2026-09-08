@@ -1236,6 +1236,8 @@
     <string name="diy_action_hotspot_off">Turn Off Hotspot</string>
     <string name="diy_action_hotspot_toggle">Toggle Hotspot</string>
     <string name="diy_dim_wallpaper_desc">This action requires Shizuku or Root to adjust system wallpaper dimming.</string>
+
+
     <string name="diy_select_trigger">Select Trigger</string>
     <string name="diy_create_app_title">App</string>
     <string name="diy_create_app_desc">Automate based on open app</string>
@@ -2231,6 +2233,11 @@
     <string name="shut_up_auto_archive_notif_text">%1$s will be archived in %2$d seconds</string>
     <string name="shut_up_auto_archive_action_freeze">Freeze now</string>
     <string name="shut_up_auto_archive_action_abort">Abort</string>
+    <string name="shut_up_service_name">Shut-Up! Service</string>
+    <string name="shut_up_service_desc">Monitors launched apps to disable developer settings</string>
+    <string name="shut_up_service_notification_title">Shut-Up! is active</string>
+    <string name="shut_up_service_notification_desc">Monitoring app launch and exit</string>
+    
     <!-- Lock Screen Clock -->
     <string name="feat_lock_screen_clock_title">Lock screen clock</string>
     <string name="feat_lock_screen_clock_desc">Customize lock screen clock on Pixels</string>
@@ -2830,5 +2837,16 @@
     <string name="watchface_promo_step3_title">3. Install on Watch</string>
     <string name="watchface_promo_step3_desc">Open the Play Store listing directly on your watch to install</string>
     <string name="watchface_promo_step3_action">Open on Watch</string>
+
+    <!-- Phase 4 Strings -->
+    <string name="shut_up_monitoring_service_header">Monitoring Service</string>
+    <string name="shut_up_enable_service_title">Enable Shut-Up! Service</string>
+    <string name="shut_up_enable_service_desc">Runs in the background and applies security rules on target app launch</string>
+    <string name="shut_up_app_configs_header">App Configurations</string>
+    <string name="shut_up_settings_configured_count">%1$d settings configured</string>
+    <string name="shut_up_auto_freeze_badge">Auto-Freeze</string>
+    <string name="shut_up_shizuku_restart_badge">Shizuku restart</string>
+    <string name="shut_up_error_could_not_launch">Could not launch %1$s</string>
+    <string name="shut_up_action_restore_now">Restore Now</string>
 </resources>
 

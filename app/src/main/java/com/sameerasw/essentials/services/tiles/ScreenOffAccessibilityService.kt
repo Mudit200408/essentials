@@ -531,6 +531,7 @@ class ScreenOffAccessibilityService :
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
+        if (com.sameerasw.essentials.utils.ShutUpManager.isAccessibilityMuted) return
 
         var detectedPackage = event.packageName?.toString()
         if (detectedPackage == null || detectedPackage == "android") {

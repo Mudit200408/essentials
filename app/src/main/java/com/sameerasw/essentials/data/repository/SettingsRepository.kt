@@ -12,6 +12,7 @@ package com.sameerasw.essentials.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.sameerasw.essentials.domain.HapticFeedbackType
 import com.sameerasw.essentials.domain.diy.Action
@@ -27,6 +28,8 @@ import com.sameerasw.essentials.domain.model.NotificationLightingSweepPosition
 import com.sameerasw.essentials.domain.model.ScaleAnimationsProfile
 import com.sameerasw.essentials.domain.model.TrackedRepo
 import com.sameerasw.essentials.domain.model.github.GitHubUser
+import com.sameerasw.essentials.domain.model.ShutUpAppConfig
+
 import com.sameerasw.essentials.utils.RootUtils
 import com.sameerasw.essentials.utils.ShizukuUtils
 import kotlinx.coroutines.channels.awaitClose
@@ -38,7 +41,7 @@ class SettingsRepository(
 ) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    private val gson = Gson()
+    private val gson = GsonBuilder().create()
 
     init {
         migrateUsageAccessKey()
@@ -132,6 +135,7 @@ class SettingsRepository(
         const val KEY_SMART_PIXELS_ENABLED = "smart_pixels_enabled"
         const val KEY_SMART_PIXELS_INTENSITY = "smart_pixels_intensity"
         const val KEY_SMART_PIXELS_DISABLE_ON_CAST = "smart_pixels_disable_on_cast"
+        const val KEY_SMART_PIXELS_ON_BATTERY_SAVER = "smart_pixels_on_battery_saver"
         const val KEY_DAILY_WALLPAPER_LAST_ID = "daily_wallpaper_last_id"
 
         const val KEY_DAILY_WALLPAPER_LAST_URL_MOBILE = "daily_wallpaper_last_url_mobile"
@@ -279,6 +283,7 @@ class SettingsRepository(
 
         const val KEY_DEVELOPER_MODE_ENABLED = "developer_mode_enabled"
         const val KEY_HAPTIC_FEEDBACK_TYPE = "haptic_feedback_type"
+
         const val KEY_DEFAULT_TAB = "default_tab"
         const val KEY_APP_ICON = "app_icon_style"
         const val KEY_USE_ROOT = "use_root"
@@ -516,6 +521,8 @@ class SettingsRepository(
         const val LIVE_WALLPAPER_TRIGGER_UNLOCK = "unlock"
         const val LIVE_WALLPAPER_TRIGGER_SCREEN_ON = "screen_on"
 
+        const val KEY_DISABLE_ROTATION_SUGGESTION = "disable_rotation_suggestion"
+
         const val KEY_SHUT_UP_SELECTED_APPS = "shut_up_selected_apps"
         const val KEY_SHUT_UP_ORIGINAL_SETTINGS = "shut_up_original_settings"
         const val KEY_SHUT_UP_ATTEMPT_SHIZUKU_RESTART = "shut_up_attempt_shizuku_restart"
@@ -523,7 +530,6 @@ class SettingsRepository(
         const val KEY_SHUT_UP_RESTORE_MODE = "shut_up_restore_mode"
         const val KEY_SHIZUKU_AUTH_TOKEN = "shizuku_auth_token"
         const val KEY_EDGE_LIGHTING_SWEEP_SELECTED_SHAPES = "edge_lighting_sweep_selected_shapes"
-        const val KEY_DISABLE_ROTATION_SUGGESTION = "disable_rotation_suggestion"
         const val KEY_ALLOW_OVERLAYS_IN_SETTINGS = "allow_overlays_in_settings"
         const val KEY_NETWORK_DOWNLOAD_RATE_LIMIT = "network_download_rate_limit"
         const val KEY_MOBILE_DATA_ALWAYS_ON = "mobile_data_always_on"
@@ -563,11 +569,11 @@ class SettingsRepository(
         const val KEY_POCKET_MODE_LOCK_SCREEN_ONLY = "pocket_mode_lock_screen_only"
         const val KEY_KEEP_PREFS = "keep_prefs"
         const val KEY_TRANSLATION_MODE_DO_NOT_SHOW_WARNING = "translation_mode_do_not_show_warning"
-
         const val KEY_LOCKDOWN_MODE = "lockdown_mode"
         const val KEY_BUBBLE_WEB_FULLSCREEN = "bubble_web_fullscreen"
         const val KEY_SIM_NAMES_APPLY_ON_BOOT = "sim_names_apply_on_boot"
         const val KEY_POWER_SAVING_APPLY_ON_BOOT = "power_saving_apply_on_boot"
+        const val KEY_SHUT_UP_SERVICE_ENABLED = "shutup_service_enabled"
     }
 
     fun isSimNamesApplyOnBootEnabled(): Boolean = getBoolean(KEY_SIM_NAMES_APPLY_ON_BOOT, false)
@@ -1288,78 +1294,6 @@ class SettingsRepository(
         packageName: String,
         enabled: Boolean,
     ) = updateAppSelection(KEY_AOD_WALLPAPER_MEDIA_EXCLUDED_APPS, packageName, enabled)
-
-    /**
-     * Executes the load shut up configs operation.
-     * @return The resulting List<com data.
-     */
-    fun loadShutUpConfigs(): List<com.sameerasw.essentials.domain.model.ShutUpAppConfig> {
-        val json = prefs.getString(KEY_SHUT_UP_SELECTED_APPS, null)
-        return if (json != null) {
-            try {
-                gson
-                    .fromJson(
-                        json,
-                        Array<com.sameerasw.essentials.domain.model.ShutUpAppConfig>::class.java,
-                    ).toList()
-            } catch (e: Exception) {
-                emptyList()
-            }
-        } else {
-            emptyList()
-        }
-    }
-
-    /**
-     * Executes the save shut up configs operation.
-     *
-     * @param configs [List<com.sameerasw.essentials.domain.model.ShutUpAppConfig>] Target configs.
-     */
-    fun saveShutUpConfigs(configs: List<com.sameerasw.essentials.domain.model.ShutUpAppConfig>) {
-        val json = gson.toJson(configs)
-        putString(KEY_SHUT_UP_SELECTED_APPS, json)
-    }
-
-    /**
-     * Executes the update shut up config operation.
-     *
-     * @param config [com.sameerasw.essentials.domain.model.ShutUpAppConfig] Target config.
-     */
-    fun updateShutUpConfig(config: com.sameerasw.essentials.domain.model.ShutUpAppConfig) {
-        val current = loadShutUpConfigs().toMutableList()
-        val index = current.indexOfFirst { it.packageName == config.packageName }
-        if (index != -1) {
-            current[index] = config
-        } else {
-            current.add(config)
-        }
-        saveShutUpConfigs(current)
-    }
-
-    /**
-     * Executes the save shut up original settings operation.
-     *
-     * @param settings [Map<String] Target settings.
-     * @param String> Target string.
-     */
-    fun saveShutUpOriginalSettings(settings: Map<String, String>) {
-        val json = gson.toJson(settings)
-        putString(KEY_SHUT_UP_ORIGINAL_SETTINGS, json)
-    }
-
-    /**
-     * Executes the get shut up original settings operation.
-     * @return The resulting Map<String, String> data.
-     */
-    fun getShutUpOriginalSettings(): Map<String, String> {
-        val json = prefs.getString(KEY_SHUT_UP_ORIGINAL_SETTINGS, null) ?: return emptyMap()
-        return try {
-            @Suppress("UNCHECKED_CAST")
-            gson.fromJson(json, Map::class.java) as Map<String, String>
-        } catch (e: Exception) {
-            emptyMap()
-        }
-    }
 
     private fun updateAppSelection(
         key: String,
@@ -3184,6 +3118,60 @@ class SettingsRepository(
      * @param value [Int] Target value.
      */
     fun setLockScreenClockSeedColor(value: Int) = putInt(KEY_LOCK_SCREEN_CLOCK_SEED_COLOR, value)
+    fun loadShutUpConfigs(): List<ShutUpAppConfig> {
+        val json = prefs.getString(KEY_SHUT_UP_SELECTED_APPS, null)
+        return if (json != null) {
+            try {
+                gson.fromJson(
+                    json,
+                    Array<ShutUpAppConfig>::class.java
+                ).toList()
+            } catch (e: Exception) {
+                emptyList()
+            }
+        } else {
+            emptyList()
+        }
+    }
+
+    fun saveShutUpConfigs(configs: List<ShutUpAppConfig>) {
+        val json = gson.toJson(configs)
+        putString(KEY_SHUT_UP_SELECTED_APPS, json)
+    }
+
+    fun updateShutUpConfig(config: ShutUpAppConfig) {
+        val current = loadShutUpConfigs().toMutableList()
+        val index = current.indexOfFirst { it.packageName == config.packageName }
+        if (index != -1) {
+            current[index] = config
+        } else {
+            current.add(config)
+        }
+        saveShutUpConfigs(current)
+    }
+
+    fun isShutUpServiceEnabled(): Boolean {
+        return prefs.getBoolean(KEY_SHUT_UP_SERVICE_ENABLED, false)
+    }
+
+    fun setShutUpServiceEnabled(enabled: Boolean) {
+        putBoolean(KEY_SHUT_UP_SERVICE_ENABLED, enabled)
+    }
+
+    fun saveShutUpOriginalSettings(settings: Map<String, String>) {
+        val json = gson.toJson(settings)
+        putString(KEY_SHUT_UP_ORIGINAL_SETTINGS, json)
+    }
+
+    fun getShutUpOriginalSettings(): Map<String, String> {
+        val json = prefs.getString(KEY_SHUT_UP_ORIGINAL_SETTINGS, null) ?: return emptyMap()
+        return try {
+            @Suppress("UNCHECKED_CAST")
+            gson.fromJson(json, Map::class.java) as Map<String, String>
+        } catch (e: Exception) {
+            emptyMap()
+        }
+    }
 
     fun getLocationReachedFullScreenAlarmEnabled(): Boolean = getBoolean(KEY_LOCATION_REACHED_FULL_SCREEN_ALARM_ENABLED, true)
 
