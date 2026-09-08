@@ -28,7 +28,9 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.sameerasw.essentials.R
+import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.services.handlers.AppFlowHandler
+import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
 
 class AppDetectionService : Service() {
     private lateinit var appFlowHandler: AppFlowHandler
@@ -87,7 +89,7 @@ class AppDetectionService : Service() {
     override fun onCreate() {
         super.onCreate()
         isRunning = true
-        appFlowHandler = AppFlowHandler(this)
+        appFlowHandler = AppFlowHandler.getInstance(this)
         createNotificationChannel()
 
         val filter =
@@ -132,10 +134,19 @@ class AppDetectionService : Service() {
                 override fun run() {
                     if (!isPolling) return
 
-                    val currentPackage = getForegroundPackage()
-                    if (currentPackage != null && currentPackage != lastPackageName) {
-                        lastPackageName = currentPackage
-                        appFlowHandler.onPackageChanged(currentPackage, isFromUsageStats = true)
+                    val useUsageAccess = SettingsRepository(this@AppDetectionService)
+                        .getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS, false)
+                    val accessibilityRunning = ScreenOffAccessibilityService.instance != null
+
+                    // Poll UsageStats if:
+                    // 1) User explicitly configured "Use Usage Access instead of Accessibility", OR
+                    // 2) Accessibility Service is not active to provide window events.
+                    if (useUsageAccess || !accessibilityRunning) {
+                        val currentPackage = getForegroundPackage()
+                        if (currentPackage != null && currentPackage != lastPackageName) {
+                            lastPackageName = currentPackage
+                            appFlowHandler.onPackageChanged(currentPackage, isFromUsageStats = true)
+                        }
                     }
 
                     handler.postDelayed(this, POLL_INTERVAL)
