@@ -8601,9 +8601,10 @@ class MainViewModel : ViewModel() {
      * @param enabled [Boolean] Target enabled.
      * @param context [Context] Target context.
      */
-    fun setPocketModeEnabled(enabled: Boolean) {
+    fun setPocketModeEnabled(enabled: Boolean, context: Context) {
         settingsRepository.putBoolean(SettingsRepository.KEY_POCKET_MODE_ENABLED, enabled)
         isPocketModeEnabled.value = enabled
+        updateAppDetectionService(context)
     }
 
     /**

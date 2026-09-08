@@ -13,6 +13,7 @@ import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -22,15 +23,19 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.AudioManager
 import android.media.session.MediaSessionManager
+import android.media.session.PlaybackState
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.Vibrator
+import android.util.Log
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
 import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.domain.HapticFeedbackType
-import com.sameerasw.essentials.domain.model.AppSelection
+import com.sameerasw.essentials.services.AppDetectionService
 import com.sameerasw.essentials.services.InputEventListenerService
 import com.sameerasw.essentials.services.NotificationListener
 import com.sameerasw.essentials.services.handlers.AmbientGlanceHandler
@@ -44,10 +49,13 @@ import com.sameerasw.essentials.services.handlers.IslandOverlayHandler
 import com.sameerasw.essentials.services.handlers.NotificationLightingHandler
 import com.sameerasw.essentials.services.handlers.OmniGestureOverlayHandler
 import com.sameerasw.essentials.services.handlers.PocketModeHandler
+import com.sameerasw.essentials.services.handlers.SmartPixelsHandler
 import com.sameerasw.essentials.services.handlers.StatusBarIconHandler
 import com.sameerasw.essentials.services.handlers.StatusGlanceHandler
 import com.sameerasw.essentials.services.receivers.FlashlightActionReceiver
+import com.sameerasw.essentials.utils.AppUtil
 import com.sameerasw.essentials.utils.FreezeManager
+import com.sameerasw.essentials.utils.ServiceUtils
 import com.sameerasw.essentials.utils.performHapticFeedback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,79 +81,42 @@ class ScreenOffAccessibilityService :
     private lateinit var omniGestureOverlayHandler: OmniGestureOverlayHandler
     private lateinit var statusBarIconHandler: StatusBarIconHandler
     private lateinit var pocketModeHandler: PocketModeHandler
-    private lateinit var smartPixelsHandler: com.sameerasw.essentials.services.handlers.SmartPixelsHandler
+    private lateinit var smartPixelsHandler: SmartPixelsHandler
     private lateinit var duoOverlayHandler: DuoOverlayHandler
     lateinit var islandOverlayHandler: IslandOverlayHandler
     private lateinit var statusGlanceHandler: StatusGlanceHandler
 
     private var lightSensor: Sensor? = null
     private var lightSensorLux: Float = 100f
-    private var pocketModeExcludedAppsSet: Set<String> = emptySet()
-    private val appCategoryCache = mutableMapOf<String, Boolean>()
     private val keyguardManager by lazy { getSystemService(KEYGUARD_SERVICE) as KeyguardManager }
 
     private var isScreenOn = true
+    private var isKeyguardLocked = false
     private var isLightSensorRegistered = false
     private var isProximityRegisteredForPocket = false
     private var isProximityRegistered = false
 
-    private fun updatePocketModeExcludedAppsSet() {
-        val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-        val json = prefs.getString("pocket_mode_excluded_apps", null)
-        pocketModeExcludedAppsSet =
-            if (json != null) {
-                try {
-                    val gson =
-                        com.google.gson
-                            .GsonBuilder()
-                            .create()
-                    gson
-                        .fromJson(json, Array<AppSelection>::class.java)
-                        .filter { it.isEnabled }
-                        .map { it.packageName }
-                        .toSet()
-                } catch (e: Exception) {
-                    emptySet()
-                }
-            } else {
-                emptySet()
-            }
+    private val prefs by lazy { getSharedPreferences("essentials_prefs", MODE_PRIVATE) }
+
+    fun invalidateBypassCache() {
+        if (::pocketModeHandler.isInitialized && ::appFlowHandler.isInitialized) {
+            pocketModeHandler.invalidateBypassCache(appFlowHandler.currentPackage)
+        }
     }
 
-    private fun isGameOrVideoApp(packageName: String): Boolean =
-        appCategoryCache.getOrPut(packageName) {
-            try {
-                val info = packageManager.getApplicationInfo(packageName, 0)
-                val isLegacyGame =
-                    @Suppress("DEPRECATION")
-                    (info.flags and android.content.pm.ApplicationInfo.FLAG_IS_GAME) != 0
-                val isCategoryMatch =
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        val category = info.category
-                        category == android.content.pm.ApplicationInfo.CATEGORY_GAME ||
-                            category == android.content.pm.ApplicationInfo.CATEGORY_VIDEO
-                    } else {
-                        false
-                    }
-                isLegacyGame || isCategoryMatch
-            } catch (e: Exception) {
-                false
-            }
+    private fun updatePocketModePrefs() {
+        if (::pocketModeHandler.isInitialized) {
+            pocketModeHandler.updatePocketModePrefs()
         }
+        invalidateBypassCache()
+    }
 
-    private fun hasActiveMediaSession(packageName: String): Boolean =
-        try {
-            val msm = getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager
-            val componentName =
-                android.content.ComponentName(this, NotificationListener::class.java)
-            val sessions = msm.getActiveSessions(componentName)
-            sessions.any {
-                it.packageName == packageName &&
-                    it.playbackState?.state == android.media.session.PlaybackState.STATE_PLAYING
-            }
-        } catch (e: Exception) {
-            false
+    private fun updatePocketModeExcludedAppsSet() {
+        if (::pocketModeHandler.isInitialized) {
+            pocketModeHandler.updatePocketModeExcludedAppsSet()
         }
+        invalidateBypassCache()
+    }
 
     private var screenReceiver: BroadcastReceiver? = null
 
@@ -158,15 +129,12 @@ class ScreenOffAccessibilityService :
 
     // Pocket Detection
     private val pocketFlashlightHandler = Handler(Looper.getMainLooper())
-    private val pocketFlashlightRunnable =
-        Runnable {
-            val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-            val pocketTurnOffEnabled = prefs.getBoolean("flashlight_pocket_turn_off_enabled", false)
-            // Re-check at fire time — guards against external torch-off between scheduling and firing
-            if (pocketTurnOffEnabled && flashlightHandler.isProximityBlocked && flashlightHandler.isTorchOn) {
-                flashlightHandler.toggleFlashlight()
-            }
+    private val pocketFlashlightRunnable = Runnable {
+        // Re-check at fire time — guards against external torch-off between scheduling and firing
+        if (::pocketModeHandler.isInitialized && pocketModeHandler.flashlightPocketTurnOffEnabled && flashlightHandler.isProximityBlocked && flashlightHandler.isTorchOn) {
+            flashlightHandler.toggleFlashlight()
         }
+    }
 
     private fun schedulePocketFlashlightTurnOff() {
         pocketFlashlightHandler.removeCallbacks(pocketFlashlightRunnable)
@@ -178,9 +146,8 @@ class ScreenOffAccessibilityService :
     }
 
     private fun updateProximitySensorRegistration() {
-        val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-        val pocketTurnOffEnabled = prefs.getBoolean("flashlight_pocket_turn_off_enabled", false)
-        val flashlightNeedsProximity = pocketTurnOffEnabled && flashlightHandler.isTorchOn
+        val flashlightNeedsProximity =
+            ::pocketModeHandler.isInitialized && pocketModeHandler.flashlightPocketTurnOffEnabled && flashlightHandler.isTorchOn
 
         val shouldRegister = isProximityRegisteredForPocket || flashlightNeedsProximity
 
@@ -206,7 +173,7 @@ class ScreenOffAccessibilityService :
         }
     }
 
-    fun updateFlashlightProximityRegistration(register: Boolean) {
+    fun updateFlashlightProximityRegistration() {
         updateProximitySensorRegistration()
     }
 
@@ -226,10 +193,13 @@ class ScreenOffAccessibilityService :
                 ) == true
             ) {
                 statusBarIconHandler.updateAll()
-            } else if (key == "pocket_mode_enabled" || key == "pocket_mode_use_light_sensor") {
+            } else if (key == "pocket_mode_enabled" || key == "pocket_mode_use_light_sensor" || key == "pocket_mode_trigger_delay" || key == "pocket_mode_lock_screen_only" || key == "flashlight_pocket_turn_off_enabled") {
+                updatePocketModePrefs()
                 updatePocketModeSensors()
+                ServiceUtils.startRequiredServices(this)
             } else if (key == "pocket_mode_excluded_apps") {
                 updatePocketModeExcludedAppsSet()
+                ServiceUtils.startRequiredServices(this)
             } else if (key == SettingsRepository.KEY_SMART_PIXELS_ENABLED ||
                 key == SettingsRepository.KEY_SMART_PIXELS_INTENSITY ||
                 key == SettingsRepository.KEY_SMART_PIXELS_DISABLE_ON_CAST
@@ -297,9 +267,7 @@ class ScreenOffAccessibilityService :
         omniGestureOverlayHandler = OmniGestureOverlayHandler(this)
         statusBarIconHandler = StatusBarIconHandler(this)
         pocketModeHandler = PocketModeHandler(this)
-        smartPixelsHandler =
-            com.sameerasw.essentials.services.handlers
-                .SmartPixelsHandler(this)
+        smartPixelsHandler = SmartPixelsHandler(this)
         duoOverlayHandler = DuoOverlayHandler(this)
         islandOverlayHandler = IslandOverlayHandler(this)
         statusGlanceHandler = StatusGlanceHandler(this)
@@ -325,6 +293,8 @@ class ScreenOffAccessibilityService :
                     when (intent?.action) {
                         Intent.ACTION_SCREEN_ON -> {
                             isScreenOn = true
+                            isKeyguardLocked = keyguardManager.isKeyguardLocked
+                            invalidateBypassCache()
                             notificationLightingHandler.onScreenOn()
                             ambientGlanceHandler.dismissImmediately()
                             aodForceTurnOffHandler.removeOverlay()
@@ -340,6 +310,8 @@ class ScreenOffAccessibilityService :
 
                         Intent.ACTION_SCREEN_OFF -> {
                             isScreenOn = false
+                            isKeyguardLocked = true
+                            invalidateBypassCache()
                             appFlowHandler.clearAuthenticated()
                             appFlowHandler.clearConsciousGate()
                             scheduleFreeze()
@@ -354,14 +326,24 @@ class ScreenOffAccessibilityService :
                         }
 
                         Intent.ACTION_USER_PRESENT -> {
+                            isKeyguardLocked = false
+                            invalidateBypassCache()
                             aodWallpaperOverlayHandler.onScreenOn()
                             statusGlanceHandler.onUserPresent()
                             islandOverlayHandler.updateState()
-                            val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-                            if (prefs.getBoolean("pocket_mode_lock_screen_only", false)) {
-                                pocketModeHandler.onScreenOff() // cancel pending timer + remove overlay
+                            val currentApp = appFlowHandler.currentPackage
+                            if (pocketModeHandler.pocketModeLockScreenOnly || isAppBypassedForPocketMode(currentApp)) {
+                                pocketModeHandler.onScreenOff() // cancel pending timer + remove overlay + reset isBypassed
                             }
                             updateOmniOverlay()
+                        }
+
+                        "com.sameerasw.essentials.MEDIA_PLAYBACK_CHANGED" -> {
+                            invalidateBypassCache()
+                            val currentApp = appFlowHandler.currentPackage
+                            if (isAppBypassedForPocketMode(currentApp)) {
+                                pocketModeHandler.dismissForAppSwitch()
+                            }
                         }
 
                         InputEventListenerService.ACTION_VOLUME_LONG_PRESSED -> {
@@ -399,11 +381,13 @@ class ScreenOffAccessibilityService :
                     }
                 }
             }
+
         val filter =
             IntentFilter().apply {
                 addAction(Intent.ACTION_SCREEN_ON)
                 addAction(Intent.ACTION_SCREEN_OFF)
                 addAction(Intent.ACTION_USER_PRESENT)
+                addAction("com.sameerasw.essentials.MEDIA_PLAYBACK_CHANGED")
                 addAction(InputEventListenerService.ACTION_VOLUME_LONG_PRESSED)
                 addAction("SHOW_AMBIENT_GLANCE")
                 addAction("HIDE_AMBIENT_GLANCE_TEMPORARILY")
@@ -418,18 +402,18 @@ class ScreenOffAccessibilityService :
             }
         registerReceiver(screenReceiver, filter, RECEIVER_EXPORTED)
 
-        getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-            .registerOnSharedPreferenceChangeListener(preferenceChangeListener)
+        prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
 
         val powerManager = getSystemService(POWER_SERVICE) as? android.os.PowerManager
         isScreenOn = powerManager?.isInteractive ?: true
+        isKeyguardLocked = keyguardManager.isKeyguardLocked
 
+        updatePocketModePrefs()
         updatePocketModeExcludedAppsSet()
         updatePocketModeSensors()
     }
 
     private fun scheduleFreeze() {
-        val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
         val isFreezeWhenLockedEnabled = prefs.getBoolean("freeze_when_locked_enabled", false)
 
         if (isFreezeWhenLockedEnabled) {
@@ -465,7 +449,6 @@ class ScreenOffAccessibilityService :
     }
 
     private fun updateOmniOverlay() {
-        val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
         val isGestureEnabled = prefs.getBoolean("circle_to_search_gesture_enabled", false)
         val height =
             try {
@@ -516,10 +499,10 @@ class ScreenOffAccessibilityService :
             }
             isLightSensorRegistered = false
         }
+
         serviceScope.cancel()
-        getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-            .unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
-        if (!com.sameerasw.essentials.services.AppDetectionService.isRunning) {
+        prefs.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
+        if (!AppDetectionService.isRunning) {
             try {
                 appFlowHandler.destroy()
             } catch (_: Exception) {
@@ -531,7 +514,6 @@ class ScreenOffAccessibilityService :
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
-        if (com.sameerasw.essentials.utils.ShutUpManager.isAccessibilityMuted) return
 
         var detectedPackage = event.packageName?.toString()
         if (detectedPackage == null || detectedPackage == "android") {
@@ -629,13 +611,19 @@ class ScreenOffAccessibilityService :
 
     override fun onInterrupt() {}
 
-    private fun updatePocketModeSensors() {
-        val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-        val pocketModeEnabled = prefs.getBoolean("pocket_mode_enabled", false)
-        val useLightSensor = prefs.getBoolean("pocket_mode_use_light_sensor", false)
+    fun isAppBypassedForPocketMode(packageName: String?): Boolean {
+        if (!::pocketModeHandler.isInitialized) return false
+        return pocketModeHandler.isAppBypassed(packageName, isKeyguardLocked)
+    }
 
-        val shouldRegisterLight = pocketModeEnabled && useLightSensor && isScreenOn
-        val shouldRegisterProximity = pocketModeEnabled && isScreenOn
+    fun dismissPocketMode() {
+        pocketModeHandler.dismissForAppSwitch()
+    }
+
+    private fun updatePocketModeSensors() {
+        if (!::pocketModeHandler.isInitialized) return
+        val shouldRegisterLight = pocketModeHandler.pocketModeEnabled && pocketModeHandler.pocketModeUseLightSensor && isScreenOn
+        val shouldRegisterProximity = pocketModeHandler.pocketModeEnabled && isScreenOn
 
         if (shouldRegisterLight) {
             if (lightSensor == null) {
@@ -657,42 +645,26 @@ class ScreenOffAccessibilityService :
             lightSensorLux = 100f
         }
 
-        if (shouldRegisterProximity) {
-            isProximityRegisteredForPocket = true
-        } else {
-            isProximityRegisteredForPocket = false
-        }
+        isProximityRegisteredForPocket = shouldRegisterProximity
 
         updateProximitySensorRegistration()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (event == null) return
+        if (event == null || !::pocketModeHandler.isInitialized) return
         if (event.sensor.type == Sensor.TYPE_LIGHT) {
             lightSensorLux = event.values[0]
-            val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-            val pocketModeEnabled = prefs.getBoolean("pocket_mode_enabled", false)
-            val useLightSensor = prefs.getBoolean("pocket_mode_use_light_sensor", false)
-            val triggerDelayMs = (prefs.getFloat("pocket_mode_trigger_delay", 3f) * 1000).toLong()
-            val lockScreenOnly = prefs.getBoolean("pocket_mode_lock_screen_only", false)
-            if (pocketModeEnabled && !pocketModeHandler.isBypassed) {
+            if (pocketModeHandler.pocketModeEnabled && !pocketModeHandler.isBypassed) {
                 val currentApp = appFlowHandler.currentPackage
-                val shouldBypass =
-                    (
-                        currentApp != null &&
-                            (
-                                pocketModeExcludedAppsSet.contains(currentApp) ||
-                                    isGameOrVideoApp(currentApp) ||
-                                    hasActiveMediaSession(currentApp)
-                            )
-                    ) ||
-                        (lockScreenOnly && !keyguardManager.isKeyguardLocked)
-                if (!shouldBypass) {
+                val shouldBypass = isAppBypassedForPocketMode(currentApp)
+                if (shouldBypass) {
+                    pocketModeHandler.dismissForAppSwitch()
+                } else {
                     pocketModeHandler.onProximityChanged(
                         isBlocked = flashlightHandler.isProximityBlocked,
                         isLightDark = lightSensorLux <= 3f,
-                        useLightSensor = useLightSensor,
-                        triggerDelayMs = triggerDelayMs,
+                        useLightSensor = pocketModeHandler.pocketModeUseLightSensor,
+                        triggerDelayMs = pocketModeHandler.pocketModeTriggerDelayMs,
                     )
                 }
             }
@@ -703,37 +675,23 @@ class ScreenOffAccessibilityService :
 
             flashlightHandler.isProximityBlocked = isBlocked
 
-            val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
-            val pocketTurnOffEnabled = prefs.getBoolean("flashlight_pocket_turn_off_enabled", false)
-
-            if (pocketTurnOffEnabled && isBlocked && flashlightHandler.isTorchOn) {
+            if (pocketModeHandler.flashlightPocketTurnOffEnabled && isBlocked && flashlightHandler.isTorchOn) {
                 schedulePocketFlashlightTurnOff()
             } else {
                 cancelPocketFlashlightTurnOff()
             }
 
-            val pocketModeEnabled = prefs.getBoolean("pocket_mode_enabled", false)
-            val useLightSensor = prefs.getBoolean("pocket_mode_use_light_sensor", false)
-            val triggerDelayMs = (prefs.getFloat("pocket_mode_trigger_delay", 3f) * 1000).toLong()
-            val lockScreenOnly = prefs.getBoolean("pocket_mode_lock_screen_only", false)
-            if (pocketModeEnabled && !pocketModeHandler.isBypassed) {
+            if (pocketModeHandler.pocketModeEnabled && !pocketModeHandler.isBypassed) {
                 val currentApp = appFlowHandler.currentPackage
-                val shouldBypass =
-                    (
-                        currentApp != null &&
-                            (
-                                pocketModeExcludedAppsSet.contains(currentApp) ||
-                                    isGameOrVideoApp(currentApp) ||
-                                    hasActiveMediaSession(currentApp)
-                            )
-                    ) ||
-                        (lockScreenOnly && !keyguardManager.isKeyguardLocked)
-                if (!shouldBypass) {
+                val shouldBypass = isAppBypassedForPocketMode(currentApp)
+                if (shouldBypass) {
+                    pocketModeHandler.dismissForAppSwitch()
+                } else {
                     pocketModeHandler.onProximityChanged(
                         isBlocked = isBlocked,
                         isLightDark = lightSensorLux <= 3f,
-                        useLightSensor = useLightSensor,
-                        triggerDelayMs = triggerDelayMs,
+                        useLightSensor = pocketModeHandler.pocketModeUseLightSensor,
+                        triggerDelayMs = pocketModeHandler.pocketModeTriggerDelayMs,
                     )
                 }
             }
@@ -752,6 +710,11 @@ class ScreenOffAccessibilityService :
         islandOverlayHandler.onConfigurationChanged()
         statusGlanceHandler.onConfigurationChanged(newConfig)
         ambientGlanceHandler.onConfigurationChanged()
+        invalidateBypassCache()
+        val currentApp = appFlowHandler.currentPackage
+        if (isAppBypassedForPocketMode(currentApp)) {
+            pocketModeHandler.dismissForAppSwitch()
+        }
     }
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
@@ -790,19 +753,16 @@ class ScreenOffAccessibilityService :
     }
 
     private fun triggerAmbientGlanceVolume(keyCode: Int) {
-        val prefs = getSharedPreferences(SettingsRepository.PREFS_NAME, MODE_PRIVATE)
         if (prefs.getBoolean(SettingsRepository.KEY_AMBIENT_MUSIC_GLANCE_ENABLED, false)) {
             // Skip if Android Auto is running
-            if (com.sameerasw.essentials.utils.AppUtil
-                    .isAndroidAutoRunning(this)
-            ) {
+            if (AppUtil.isAndroidAutoRunning(this)) {
                 return
             }
 
             val mediaSessionManager =
                 getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager
             val componentName =
-                android.content.ComponentName(this, NotificationListener::class.java)
+                ComponentName(this, NotificationListener::class.java)
             val sessions =
                 try {
                     mediaSessionManager.getActiveSessions(componentName)
@@ -810,7 +770,7 @@ class ScreenOffAccessibilityService :
                     emptyList()
                 }
             val isPlaying =
-                sessions.any { it.playbackState?.state == android.media.session.PlaybackState.STATE_PLAYING }
+                sessions.any { it.playbackState?.state == PlaybackState.STATE_PLAYING }
             if (!isPlaying) {
                 return
             }
@@ -818,10 +778,10 @@ class ScreenOffAccessibilityService :
             val title = prefs.getString("current_media_title", null)
             val artist = prefs.getString("current_media_artist", null)
 
-            val audioManager = getSystemService(AUDIO_SERVICE) as android.media.AudioManager
+            val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
             val currentVolume =
-                audioManager.getStreamVolume(android.media.AudioManager.STREAM_MUSIC)
-            val maxVolume = audioManager.getStreamMaxVolume(android.media.AudioManager.STREAM_MUSIC)
+                audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+            val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
             val percentage = (currentVolume.toFloat() / maxVolume.toFloat() * 100).toInt()
 
             val isDockedMode =
@@ -849,7 +809,6 @@ class ScreenOffAccessibilityService :
 
         when (action) {
             "LOCK_SCREEN" -> {
-                val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
                 val hapticTypeStr =
                     prefs.getString("haptic_feedback_type", HapticFeedbackType.NONE.name)
                 val hapticType =
@@ -910,7 +869,6 @@ class ScreenOffAccessibilityService :
     }
 
     private fun startInputEventListenerIfEnabled() {
-        val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
         val isEnabled = prefs.getBoolean("button_remap_enabled", false)
         val useShizuku = prefs.getBoolean("button_remap_use_shizuku", false)
 
