@@ -106,6 +106,7 @@ import com.sameerasw.essentials.ui.features.system.NotificationLightingSettingsU
 import com.sameerasw.essentials.ui.features.system.NotificationSnoozingSettingsUI
 import com.sameerasw.essentials.ui.features.system.OtherCustomizationsSettingsUI
 import com.sameerasw.essentials.ui.features.system.FaceUnlockBrightnessSettingsUI
+import com.sameerasw.essentials.ui.features.display.PerAppRefreshRateSettingsUI
 import com.sameerasw.essentials.ui.features.system.PocketModeSettingsUI
 import com.sameerasw.essentials.ui.features.system.PowerAndBatterySettingsUI
 import com.sameerasw.essentials.ui.features.system.QuickSettingsTilesSettingsUI
@@ -128,6 +129,7 @@ import com.sameerasw.essentials.ui.features.watch.WatchfaceSettingsUI
 import com.sameerasw.essentials.ui.modifiers.BlurDirection
 import com.sameerasw.essentials.ui.modifiers.highlight
 import com.sameerasw.essentials.ui.modifiers.progressiveBlur
+import com.sameerasw.essentials.utils.ShellUtils
 import com.sameerasw.essentials.ui.modifiers.scrollMotionBlur
 import com.sameerasw.essentials.ui.theme.EssentialsTheme
 import com.sameerasw.essentials.utils.BiometricSecurityHelper
@@ -407,6 +409,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                         context,
                                     )
                                 "Shut-Up!" -> !isWriteSecureSettingsEnabled || !isWriteSettingsEnabled || !isUsageStatsPermissionGranted || !isPostNotificationsEnabled
+                                "Per app refresh rate" ->
+                                    (if (viewModel.isUseUsageAccess.value) !viewModel.isUsageStatsPermissionGranted.value else !isAccessibilityEnabled) ||
+                                        !ShellUtils.hasPermission(context)
                                 // Top level checks for other features (rarely hit if they are children, but safe to add)
                                 "Essentials On Display" -> !isAccessibilityEnabled || !isNotificationListenerEnabled
                                 "Call vibrations" -> !isReadPhoneStateEnabled || !isNotificationListenerEnabled
@@ -672,6 +677,7 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                             listOf(
                                                 "Text and animations",
                                                 "Screen refresh rate",
+                                                "Per app refresh rate",
                                                 "Navigation",
                                             ),
                                             listOf(
@@ -891,6 +897,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                                                     !viewModel.isWriteSettingsEnabled.value ||
                                                                     !viewModel.isUsageStatsPermissionGranted.value ||
                                                                     !viewModel.isPostNotificationsEnabled.value
+                                                            "Per app refresh rate" ->
+                                                                (if (viewModel.isUseUsageAccess.value) !viewModel.isUsageStatsPermissionGranted.value else !isAccessibilityEnabled) ||
+                                                                    !ShellUtils.hasPermission(context)
                                                             "Power and Battery" -> !isWriteSecureSettingsEnabled
                                                             "Networks" ->
                                                                 !isWriteSecureSettingsEnabled &&
@@ -1339,6 +1348,13 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                             viewModel = viewModel,
                                             modifier = Modifier.padding(top = 16.dp),
                                             highlightSetting = highlightSetting,
+                                        )
+                                    }
+                                    "Per app refresh rate" -> {
+                                        PerAppRefreshRateSettingsUI(
+                                            viewModel = viewModel,
+                                            modifier = Modifier.padding(top = 16.dp),
+                                            highlightSetting = highlightSetting
                                         )
                                     }
 
