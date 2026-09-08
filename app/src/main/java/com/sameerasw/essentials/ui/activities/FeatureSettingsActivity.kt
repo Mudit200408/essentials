@@ -276,6 +276,9 @@ fun FeatureSettingsScreen(
             val isNotificationListenerEnabled by viewModel.isNotificationListenerEnabled
             val isReadPhoneStateEnabled by viewModel.isReadPhoneStateEnabled
             val isShizukuPermissionGranted by viewModel.isShizukuPermissionGranted
+            val isWriteSettingsEnabled by viewModel.isWriteSettingsEnabled
+            val isUsageStatsPermissionGranted by viewModel.isUsageStatsPermissionGranted
+            val isPostNotificationsEnabled by viewModel.isPostNotificationsEnabled
 
             var watchAdbWifiEnabled by remember {
                 mutableStateOf(prefs.getBoolean("watch_adb_wifi_enabled", false))
@@ -356,6 +359,9 @@ fun FeatureSettingsScreen(
                 isNotificationListenerEnabled,
                 isReadPhoneStateEnabled,
                 isShizukuPermissionGranted,
+                isWriteSettingsEnabled,
+                isUsageStatsPermissionGranted,
+                isPostNotificationsEnabled,
             ) {
                 val hasMissingPermissions =
                     when (featureId) {
@@ -426,7 +432,7 @@ fun FeatureSettingsScreen(
                                 context,
                             )
 
-                        "Shut-Up!" -> !isWriteSecureSettingsEnabled || !viewModel.isUsageStatsPermissionGranted.value
+                        "Shut-Up!" -> !isWriteSecureSettingsEnabled || !isWriteSettingsEnabled || !isUsageStatsPermissionGranted || !isPostNotificationsEnabled
                         "Power and Battery" -> !isWriteSecureSettingsEnabled
                         "Networks" ->
                             !isWriteSecureSettingsEnabled &&
@@ -901,7 +907,9 @@ fun FeatureSettingsScreen(
 
                                                     "Shut-Up!" ->
                                                         !isWriteSecureSettingsEnabled ||
-                                                            !viewModel.isUsageStatsPermissionGranted.value
+                                                            !viewModel.isWriteSettingsEnabled.value ||
+                                                            !viewModel.isUsageStatsPermissionGranted.value ||
+                                                            !viewModel.isPostNotificationsEnabled.value
                                                     "Power and Battery" -> !isWriteSecureSettingsEnabled
                                                     "Networks" ->
                                                         !isWriteSecureSettingsEnabled &&
@@ -1462,7 +1470,7 @@ fun FeatureSettingsScreen(
                                 ShutUpSettingsUI(
                                     viewModel = viewModel,
                                     modifier = Modifier.padding(top = 16.dp),
-                                    highlightKey = highlightSetting,
+                                    highlightSetting = highlightSetting,
                                 )
                             }
 
