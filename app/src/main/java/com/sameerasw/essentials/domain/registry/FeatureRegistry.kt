@@ -381,6 +381,46 @@ object FeatureRegistry {
                 ) {}
             },
             object : Feature(
+                id = "Per app refresh rate",
+                title = R.string.refresh_rate_per_app_enable_title,
+                iconRes = R.drawable.ic_per_app_refresh_rate,
+                category = R.string.cat_interface,
+                description = R.string.refresh_rate_per_app_enable_desc,
+                aboutDescription = R.string.refresh_rate_per_app_enable_desc,
+                searchableSettings =
+                    listOf(
+                        SearchSetting(
+                            R.string.search_refresh_rate_per_app_title,
+                            R.string.search_refresh_rate_per_app_desc,
+                            "per_app_refresh_rate_card",
+                        ),
+                    ),
+                showToggle = false,
+                parentFeatureId = "Display",
+            ) {
+                override val permissionKeys: List<String>
+                    get() {
+                        val baseKeys =
+                            if (SettingsRepository(EssentialsApp.context).getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS)) {
+                                listOf("USAGE_STATS")
+                            } else {
+                                listOf("ACCESSIBILITY")
+                            }
+                        val shellKey = if (ShellUtils.isRootEnabled(EssentialsApp.context)) "ROOT" else "SHIZUKU"
+                        return baseKeys + shellKey
+                    }
+
+                override fun isEnabled(viewModel: MainViewModel): Boolean = viewModel.isPerAppRefreshRateEnabled.value
+
+                override fun isToggleEnabled(viewModel: MainViewModel, context: Context): Boolean =
+                    (if (viewModel.isUseUsageAccess.value) viewModel.isUsageStatsPermissionGranted.value else viewModel.isAccessibilityEnabled.value) &&
+                        ShellUtils.hasPermission(context)
+
+                override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {
+                    viewModel.setPerAppRefreshRateEnabled(enabled, context)
+                }
+            },
+            object : Feature(
                 id = "Screen refresh rate",
                 title = R.string.feat_screen_refresh_rate_title,
                 iconRes = R.drawable.rounded_shutter_speed_24,
