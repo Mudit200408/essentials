@@ -23,6 +23,7 @@ import com.sameerasw.essentials.domain.diy.DIYRepository
 import com.sameerasw.essentials.services.AppDetectionService
 import com.sameerasw.essentials.services.AppUpdateWorker
 import com.sameerasw.essentials.services.BatteryNotificationService
+import com.sameerasw.essentials.services.ShutUpForegroundService
 import com.sameerasw.essentials.services.widgets.StackHost
 import com.sameerasw.essentials.utils.SimCarrierUtil
 import com.sameerasw.essentials.utils.ShellUtils
@@ -39,8 +40,8 @@ object ServiceUtils {
      */
     fun startRequiredServices(context: Context) {
         val settingsRepository = SettingsRepository(context)
-
         CoroutineScope(Dispatchers.IO).launch {
+            startShutUpServiceIfNeeded(context, settingsRepository)
             startAppDetectionServiceIfNeeded(context, settingsRepository)
             startBatteryNotificationServiceIfNeeded(context, settingsRepository)
             schedulePeriodicAppUpdateCheck(context, settingsRepository)
@@ -108,6 +109,12 @@ object ServiceUtils {
         val hasBackGestureApps = settingsRepository.loadBackGestureAppConfigs().isNotEmpty()
         val isUseUsageAccess =
             settingsRepository.getBoolean(SettingsRepository.KEY_USE_USAGE_ACCESS)
+        val isPerAppRefreshRateEnabled =
+            settingsRepository.getBoolean(SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED)
+        val isPocketModeEnabled =
+            settingsRepository.getBoolean(SettingsRepository.KEY_POCKET_MODE_ENABLED)
+        val hasPocketModeExcludedApps = isPocketModeEnabled &&
+                settingsRepository.loadPocketModeExcludedApps().any { it.isEnabled }
 
         val hasAppAutomations =
             DIYRepository.automations.value.any {
@@ -120,7 +127,9 @@ object ServiceUtils {
         val shouldRun =
             (
                 isUseUsageAccess &&
-                    (isAppLockEnabled || isConsciousGateEnabled || isDynamicNightLightEnabled || isHideGestureBarOnLauncherEnabled || hasBackGestureApps || hasAppAutomations)
+                    (isAppLockEnabled || isConsciousGateEnabled || isDynamicNightLightEnabled ||
+                        isHideGestureBarOnLauncherEnabled || hasBackGestureApps || hasAppAutomations ||
+                        isPerAppRefreshRateEnabled || hasPocketModeExcludedApps)
             ) ||
                 hasShutUpApps
 
@@ -160,6 +169,7 @@ object ServiceUtils {
         }
     }
 
+
     fun schedulePeriodicAppUpdateCheck(
         context: Context,
         settingsRepository: SettingsRepository,
@@ -187,6 +197,24 @@ object ServiceUtils {
                 ExistingPeriodicWorkPolicy.KEEP,
                 workRequest,
             )
+        }
+    }
+    private fun startShutUpServiceIfNeeded(
+        context: Context,
+        settingsRepository: SettingsRepository
+    ) {
+        val isServiceNeeded = settingsRepository.isShutUpServiceEnabled()
+        val intent = Intent(context, ShutUpForegroundService::class.java)
+        if (isServiceNeeded) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
