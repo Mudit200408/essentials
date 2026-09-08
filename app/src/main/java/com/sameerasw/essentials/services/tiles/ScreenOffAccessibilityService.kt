@@ -306,7 +306,7 @@ class ScreenOffAccessibilityService :
         flashlightHandler = FlashlightHandler(this, serviceScope)
         notificationLightingHandler = NotificationLightingHandler(this)
         buttonRemapHandler = ButtonRemapHandler(this, flashlightHandler)
-        appFlowHandler = AppFlowHandler(this, this)
+        appFlowHandler = AppFlowHandler.getInstance(this)
         ambientGlanceHandler = AmbientGlanceHandler(this)
         aodForceTurnOffHandler = AodForceTurnOffHandler(this)
         aodWallpaperOverlayHandler = AodWallpaperOverlayHandler(this)
@@ -555,6 +555,12 @@ class ScreenOffAccessibilityService :
         serviceScope.cancel()
         getSharedPreferences("essentials_prefs", MODE_PRIVATE)
             .unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
+        if (!com.sameerasw.essentials.services.AppDetectionService.isRunning) {
+            try {
+                appFlowHandler.destroy()
+            } catch (_: Exception) {
+            }
+        }
         instance = null
         super.onDestroy()
     }
