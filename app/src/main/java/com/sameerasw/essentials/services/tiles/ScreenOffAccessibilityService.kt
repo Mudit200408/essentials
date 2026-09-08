@@ -732,6 +732,7 @@ class ScreenOffAccessibilityService :
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
+        if (com.sameerasw.essentials.utils.ShutUpManager.isAccessibilityMuted) return
 
         val trustsEventPackage = event.eventType != AccessibilityEvent.TYPE_WINDOWS_CHANGED
         val detectedPackage = if (trustsEventPackage) event.packageName?.toString() else null

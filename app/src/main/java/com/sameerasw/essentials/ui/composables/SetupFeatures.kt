@@ -9,6 +9,7 @@
 
 package com.sameerasw.essentials.ui.composables
 
+import android.Manifest
 import com.sameerasw.essentials.ui.navigation.LocalSelectedFeatureIds
 import com.sameerasw.essentials.ui.navigation.LocalListPaneWidth
 import androidx.compose.foundation.layout.width
@@ -26,6 +27,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -72,12 +74,15 @@ import com.sameerasw.essentials.domain.registry.PermissionRegistry
 import com.sameerasw.essentials.domain.registry.QSTileRegistry
 import com.sameerasw.essentials.ui.activities.PixelSearchbarSettingsActivity
 import com.sameerasw.essentials.ui.activities.WallpaperActivity
+import com.sameerasw.essentials.utils.PermissionUtils
 import com.sameerasw.essentials.ui.activities.YourAndroidActivity
 import com.sameerasw.essentials.ui.components.FavoriteCarousel
 import com.sameerasw.essentials.ui.components.buttons.ListExpandToggleButton
 import com.sameerasw.essentials.ui.core.cards.FeatureCard
 import com.sameerasw.essentials.ui.core.containers.RoundedCardContainer
 import com.sameerasw.essentials.ui.core.sheets.PermissionItem
+import com.sameerasw.essentials.ui.core.sheets.FeatureHelpBottomSheet
+import com.sameerasw.essentials.ui.core.sheets.InstructionsBottomSheet
 import com.sameerasw.essentials.ui.core.sheets.PermissionsBottomSheet
 import com.sameerasw.essentials.ui.core.sheets.ReorderFavoritesBottomSheet
 import com.sameerasw.essentials.ui.features.freeze.FrozenAppsSearchResultCard
@@ -88,6 +93,7 @@ import com.sameerasw.essentials.utils.PermissionUIHelper
 import com.sameerasw.essentials.ui.modifiers.scrollMotionBlur
 import com.sameerasw.essentials.utils.BiometricSecurityHelper
 import com.sameerasw.essentials.utils.PermissionUtils
+import com.sameerasw.essentials.utils.RootUtils
 import com.sameerasw.essentials.viewmodels.MainViewModel
 import kotlinx.coroutines.delay
 
@@ -354,6 +360,26 @@ fun SetupFeatures(
                             ),
                         )
                     }
+                    if (!viewModel.isPostNotificationsEnabled.value) {
+                        missing.add(
+                            PermissionItem(
+                                iconRes = R.drawable.rounded_notifications_unread_24,
+                                title = R.string.permission_post_notifications_title,
+                                description = R.string.permission_post_notifications_desc,
+                                dependentFeatures = PermissionRegistry.getFeatures("POST_NOTIFICATIONS"),
+                                actionLabel = R.string.perm_action_grant,
+                                action = {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        (context as? Activity)?.requestPermissions(
+                                            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                                            1,
+                                        )
+                                    }
+                                },
+                                isGranted = viewModel.isPostNotificationsEnabled.value,
+                            ),
+                        )
+                    }
                 }
 
                 R.string.feat_screen_locked_security_title -> {
@@ -367,8 +393,7 @@ fun SetupFeatures(
                                     dependentFeatures = listOf(R.string.feat_screen_locked_security_title),
                                     action = {
                                         viewModel.isRootPermissionGranted.value =
-                                            com.sameerasw.essentials.utils.RootUtils
-                                                .isRootPermissionGranted()
+                                            RootUtils.isRootPermissionGranted()
                                     },
                                     isGranted = isRootPermissionGranted,
                                 ),
@@ -453,6 +478,84 @@ fun SetupFeatures(
                                 },
                                 isGranted = isAccessibilityEnabled,
                             ),
+                        )
+                    }
+                }
+
+                R.string.feat_shut_up_title -> {
+                    if (!isWriteSecureSettingsEnabled) {
+                        missing.add(
+                            PermissionItem(
+                                iconRes = R.drawable.rounded_security_24,
+                                title = R.string.perm_write_secure_title,
+                                description = R.string.perm_write_secure_desc_common,
+                                dependentFeatures = PermissionRegistry.getFeatures("WRITE_SECURE_SETTINGS"),
+                                actionLabel = R.string.perm_action_copy_adb,
+                                action = {
+                                    val adbCommand =
+                                        "adb shell pm grant com.sameerasw.essentials android.permission.WRITE_SECURE_SETTINGS"
+                                    val clipboard =
+                                        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText("adb_command", adbCommand)
+                                    clipboard.setPrimaryClip(clip)
+                                },
+                                secondaryActionLabel = R.string.perm_action_check,
+                                secondaryAction = {
+                                    viewModel.isWriteSecureSettingsEnabled.value =
+                                        PermissionUtils.canWriteSecureSettings(context)
+                                },
+                                isGranted = isWriteSecureSettingsEnabled
+                            )
+                        )
+                    }
+                    if (!isWriteSettingsEnabled) {
+                        missing.add(
+                            PermissionItem(
+                                iconRes = R.drawable.rounded_settings_24,
+                                title = R.string.perm_write_settings_title,
+                                description = R.string.perm_write_settings_desc,
+                                dependentFeatures = PermissionRegistry.getFeatures("WRITE_SETTINGS"),
+                                actionLabel = R.string.perm_action_enable,
+                                action = {
+                                    PermissionUtils.openWriteSettings(context)
+                                },
+                                isGranted = isWriteSettingsEnabled
+                            )
+                        )
+                    }
+                    if (!viewModel.isUsageStatsPermissionGranted.value) {
+                        missing.add(
+                            PermissionItem(
+                                iconRes = R.drawable.rounded_data_usage_24,
+                                title = R.string.perm_usage_stats_title,
+                                description = R.string.perm_usage_stats_desc,
+                                dependentFeatures = PermissionRegistry.getFeatures("USAGE_STATS"),
+                                actionLabel = R.string.perm_action_grant,
+                                action = {
+                                    PermissionUtils.openUsageStatsSettings(context)
+                                },
+                                isGranted = viewModel.isUsageStatsPermissionGranted.value
+                            )
+                        )
+                    }
+                    if (!viewModel.isPostNotificationsEnabled.value) {
+                        missing.add(
+                            PermissionItem(
+                                iconRes = R.drawable.rounded_notifications_unread_24,
+                                title = R.string.permission_post_notifications_title,
+                                description = R.string.permission_post_notifications_desc,
+                                dependentFeatures = PermissionRegistry.getFeatures("POST_NOTIFICATIONS"),
+                                actionLabel = R.string.perm_action_grant,
+                                action = {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                        (context as? Activity)?.requestPermissions(
+                                            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                                            1
+                                        )
+                                    }
+                                },
+                                isGranted = viewModel.isPostNotificationsEnabled.value
+                            )
                         )
                     }
                 }
@@ -688,8 +791,7 @@ fun SetupFeatures(
                                     dependentFeatures = listOf(R.string.feat_screen_locked_security_title),
                                     action = {
                                         viewModel.isRootPermissionGranted.value =
-                                            com.sameerasw.essentials.utils.RootUtils
-                                                .isRootPermissionGranted()
+                                            RootUtils.isRootPermissionGranted()
                                     },
                                     isGranted = isRootPermissionGranted,
                                 ),
@@ -834,9 +936,71 @@ fun SetupFeatures(
                         ),
                     )
 
+                R.string.feat_shut_up_title ->
+                    listOf(
+                        PermissionItem(
+                            iconRes = R.drawable.rounded_security_24,
+                            title = R.string.perm_write_secure_title,
+                            description = R.string.perm_write_secure_desc_common,
+                            dependentFeatures = PermissionRegistry.getFeatures("WRITE_SECURE_SETTINGS"),
+                            actionLabel = R.string.perm_action_copy_adb,
+                            action = {
+                                val adbCommand =
+                                    "adb shell pm grant com.sameerasw.essentials android.permission.WRITE_SECURE_SETTINGS"
+                                val clipboard =
+                                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("adb_command", adbCommand)
+                                clipboard.setPrimaryClip(clip)
+                            },
+                            secondaryActionLabel = R.string.perm_action_check,
+                            secondaryAction = {
+                                viewModel.isWriteSecureSettingsEnabled.value =
+                                    PermissionUtils.canWriteSecureSettings(context)
+                            },
+                            isGranted = isWriteSecureSettingsEnabled,
+                        ),
+                        PermissionItem(
+                            iconRes = R.drawable.rounded_settings_24,
+                            title = R.string.perm_write_settings_title,
+                            description = R.string.perm_write_settings_desc,
+                            dependentFeatures = PermissionRegistry.getFeatures("WRITE_SETTINGS"),
+                            actionLabel = R.string.perm_action_grant,
+                            action = {
+                                viewModel.requestWriteSettingsPermission(context)
+                            },
+                            isGranted = isWriteSettingsEnabled,
+                        ),
+                        PermissionItem(
+                            iconRes = R.drawable.rounded_data_usage_24,
+                            title = R.string.perm_usage_stats_title,
+                            description = R.string.perm_usage_stats_desc,
+                            dependentFeatures = PermissionRegistry.getFeatures("USAGE_STATS"),
+                            actionLabel = R.string.perm_action_grant,
+                            action = {
+                                PermissionUtils.openUsageStatsSettings(context)
+                            },
+                            isGranted = viewModel.isUsageStatsPermissionGranted.value,
+                        ),
+                        PermissionItem(
+                            iconRes = R.drawable.rounded_notifications_unread_24,
+                            title = R.string.permission_post_notifications_title,
+                            description = R.string.permission_post_notifications_desc,
+                            dependentFeatures = PermissionRegistry.getFeatures("POST_NOTIFICATIONS"),
+                            actionLabel = R.string.perm_action_grant,
+                            action = {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    (context as? Activity)?.requestPermissions(
+                                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                                        1,
+                                    )
+                                }
+                            },
+                            isGranted = viewModel.isPostNotificationsEnabled.value,
+                        ),
+                    )
+
                 else -> emptyList()
             }
-
         if (showSheet && permissionItems.isNotEmpty() && currentFeature != null) {
             PermissionsBottomSheet(
                 onDismissRequest = { showSheet = false },
@@ -853,13 +1017,13 @@ fun SetupFeatures(
     var showInstructionsSheet by rememberSaveable { mutableStateOf(false) }
 
     if (showInstructionsSheet) {
-        com.sameerasw.essentials.ui.core.sheets.InstructionsBottomSheet(
+        InstructionsBottomSheet(
             onDismissRequest = { showInstructionsSheet = false },
         )
     }
 
     if (showHelpSheet && selectedHelpFeature != null) {
-        com.sameerasw.essentials.ui.core.sheets.FeatureHelpBottomSheet(
+        FeatureHelpBottomSheet(
             onDismissRequest = {
                 showHelpSheet = false
                 selectedHelpFeature = null
