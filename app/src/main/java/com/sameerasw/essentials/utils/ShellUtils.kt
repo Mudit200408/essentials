@@ -14,6 +14,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.sameerasw.essentials.R
@@ -23,10 +24,28 @@ object ShellUtils {
     private var lastAlertTime = 0L
     private const val ALERT_COOLDOWN = 180000L // 3 minutes
 
+    @Volatile
+    private var cachedIsRootEnabled: Boolean? = null
+    @Volatile
+    private var prefListenerRegistered = false
+
+    private val prefListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == SettingsRepository.KEY_USE_ROOT) {
+            cachedIsRootEnabled = null
+        }
+    }
+
     fun isRootEnabled(context: Context): Boolean {
+        cachedIsRootEnabled?.let { return it }
         val prefs =
             context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs.getBoolean(SettingsRepository.KEY_USE_ROOT, false)
+        if (!prefListenerRegistered) {
+            prefs.registerOnSharedPreferenceChangeListener(prefListener)
+            prefListenerRegistered = true
+        }
+        val enabled = prefs.getBoolean(SettingsRepository.KEY_USE_ROOT, false)
+        cachedIsRootEnabled = enabled
+        return enabled
     }
 
     fun isAvailable(context: Context): Boolean =
