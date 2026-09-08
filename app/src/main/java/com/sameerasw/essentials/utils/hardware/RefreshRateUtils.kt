@@ -80,11 +80,22 @@ object RefreshRateUtils {
     ): Boolean {
         if (!ShellUtils.hasPermission(context)) return false
 
-        val clamped = normalizeRate(value)
+        val clamped = normalizeRate(context, value)
+        val currentState = getCurrentState(context)
+        if (!currentState.isSystemManaged &&
+            currentState.peak.roundToInt() == clamped.roundToInt() &&
+            currentState.min.roundToInt() == clamped.roundToInt()
+        ) {
+            return true
+        }
+
         val formatted = formatRate(clamped)
         val featureName = context.getString(R.string.feat_screen_refresh_rate_title)
-        ShellUtils.runCommand(context, "settings put system $KEY_PEAK_REFRESH_RATE $formatted", featureName = featureName)
-        ShellUtils.runCommand(context, "settings put system $KEY_MIN_REFRESH_RATE $formatted", featureName = featureName)
+        val batchCommand = "settings put system $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put system $KEY_MIN_REFRESH_RATE $formatted; " +
+            "settings put global $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put global $KEY_MIN_REFRESH_RATE $formatted"
+        ShellUtils.runCommand(context, batchCommand, featureName = featureName)
         return true
     }
 
@@ -95,19 +106,24 @@ object RefreshRateUtils {
     ): Boolean {
         if (!ShellUtils.hasPermission(context)) return false
 
-        val safeMin = normalizeRate(minValue)
-        val safePeak = normalizeRate(maxOf(minValue, peakValue))
+        val safeMin = normalizeRate(context, minValue)
+        val safePeak = normalizeRate(context, maxOf(minValue, peakValue))
+        val currentState = getCurrentState(context)
+        if (!currentState.isSystemManaged &&
+            currentState.min.roundToInt() == safeMin.roundToInt() &&
+            currentState.peak.roundToInt() == safePeak.roundToInt()
+        ) {
+            return true
+        }
+
         val featureName = context.getString(R.string.feat_screen_refresh_rate_title)
-        ShellUtils.runCommand(
-            context,
-            "settings put system $KEY_MIN_REFRESH_RATE ${formatRate(safeMin)}",
-            featureName = featureName,
-        )
-        ShellUtils.runCommand(
-            context,
-            "settings put system $KEY_PEAK_REFRESH_RATE ${formatRate(safePeak)}",
-            featureName = featureName,
-        )
+        val minFormatted = formatRate(safeMin)
+        val peakFormatted = formatRate(safePeak)
+        val batchCommand = "settings put system $KEY_MIN_REFRESH_RATE $minFormatted; " +
+            "settings put system $KEY_PEAK_REFRESH_RATE $peakFormatted; " +
+            "settings put global $KEY_MIN_REFRESH_RATE $minFormatted; " +
+            "settings put global $KEY_PEAK_REFRESH_RATE $peakFormatted"
+        ShellUtils.runCommand(context, batchCommand, featureName = featureName)
         return true
     }
 
@@ -117,15 +133,22 @@ object RefreshRateUtils {
     ): Boolean {
         if (!ShellUtils.hasPermission(context)) return false
 
-        val featureName = context.getString(R.string.feat_screen_refresh_rate_title)
-        // Clear both namespaces first, then restore the original system-managed peak behavior.
-        ShellUtils.runCommand(context, "settings delete system $KEY_MIN_REFRESH_RATE", featureName = featureName)
-        ShellUtils.runCommand(context, "settings delete system $KEY_PEAK_REFRESH_RATE", featureName = featureName)
-        ShellUtils.runCommand(context, "settings delete global $KEY_PEAK_REFRESH_RATE", featureName = featureName)
-        ShellUtils.runCommand(context, "settings delete global $KEY_MIN_REFRESH_RATE", featureName = featureName)
-        if (restoreInfinityPeak) {
-            ShellUtils.runCommand(context, "settings put system $KEY_PEAK_REFRESH_RATE Infinity", featureName = featureName)
+        val currentState = getCurrentState(context)
+        if (currentState.isSystemManaged && currentState.usesInfinityDefaultPeak == restoreInfinityPeak) {
+            return true
         }
+
+        val featureName = context.getString(R.string.feat_screen_refresh_rate_title)
+        val deleteCmd = "settings delete system $KEY_MIN_REFRESH_RATE; " +
+            "settings delete system $KEY_PEAK_REFRESH_RATE; " +
+            "settings delete global $KEY_PEAK_REFRESH_RATE; " +
+            "settings delete global $KEY_MIN_REFRESH_RATE"
+        val batchCommand = if (restoreInfinityPeak) {
+            "$deleteCmd; settings put system $KEY_PEAK_REFRESH_RATE Infinity"
+        } else {
+            deleteCmd
+        }
+        ShellUtils.runCommand(context, batchCommand, featureName = featureName)
         return true
     }
 
@@ -139,9 +162,15 @@ object RefreshRateUtils {
         }
     }
 
-    fun normalizeRate(value: Float): Float {
+    fun normalizeRate(value: Float, maxRate: Float = 120f): Float {
         val rounded = value.roundToInt()
-        return rounded.coerceIn(10, 120).toFloat()
+        val upperLimit = maxOf(120f, maxRate).roundToInt()
+        return rounded.coerceIn(10, upperLimit).toFloat()
+    }
+
+    fun normalizeRate(context: Context, value: Float): Float {
+        val maxRate = getHighestSupportedRefreshRate(context)
+        return normalizeRate(value, maxRate)
     }
 
     fun getCurrentState(context: Context): RefreshRateState {
@@ -234,6 +263,43 @@ object RefreshRateUtils {
         } catch (_: Exception) {
             DEFAULT_SYSTEM_REFRESH_RATE
         }
+
+    fun getSupportedRefreshRates(context: Context): List<Float> {
+        return try {
+            val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+            val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
+            val rates = display?.supportedModes
+                ?.map { it.refreshRate.roundToInt().toFloat() }
+                ?.distinct()
+                ?.sorted()
+                ?.filter { it >= 30f }
+                ?: emptyList()
+            if (rates.isEmpty()) listOf(60f, 120f) else rates
+        } catch (_: Exception) {
+            listOf(60f, 120f)
+        }
+    }
+
+    fun applyDynamicRefreshRate(context: Context, value: Float): Boolean {
+        if (!ShellUtils.hasPermission(context)) return false
+
+        val clamped = normalizeRate(context, value)
+        val currentState = getCurrentState(context)
+        if (!currentState.isSystemManaged &&
+            currentState.peak.roundToInt() == clamped.roundToInt() &&
+            currentState.min <= 0f
+        ) {
+            return true
+        }
+
+        val formatted = formatRate(clamped)
+        val batchCommand = "settings put system $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put system $KEY_MIN_REFRESH_RATE 0; " +
+            "settings put global $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put global $KEY_MIN_REFRESH_RATE 0"
+        ShellUtils.runCommand(context, batchCommand)
+        return true
+    }
 
     private fun formatRate(value: Float): String = String.format(Locale.US, "%.0f", value)
 }
