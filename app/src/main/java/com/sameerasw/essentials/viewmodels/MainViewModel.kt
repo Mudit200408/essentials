@@ -747,6 +747,7 @@ class MainViewModel : ViewModel() {
                     SettingsRepository.KEY_SMART_PIXELS_DISABLE_ON_CAST ->
                         isSmartPixelsDisableOnCastEnabled.value =
                             settingsRepository.getBoolean(key, true)
+
                     SettingsRepository.KEY_DUO_ENABLED ->
                         isDuoEnabled.value = settingsRepository.isDuoEnabled()
 
@@ -1761,7 +1762,7 @@ class MainViewModel : ViewModel() {
 
     fun createShutUpShortcut(context: Context, config: ShutUpAppConfig) {
         if (!ShortcutManagerCompat.isRequestPinShortcutSupported(context)) {
-            Toast.makeText(context, "Shortcut pinning not supported by launcher", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.shut_up_shortcut_pin_unsupported), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -1772,8 +1773,8 @@ class MainViewModel : ViewModel() {
         } catch (e: Exception) {
             config.packageName
         }
-        val shortLabel = "Shut-Up $appLabel"
-        val longLabel = "Launch $appLabel with Shut-Up"
+        val shortLabel = context.getString(R.string.shut_up_shortcut_short_label, appLabel)
+        val longLabel = context.getString(R.string.shut_up_shortcut_long_label, appLabel)
 
         val iconCompat = try {
             val bitmap = AppUtil.getShortcutIcon(context, config.packageName)

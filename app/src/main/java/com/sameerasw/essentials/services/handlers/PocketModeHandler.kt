@@ -71,6 +71,7 @@ import android.os.Build
 import android.view.Display
 import android.view.Surface
 import com.google.gson.GsonBuilder
+import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.domain.model.AppSelection
 import com.sameerasw.essentials.services.NotificationListener
 import java.util.concurrent.ConcurrentHashMap
@@ -86,7 +87,8 @@ class PocketModeHandler(
     var isBypassed = false
     var isOverlayVisible = false
 
-    val prefs by lazy { service.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE) }
+    val settingsRepository by lazy { SettingsRepository(service) }
+    val prefs by lazy { service.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE) }
     private val keyguardManager by lazy {
         service.getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager
     }
@@ -120,31 +122,20 @@ class PocketModeHandler(
     }
 
     fun updatePocketModePrefs() {
-        pocketModeEnabled = prefs.getBoolean("pocket_mode_enabled", false)
-        pocketModeUseLightSensor = prefs.getBoolean("pocket_mode_use_light_sensor", false)
-        pocketModeTriggerDelayMs = (prefs.getFloat("pocket_mode_trigger_delay", 3f) * 1000).toLong()
-        pocketModeLockScreenOnly = prefs.getBoolean("pocket_mode_lock_screen_only", false)
-        flashlightPocketTurnOffEnabled = prefs.getBoolean("flashlight_pocket_turn_off_enabled", false)
-        invalidateBypassCache()
+        pocketModeEnabled = prefs.getBoolean(SettingsRepository.KEY_POCKET_MODE_ENABLED, false)
+        pocketModeUseLightSensor = prefs.getBoolean(SettingsRepository.KEY_POCKET_MODE_USE_LIGHT_SENSOR, false)
+        pocketModeTriggerDelayMs = (prefs.getFloat(SettingsRepository.KEY_POCKET_MODE_TRIGGER_DELAY, 3f) * 1000).toLong()
+        pocketModeLockScreenOnly = prefs.getBoolean(SettingsRepository.KEY_POCKET_MODE_LOCK_SCREEN_ONLY, false)
+        flashlightPocketTurnOffEnabled = prefs.getBoolean(SettingsRepository.KEY_FLASHLIGHT_POCKET_TURN_OFF_ENABLED, false)
+        invalidateBypassCache(AppFlowHandler.getInstance(service).currentPackage)
     }
 
     fun updatePocketModeExcludedAppsSet() {
-        val json = prefs.getString("pocket_mode_excluded_apps", null)
-        pocketModeExcludedAppsSet =
-            if (json != null) {
-                try {
-                    val gson = GsonBuilder().create()
-                    gson.fromJson(json, Array<AppSelection>::class.java)
-                        .filter { it.isEnabled }
-                        .map { it.packageName }
-                        .toSet()
-                } catch (e: Exception) {
-                    emptySet()
-                }
-            } else {
-                emptySet()
-            }
-        invalidateBypassCache()
+        pocketModeExcludedAppsSet = settingsRepository.loadPocketModeExcludedApps()
+            .filter { it.isEnabled }
+            .map { it.packageName }
+            .toSet()
+        invalidateBypassCache(AppFlowHandler.getInstance(service).currentPackage)
     }
 
     fun invalidateBypassCache(currentPackage: String? = null) {
@@ -208,7 +199,7 @@ class PocketModeHandler(
         } catch (e: SecurityException) {
             Log.w("PocketModeHandler", "SecurityException checking media sessions for $packageName: ${e.message}")
             val audioManager = service.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
-            audioManager?.isMusicActive == true
+            audioManager?.isMusicActive == true && KNOWN_STREAMING_PACKAGES.contains(packageName)
         } catch (e: Exception) {
             false
         }

@@ -9,7 +9,10 @@
 
 package com.sameerasw.essentials.services.handlers
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -28,6 +31,7 @@ class WifiAutoOffHandler(private val context: Context) {
     private val settingsRepository by lazy { SettingsRepository(context) }
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
     private var isWifiConnected = false
+    private var isWifiReceiverRegistered = false
 
     private val wifiAutoOffRunnable = Runnable {
         if (!isWifiConnected && settingsRepository.isWifiAutoOffEnabled()) {
@@ -40,6 +44,22 @@ class WifiAutoOffHandler(private val context: Context) {
         }
     }
 
+    private val wifiStateReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == WifiManager.WIFI_STATE_CHANGED_ACTION) {
+                    val state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN)
+                    if (state == WifiManager.WIFI_STATE_ENABLED) {
+                        if (!isWifiConnected) {
+                            checkAndScheduleWifiAutoOff()
+                        }
+                    } else if (state == WifiManager.WIFI_STATE_DISABLED || state == WifiManager.WIFI_STATE_DISABLING) {
+                        handler.removeCallbacks(wifiAutoOffRunnable)
+                    }
+                }
+            }
+        }
+
     companion object {
         private const val TAG = "WifiAutoOffHandler"
     }
@@ -49,6 +69,9 @@ class WifiAutoOffHandler(private val context: Context) {
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return
 
         isWifiConnected = isWifiCurrentlyConnected(connectivityManager)
+        if (!isWifiConnected) {
+            checkAndScheduleWifiAutoOff()
+        }
 
         val networkRequest = NetworkRequest.Builder()
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
@@ -75,10 +98,29 @@ class WifiAutoOffHandler(private val context: Context) {
         } catch (e: Exception) {
             Log.e(TAG, "Failed to register network callback", e)
         }
+
+        val filter = IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(wifiStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                context.registerReceiver(wifiStateReceiver, filter)
+            }
+            isWifiReceiverRegistered = true
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to register wifi state receiver", e)
+        }
     }
 
     fun unregister() {
         handler.removeCallbacks(wifiAutoOffRunnable)
+        if (isWifiReceiverRegistered) {
+            try {
+                context.unregisterReceiver(wifiStateReceiver)
+            } catch (_: Exception) {
+            }
+            isWifiReceiverRegistered = false
+        }
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         networkCallback?.let {
