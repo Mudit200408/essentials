@@ -9,7 +9,6 @@
 
 package com.sameerasw.essentials.services.handlers
 
-import android.accessibilityservice.AccessibilityService
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -47,7 +46,6 @@ import com.sameerasw.essentials.domain.model.AppRefreshRateConfig
 import com.sameerasw.essentials.domain.model.AppSelection
 import com.sameerasw.essentials.domain.model.BackGestureAppConfig
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
-import com.sameerasw.essentials.domain.model.disableWirelessDebugging
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.services.AppDetectionService
 import com.sameerasw.essentials.services.NotificationListener
@@ -205,14 +203,6 @@ class AppFlowHandler private constructor(
     private var cachedRefreshRateConfigs: List<AppRefreshRateConfig>? = null
     private val mediaPlayingPackages = ConcurrentHashMap<String, Boolean>()
 
-    // App Automation State
-    private val activeAppAutomationIds = mutableSetOf<String>()
-
-    // Night Light State
-    private var wasNightLightOnBeforeAutoToggle = false
-    private var isNightLightAutoToggledOff = false
-    private var pendingNLRunnable: Runnable? = null
-    private val nlDebounceDelay = 500L
 
     private val shutUpReceiver =
         object : BroadcastReceiver() {
@@ -240,10 +230,7 @@ class AppFlowHandler private constructor(
                         cancelRestoreNotification()
                         val autoPkg = intent.getStringExtra(EXTRA_AUTO_ARCHIVE_PACKAGE)
                         val pkgName = intent.getStringExtra(EXTRA_PACKAGE_NAME)
-                        val settingsRepo =
-                            com.sameerasw.essentials.data.repository.SettingsRepository(
-                                context ?: return,
-                            )
+                        val settingsRepo = settingsRepository
                         val config =
                             if (pkgName != null) {
                                 settingsRepo.loadShutUpConfigs().find { it.packageName == pkgName }
@@ -279,7 +266,7 @@ class AppFlowHandler private constructor(
                 addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
             }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.context.registerReceiver(mediaReceiver, mediaFilter, Context.RECEIVER_EXPORTED)
+            this.context.registerReceiver(mediaReceiver, mediaFilter, Context.RECEIVER_NOT_EXPORTED)
         } else {
             this.context.registerReceiver(mediaReceiver, mediaFilter)
         }
@@ -291,7 +278,7 @@ class AppFlowHandler private constructor(
                 addAction(ACTION_RESTORE_NOW)
             }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.context.registerReceiver(shutUpReceiver, shutUpFilter, Context.RECEIVER_EXPORTED)
+            this.context.registerReceiver(shutUpReceiver, shutUpFilter, Context.RECEIVER_NOT_EXPORTED)
         } else {
             this.context.registerReceiver(shutUpReceiver, shutUpFilter)
         }
@@ -346,7 +333,7 @@ class AppFlowHandler private constructor(
                 }
             }
         }
-        synchronized(AppFlowHandler::class.java) {
+        synchronized(AppFlowHandler.Companion) {
             if (INSTANCE === this) {
                 INSTANCE = null
             }
@@ -561,7 +548,6 @@ class AppFlowHandler private constructor(
         if (now - session.startTimeMillis > session.durationMillis) return null
         return session
     }
-
     private fun checkShutUp(packageName: String) {
         val serviceEnabled = settingsRepository.isShutUpServiceEnabled()
         if (!serviceEnabled) return
@@ -712,6 +698,14 @@ class AppFlowHandler private constructor(
         }
 
         if (packageName == gatingPackage && now - lastGateRequestTime < 2500) {
+            return
+        }
+
+        // `currentPackage` is only as fresh as the last window-state-changed event we received, and closing an app
+        // can fire a stale event for its own package after the real foreground has already moved elsewhere.
+        // Cross-check against the window the accessibility service reports as actually active right now before committing.
+        val actuallyActivePackage = ScreenOffAccessibilityService.instance?.rootInActiveWindow?.packageName?.toString()
+        if (actuallyActivePackage != null && actuallyActivePackage != packageName) {
             return
         }
 
@@ -1105,10 +1099,10 @@ class AppFlowHandler private constructor(
             )
 
         val title =
-            context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_notif_title)
+            context.getString(R.string.shut_up_auto_archive_notif_title)
         val text =
             context.getString(
-                com.sameerasw.essentials.R.string.shut_up_auto_archive_notif_text,
+                R.string.shut_up_auto_archive_notif_text,
                 appName,
                 secondsLeft,
             )
@@ -1119,7 +1113,7 @@ class AppFlowHandler private constructor(
                 val builder =
                     android.app.Notification
                         .Builder(context, "shutup_alerts_channel")
-                        .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_snowflake_24)
+                        .setSmallIcon(R.drawable.rounded_snowflake_24)
                         .setContentTitle(title)
                         .setContentText(text)
                         .setOngoing(true)
@@ -1138,9 +1132,9 @@ class AppFlowHandler private constructor(
                         .Builder(
                             android.graphics.drawable.Icon.createWithResource(
                                 context,
-                                com.sameerasw.essentials.R.drawable.rounded_snowflake_24,
+                                R.drawable.rounded_snowflake_24,
                             ),
-                            context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_action_freeze),
+                            context.getString(R.string.shut_up_auto_archive_action_freeze),
                             freezePendingIntent,
                         ).build(),
                 )
@@ -1149,9 +1143,9 @@ class AppFlowHandler private constructor(
                         .Builder(
                             android.graphics.drawable.Icon.createWithResource(
                                 context,
-                                com.sameerasw.essentials.R.drawable.rounded_close_24,
+                                R.drawable.rounded_close_24,
                             ),
-                            context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_action_abort),
+                            context.getString(R.string.shut_up_auto_archive_action_abort),
                             abortPendingIntent,
                         ).build(),
                 )
@@ -1164,7 +1158,10 @@ class AppFlowHandler private constructor(
                             Boolean::class.javaPrimitiveType,
                         )
                     setRequestPromotedOngoing.invoke(builder, true)
+                } catch (_: Throwable) {
+                }
 
+                try {
                     val setShortCriticalText =
                         builder.javaClass.getMethod(
                             "setShortCriticalText",
@@ -1185,7 +1182,7 @@ class AppFlowHandler private constructor(
             } else {
                 NotificationCompat
                     .Builder(context, "shutup_alerts_channel")
-                    .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_snowflake_24)
+                    .setSmallIcon(R.drawable.rounded_snowflake_24)
                     .setContentTitle(title)
                     .setContentText(text)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -1195,12 +1192,12 @@ class AppFlowHandler private constructor(
                     .setOngoing(true)
                     .setProgress(10, secondsLeft, false)
                     .addAction(
-                        com.sameerasw.essentials.R.drawable.rounded_snowflake_24,
-                        context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_action_freeze),
+                        R.drawable.rounded_snowflake_24,
+                        context.getString(R.string.shut_up_auto_archive_action_freeze),
                         freezePendingIntent,
                     ).addAction(
-                        com.sameerasw.essentials.R.drawable.rounded_close_24,
-                        context.getString(com.sameerasw.essentials.R.string.shut_up_auto_archive_action_abort),
+                        R.drawable.rounded_close_24,
+                        context.getString(R.string.shut_up_auto_archive_action_abort),
                         abortPendingIntent,
                     ).addExtras(
                         android.os.Bundle().apply {
@@ -1229,7 +1226,7 @@ class AppFlowHandler private constructor(
                 android.app
                     .NotificationChannel(
                         "app_detection_service_channel",
-                        context.getString(com.sameerasw.essentials.R.string.app_detection_service_channel_name),
+                        context.getString(R.string.app_detection_service_channel_name),
                         NotificationManager.IMPORTANCE_HIGH,
                     ).apply {
                         description = "Channel for app detection alerts"
@@ -1267,7 +1264,7 @@ class AppFlowHandler private constructor(
     }
 
     private fun showRestoreNotification(
-        wasShutUpConfig: com.sameerasw.essentials.domain.model.ShutUpAppConfig?,
+        wasShutUpConfig: ShutUpAppConfig?,
         autoArchivePackage: String?,
     ) {
         createNotificationChannel()
@@ -1301,7 +1298,7 @@ class AppFlowHandler private constructor(
                 val builder =
                     android.app.Notification
                         .Builder(context, "shutup_restore_channel")
-                        .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_code_24)
+                        .setSmallIcon(R.drawable.rounded_code_24)
                         .setContentTitle(title)
                         .setContentText(text)
                         .setCategory(android.app.Notification.CATEGORY_SERVICE)
@@ -1313,7 +1310,7 @@ class AppFlowHandler private constructor(
                                 .Builder(
                                     android.graphics.drawable.Icon.createWithResource(
                                         context,
-                                        com.sameerasw.essentials.R.drawable.rounded_code_24,
+                                        R.drawable.rounded_code_24,
                                     ),
                                     "Restore Now",
                                     restorePendingIntent,
@@ -1338,7 +1335,7 @@ class AppFlowHandler private constructor(
             } else {
                 NotificationCompat
                     .Builder(context, "shutup_restore_channel")
-                    .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_code_24)
+                    .setSmallIcon(R.drawable.rounded_code_24)
                     .setContentTitle(title)
                     .setContentText(text)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -1368,8 +1365,8 @@ class AppFlowHandler private constructor(
     }
 
     private fun restoreShutUpSettings(
-        repository: com.sameerasw.essentials.data.repository.SettingsRepository,
-        wasShutUpConfig: com.sameerasw.essentials.domain.model.ShutUpAppConfig?,
+        repository: SettingsRepository,
+        wasShutUpConfig: ShutUpAppConfig?,
         autoArchivePackage: String? = null,
         forceRestore: Boolean = false,
     ) {
@@ -1610,6 +1607,30 @@ class AppFlowHandler private constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun onScreenOff() {
+        cancelPendingRateRunnable()
+        cancelPendingRestoreRunnable()
+        refreshRateJob?.cancel()
+        if (perAppRateSnapshot != null) {
+            val snapshot = perAppRateSnapshot
+            perAppRateSnapshot = null
+            scope.launch(Dispatchers.IO) {
+                try {
+                    snapshot?.let { restoreFromSnapshotState(it) }
+                } catch (e: Exception) {
+                    Log.e("AppFlowHandler", "Failed to restore refresh rate on screen off", e)
+                }
+            }
+        }
+    }
+
+    fun onScreenOn() {
+        val currentPkg = currentPackage
+        if (currentPkg != null) {
+            checkPerAppRefreshRate(currentPkg)
         }
     }
 
