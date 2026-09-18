@@ -227,6 +227,12 @@ class AppDetectionService : Service() {
             unregisterReceiver(authReceiver)
         } catch (_: Exception) {
         }
+        if (ScreenOffAccessibilityService.instance == null) {
+            try {
+                appFlowHandler.destroy()
+            } catch (_: Exception) {
+            }
+        }
         super.onDestroy()
     }
 

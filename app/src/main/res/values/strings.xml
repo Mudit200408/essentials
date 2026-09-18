@@ -2879,5 +2879,8 @@
     <string name="refresh_rate_per_app_portrait_desc">%1$d Hz (%2$s)</string>
     <string name="search_refresh_rate_per_app_title">Per-App Refresh Rate</string>
     <string name="search_refresh_rate_per_app_desc">Configure custom display refresh rates for individual apps</string>
+    <string name="shut_up_shortcut_pin_unsupported">Shortcut pinning not supported by launcher</string>
+    <string name="shut_up_shortcut_short_label">Shut-Up %1$s</string>
+    <string name="shut_up_shortcut_long_label">Launch %1$s with Shut-Up</string>
 </resources>
 
