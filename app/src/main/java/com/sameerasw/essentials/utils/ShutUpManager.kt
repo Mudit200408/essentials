@@ -393,10 +393,18 @@ object ShutUpManager {
                         }
                     }
 
+                    // Always clear in-memory flags regardless of partial write failures.
+                    // These flags represent "ShutUp is currently active" — if restore was
+                    // attempted, we must unblock accessibility and app-flow events even if
+                    // a single shell write failed, otherwise the accessibility service
+                    // reconnects but events remain silently dropped forever.
+                    isAccessibilityMuted = false
+                    settingsCurrentlyApplied = false
+
                     if (restoreSucceeded) {
                         repository.saveShutUpOriginalSettings(emptyMap())
-                        isAccessibilityMuted = false
-                        settingsCurrentlyApplied = false
+                    } else {
+                        Log.w(TAG, "Restore completed with partial failures — flags cleared, backup retained for retry")
                     }
                 }
 

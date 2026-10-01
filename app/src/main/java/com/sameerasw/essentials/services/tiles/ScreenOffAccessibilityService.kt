@@ -56,6 +56,7 @@ import com.sameerasw.essentials.services.receivers.FlashlightActionReceiver
 import com.sameerasw.essentials.utils.AppUtil
 import com.sameerasw.essentials.utils.FreezeManager
 import com.sameerasw.essentials.utils.ServiceUtils
+import com.sameerasw.essentials.utils.ShutUpManager
 import com.sameerasw.essentials.utils.performHapticFeedback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -451,6 +452,21 @@ class ScreenOffAccessibilityService :
                     AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS or
                     AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS
             }
+
+        // If ShutUp had muted accessibility (by blanking enabled_accessibility_services) and
+        // the service was killed and then restarted by the OS after restore, the in-memory
+        // flags may still be true from a prior partial restore. Clear them here so that
+        // Duo, AppFlowHandler, and AppDetectionService all resume normal event routing.
+        // Only reset if no ShutUp backup is currently pending (i.e. restore is done / not active).
+        val repo = SettingsRepository(this)
+        if (ShutUpManager.isAccessibilityMuted &&
+            repo.getShutUpOriginalSettings().isEmpty()
+        ) {
+            ShutUpManager.isAccessibilityMuted = false
+            ShutUpManager.settingsCurrentlyApplied = false
+            android.util.Log.d("ScreenOffService", "onServiceConnected: cleared stale ShutUp mute flags")
+        }
+
         updateOmniOverlay()
         duoOverlayHandler.updateState()
         statusGlanceHandler.updateState()
