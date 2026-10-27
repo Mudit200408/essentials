@@ -60,6 +60,8 @@ import com.sameerasw.essentials.utils.StatusBarManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -71,7 +73,7 @@ class AppFlowHandler private constructor(
 ) {
     private val context = context.applicationContext
     private val handler = Handler(Looper.getMainLooper())
-    private val scope = CoroutineScope(Dispatchers.Main.immediate)
+    private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
     private var lastIsLandscape = isDeviceInLandscape()
     private val settingsRepository by lazy { SettingsRepository(context) }
     private val notificationListenerComponent by lazy {
@@ -93,11 +95,17 @@ class AppFlowHandler private constructor(
     }
 
     private val prefsChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-        if (key == SettingsRepository.KEY_PER_APP_REFRESH_RATE_CONFIGS) {
-            cachedRefreshRateConfigs = null
-            currentPackage?.let { checkPerAppRefreshRate(it) }
-        } else if (key == SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED) {
-            currentPackage?.let { checkPerAppRefreshRate(it) }
+        when (key) {
+            SettingsRepository.KEY_PER_APP_REFRESH_RATE_CONFIGS -> {
+                cachedRefreshRateConfigs = null
+                currentPackage?.let { checkPerAppRefreshRate(it) }
+            }
+            SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED -> {
+                currentPackage?.let { checkPerAppRefreshRate(it) }
+            }
+            "app_lock_selected_apps" -> cachedAppLockApps = null
+            "conscious_gate_selected_apps" -> cachedConsciousGateApps = null
+            "dynamic_night_light_selected_apps" -> cachedNightLightApps = null
         }
     }
 
@@ -137,9 +145,16 @@ class AppFlowHandler private constructor(
         object : AudioManager.AudioPlaybackCallback() {
             override fun onPlaybackConfigChanged(configs: MutableList<AudioPlaybackConfiguration>?) {
                 val currentPkg = currentPackage
+                // Only re-check refresh rate when the current app has a media-conditional config.
+                // Without this guard, every notification sound / duck event triggers a binder call.
                 if (currentPkg != null) {
-                    Log.d("AppFlowHandler", "AudioPlaybackCallback: playback config changed, checking refresh rate for $currentPkg")
-                    checkPerAppRefreshRate(currentPkg)
+                    val isMediaConditional = cachedRefreshRateConfigs?.any {
+                        it.packageName == currentPkg && it.isEnabled && it.onlyOnMediaPlaying
+                    } ?: false
+                    if (isMediaConditional) {
+                        Log.d("AppFlowHandler", "AudioPlaybackCallback: media-conditional config found, checking refresh rate for $currentPkg")
+                        checkPerAppRefreshRate(currentPkg)
+                    }
                 }
                 ScreenOffAccessibilityService.instance?.let { service ->
                     service.invalidateBypassCache()
@@ -153,9 +168,15 @@ class AppFlowHandler private constructor(
 
     private val activeSessionsListener = MediaSessionManager.OnActiveSessionsChangedListener { controllers ->
         val currentPkg = currentPackage
+        // Same guard as audioPlaybackCallback — fire only for media-conditional configs.
         if (currentPkg != null) {
-            Log.d("AppFlowHandler", "OnActiveSessionsChangedListener: active sessions changed, checking refresh rate for $currentPkg")
-            checkPerAppRefreshRate(currentPkg)
+            val isMediaConditional = cachedRefreshRateConfigs?.any {
+                it.packageName == currentPkg && it.isEnabled && it.onlyOnMediaPlaying
+            } ?: false
+            if (isMediaConditional) {
+                Log.d("AppFlowHandler", "OnActiveSessionsChangedListener: active sessions changed, checking refresh rate for $currentPkg")
+                checkPerAppRefreshRate(currentPkg)
+            }
         }
         ScreenOffAccessibilityService.instance?.let { service ->
             service.invalidateBypassCache()
@@ -199,6 +220,20 @@ class AppFlowHandler private constructor(
     @Volatile
     private var cachedRefreshRateConfigs: List<AppRefreshRateConfig>? = null
     private val mediaPlayingPackages = ConcurrentHashMap<String, Boolean>()
+
+    // --- Config caches: avoid JSON parse + SharedPrefs read on every package switch ---
+    private val gson = Gson()
+    private var cachedAppLockApps: List<AppSelection>? = null
+    private var cachedConsciousGateApps: List<AppSelection>? = null
+    private var cachedNightLightApps: List<AppSelection>? = null
+    // Launcher package cache: rebuilt on first use, cleared in destroy()
+    @Volatile private var cachedLauncherPackages: Set<String>? = null
+    // AudioManager.mode cache (100ms TTL) to avoid blocking binder in isIgnoredPackage
+    @Volatile private var cachedAudioMode: Int = AudioManager.MODE_NORMAL
+    @Volatile private var cachedAudioModeTs: Long = 0L
+    // IME package cache (5s TTL) to avoid IPC on every accessibility event
+    @Volatile private var cachedImePackages: Set<String>? = null
+    @Volatile private var cachedImePackagesTs: Long = 0L
 
 
     private val shutUpReceiver =
@@ -319,6 +354,7 @@ class AppFlowHandler private constructor(
         cancelPendingRateRunnable()
         cancelPendingRestoreRunnable()
         refreshRateJob?.cancel()
+        scope.cancel()
         if (perAppRateSnapshot != null) {
             val snapshotToRestore = perAppRateSnapshot
             perAppRateSnapshot = null
@@ -390,22 +426,38 @@ class AppFlowHandler private constructor(
             return true
         }
 
-        // Check active call state via AudioManager mode
-        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
-        if (audioManager != null) {
-            val mode = audioManager.mode
-            if (mode == AudioManager.MODE_IN_CALL ||
-                mode == AudioManager.MODE_IN_COMMUNICATION ||
-                mode == AudioManager.MODE_RINGTONE
-            ) {
-                return true
-            }
+        // Check active call state via AudioManager mode.
+        // Uses a 100ms TTL cache to avoid a blocking binder call on every accessibility event.
+        val nowMs = System.currentTimeMillis()
+        val audioMode = if (nowMs - cachedAudioModeTs > 100L) {
+            val mode = (context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager)?.mode
+                ?: AudioManager.MODE_NORMAL
+            cachedAudioMode = mode
+            cachedAudioModeTs = nowMs
+            mode
+        } else {
+            cachedAudioMode
+        }
+        if (audioMode == AudioManager.MODE_IN_CALL ||
+            audioMode == AudioManager.MODE_IN_COMMUNICATION ||
+            audioMode == AudioManager.MODE_RINGTONE
+        ) {
+            return true
         }
 
+        // Check IME packages. Uses a 5s TTL cache since IME changes are extremely rare.
         return try {
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            val ims = imm?.enabledInputMethodList
-            ims?.any { it.packageName == packageName } == true
+            val imeNow = System.currentTimeMillis()
+            val imePackages = if (imeNow - cachedImePackagesTs > 5_000L) {
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                val packages = imm?.enabledInputMethodList?.map { it.packageName }?.toSet() ?: emptySet()
+                cachedImePackages = packages
+                cachedImePackagesTs = imeNow
+                packages
+            } else {
+                cachedImePackages ?: emptySet()
+            }
+            imePackages.contains(packageName)
         } catch (_: Exception) {
             false
         }
@@ -590,17 +642,16 @@ class AppFlowHandler private constructor(
             return
         }
 
-        val json = prefs.getString("app_lock_selected_apps", null)
-        val selectedApps: List<AppSelection> =
-            if (json != null) {
+        val selectedApps: List<AppSelection> = cachedAppLockApps ?: run {
+            val json = prefs.getString("app_lock_selected_apps", null)
+            val parsed = if (json != null) {
                 try {
-                    Gson().fromJson(json, Array<AppSelection>::class.java).toList()
-                } catch (_: Exception) {
-                    emptyList()
-                }
-            } else {
-                emptyList()
-            }
+                    gson.fromJson(json, Array<AppSelection>::class.java).toList()
+                } catch (_: Exception) { emptyList() }
+            } else { emptyList() }
+            cachedAppLockApps = parsed
+            parsed
+        }
 
         val isLocked = selectedApps.find { it.packageName == packageName }?.isEnabled ?: false
 
@@ -653,17 +704,16 @@ class AppFlowHandler private constructor(
         val isEnabled = prefs.getBoolean("conscious_gate_enabled", false)
         if (!isEnabled || isIgnoredPackage(packageName)) return
 
-        val json = prefs.getString("conscious_gate_selected_apps", null)
-        val selectedApps: List<AppSelection> =
-            if (json != null) {
+        val selectedApps: List<AppSelection> = cachedConsciousGateApps ?: run {
+            val json = prefs.getString("conscious_gate_selected_apps", null)
+            val parsed = if (json != null) {
                 try {
-                    Gson().fromJson(json, Array<AppSelection>::class.java).toList()
-                } catch (_: Exception) {
-                    emptyList()
-                }
-            } else {
-                emptyList()
-            }
+                    gson.fromJson(json, Array<AppSelection>::class.java).toList()
+                } catch (_: Exception) { emptyList() }
+            } else { emptyList() }
+            cachedConsciousGateApps = parsed
+            parsed
+        }
 
         val isGated = selectedApps.find { it.packageName == packageName }?.isEnabled ?: false
         if (!isGated) return
@@ -801,17 +851,16 @@ class AppFlowHandler private constructor(
     }
 
     private fun processNightLightChange(packageName: String) {
-        val json = prefs.getString("dynamic_night_light_selected_apps", null)
-        val selectedApps: List<AppSelection> =
-            if (json != null) {
+        val selectedApps: List<AppSelection> = cachedNightLightApps ?: run {
+            val json = prefs.getString("dynamic_night_light_selected_apps", null)
+            val parsed = if (json != null) {
                 try {
-                    Gson().fromJson(json, Array<AppSelection>::class.java).toList()
-                } catch (_: Exception) {
-                    emptyList()
-                }
-            } else {
-                emptyList()
-            }
+                    gson.fromJson(json, Array<AppSelection>::class.java).toList()
+                } catch (_: Exception) { emptyList() }
+            } else { emptyList() }
+            cachedNightLightApps = parsed
+            parsed
+        }
 
         val isAppSelected = selectedApps.find { it.packageName == packageName }?.isEnabled ?: false
         val isNLCurrentlyOn = isNightLightEnabled()
@@ -942,17 +991,20 @@ class AppFlowHandler private constructor(
     private fun isLauncher(packageName: String): Boolean {
         if (packageName == "com.android.systemui") return true
 
-        val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
-        val resolveInfo =
-            context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        val defaultLauncher = resolveInfo?.activityInfo?.packageName
-
-        if (packageName == defaultLauncher) return true
-
-        // Secondary check for other launchers if not default
-        val launchers =
-            context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        return launchers.any { it.activityInfo.packageName == packageName }
+        // Cache launcher packages to avoid two PackageManager IPC calls on every package switch.
+        // Cleared in destroy(); rebuilt on first call after that.
+        val packages = cachedLauncherPackages ?: run {
+            val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
+            val resolveInfo = context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+            val launchers = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+            val set = buildSet<String> {
+                resolveInfo?.activityInfo?.packageName?.let { add(it) }
+                launchers.forEach { add(it.activityInfo.packageName) }
+            }
+            cachedLauncherPackages = set
+            set
+        }
+        return packages.contains(packageName)
     }
 
     private fun checkShutUpRestore(
