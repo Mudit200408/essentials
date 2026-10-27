@@ -1,0 +1,3902 @@
+{
+  "/Users/muditpurohit/Projects/ess/essentials/shizu_store.json": {
+    "mtime": 1785681443.5519028,
+    "ast_hash": "1249f20e44c11792a0a5468aaff94f9d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/grant_perms.sh": {
+    "mtime": 1785681443.5516198,
+    "ast_hash": "03b21528a46fce4a9b7275485c2699b2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/gradlew": {
+    "mtime": 1787404077.9249039,
+    "ast_hash": "45bf2667b1fbec0e07e42808dc662b6b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/build.gradle.kts": {
+    "mtime": 1790315660.1920815,
+    "ast_hash": "47528dcc50fd50e0fd4a7207efd4b995",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/settings.gradle.kts": {
+    "mtime": 1787403204.8637638,
+    "ast_hash": "be1b1fb03c1e3c7d988a23ff6c4aff65",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/build.gradle.kts": {
+    "mtime": 1791483418.8433914,
+    "ast_hash": "4495667210cf85ccef186904bda2b54b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/release/output-metadata.json": {
+    "mtime": 1787432435.5574915,
+    "ast_hash": "f6e065b62067112b4ff2cc8d0e1022c4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/androidTest/java/com/sameerasw/essentials/ExampleInstrumentedTest.kt": {
+    "mtime": 1787403204.8115919,
+    "ast_hash": "db0f3269f012c8e1c694e4618b4f5aac",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/TranslationValidatorTest.kt": {
+    "mtime": 1789842858.0436037,
+    "ast_hash": "a5af4db8a626d5df31a6c46bb7950941",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/ExampleUnitTest.kt": {
+    "mtime": 1787403204.8635185,
+    "ast_hash": "dc217731f7af29b3b5c9127b91f1a0e8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/utils/MathEvaluatorTest.kt": {
+    "mtime": 1789842858.0437036,
+    "ast_hash": "9d2d6156e6503214f3c6c577bacf7634",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/utils/ActivityLauncherTest.kt": {
+    "mtime": 1791483418.879872,
+    "ast_hash": "97c99f222b43c31208838f1a7eba4152",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/utils/LockscreenShortcutDetectorTest.kt": {
+    "mtime": 1791483418.879915,
+    "ast_hash": "325c563e6ffb76c81126b903ec15854b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/island/CompactLayoutEngineTest.kt": {
+    "mtime": 1790315660.1919067,
+    "ast_hash": "fbbf07914f13e89b198f5ff1945337fe",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/island/IslandControllerTest.kt": {
+    "mtime": 1790315660.1919806,
+    "ast_hash": "33412350e9baa8ba45c3f1edda78fded",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/domain/ActionListJsonTest.kt": {
+    "mtime": 1791483418.8797674,
+    "ast_hash": "13de6d82a4094845593f99d1b55ca5b8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/test/java/com/sameerasw/essentials/domain/HilightFramesTest.kt": {
+    "mtime": 1791483418.8798206,
+    "ast_hash": "6a09b541f3bfb4752b1553ed5bd6c2ff",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/MainActivity.kt": {
+    "mtime": 1789723994.7289433,
+    "ast_hash": "cfc18d80e062047bd79fe962a13c2d86",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/EssentialsApp.kt": {
+    "mtime": 1791484370.9907458,
+    "ast_hash": "fb8e2be4f5f60c8aa1a6598084da7fe8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/EmojiData.kt": {
+    "mtime": 1787403204.854332,
+    "ast_hash": "edec4f8cb648c27cd6ca15d430b92d28",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/EmojiPicker.kt": {
+    "mtime": 1787403204.854427,
+    "ast_hash": "84fb9db594fc763472d95874f7e83dc6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/KaomojiPicker.kt": {
+    "mtime": 1787403204.8546112,
+    "ast_hash": "3034d1a6a0c6467fa5054d8e572f92c0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/KaomojiData.kt": {
+    "mtime": 1787403204.854517,
+    "ast_hash": "1c970da35f8e9a7b589da70c84afab00",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/KeyboardInputView.kt": {
+    "mtime": 1788869944.682226,
+    "ast_hash": "4b58b4a188f096405427df4d3b9b5979",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/touch/SpatialTouchDecoder.kt": {
+    "mtime": 1788869944.6826901,
+    "ast_hash": "e43a63aaa09912c4c18c3bd95eefe6ac",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/touch/KeyboardLayoutBuilder.kt": {
+    "mtime": 1788869944.6825373,
+    "ast_hash": "5cc5e04f37c7c4e50609f3c12a601d14",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/touch/KeyboardTouchState.kt": {
+    "mtime": 1788869944.682614,
+    "ast_hash": "aa5c2156a41d8633fcf6794d1bf667b9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/touch/HysteresisSelector.kt": {
+    "mtime": 1788869944.6823826,
+    "ast_hash": "717a856df43be1780b92e8a686007343",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/ime/touch/KeyGeometry.kt": {
+    "mtime": 1788869944.6824582,
+    "ast_hash": "a549ef7e0bb041d3e7347c9ebec4910a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/modifiers/LiquidRippleModifier.kt": {
+    "mtime": 1788869944.6827748,
+    "ast_hash": "c957f86ba9797fd15ca7ddd27a4c1606",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/modifiers/ProgressiveBlurModifier.kt": {
+    "mtime": 1791483418.8713443,
+    "ast_hash": "4033dc8b9c0f7d63d967a7c6f7197d69",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/modifiers/ScrollMotionBlurModifier.kt": {
+    "mtime": 1789723994.7522173,
+    "ast_hash": "ebc8c92a8f4b87bd0c5512aaeed74aa2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/modifiers/HighlightModifier.kt": {
+    "mtime": 1787403204.8548672,
+    "ast_hash": "7a0faa17e39a4fccba6286c4362d9ef6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/composables/SetupFeatures.kt": {
+    "mtime": 1791483485.0590906,
+    "ast_hash": "e854afbb615964f4badb4ac87d27f85a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/composables/WelcomeScreen.kt": {
+    "mtime": 1791483418.8644738,
+    "ast_hash": "e57fee44651a6111debc8c3c50910987",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/BatteryLevelStateSheet.kt": {
+    "mtime": 1790832228.7659013,
+    "ast_hash": "f4196979dbe583b9dae93e0b9b30ae2a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/ActivityIconSheet.kt": {
+    "mtime": 1791483418.8648381,
+    "ast_hash": "b90d4b1cc58fb6d187bdcf7e46a22b71",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/LicensesBottomSheet.kt": {
+    "mtime": 1789987407.705521,
+    "ast_hash": "cc3fa8f2b92813341b04133fa6444669",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/ColorPickerBottomSheet.kt": {
+    "mtime": 1787403204.8440287,
+    "ast_hash": "ecf78bc832174bbece3643b0188f899f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/UnsupportedFeaturesConfirmationSheet.kt": {
+    "mtime": 1791483418.8655527,
+    "ast_hash": "38479c254f3eff38aecf3ce751a8d06f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/PixelSearchAppActionSheet.kt": {
+    "mtime": 1789842858.008608,
+    "ast_hash": "ed2fada9c0cc53fbf64bb1b60a8814e2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/BugReportBottomSheet.kt": {
+    "mtime": 1789842858.0082314,
+    "ast_hash": "3c7edaa87c13cb03ebeb2e394903943a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/InstructionsBottomSheet.kt": {
+    "mtime": 1787403204.8446372,
+    "ast_hash": "bc02bcd116f27c54ac8d8472d58cbda5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/PreReleaseConfirmationSheet.kt": {
+    "mtime": 1788869944.6774075,
+    "ast_hash": "4de58ac4349a37cb1d0c2e99ac83cec2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/TimeSelectionSheet.kt": {
+    "mtime": 1788869944.6777847,
+    "ast_hash": "278f09a9e1c972e131a7eaf0f4e5ab36",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/PixelSearchFileActionSheet.kt": {
+    "mtime": 1789842858.008791,
+    "ast_hash": "ea9f6dca8bbb50e8b96d5138a29cf377",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/UpdateBottomSheet.kt": {
+    "mtime": 1788869944.677901,
+    "ast_hash": "edc799669e631a3610424ff7a9521dde",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/HilightEffectSheet.kt": {
+    "mtime": 1791483418.8653831,
+    "ast_hash": "28f2e27c3c8d1d0ae3158b15fef90e18",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/GitHubAuthSheet.kt": {
+    "mtime": 1787403204.8444076,
+    "ast_hash": "8647c0b745b9a72b44b1eaeab47c6780",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/PermissionsBottomSheet.kt": {
+    "mtime": 1789725015.7557929,
+    "ast_hash": "529885457b0e286d9b920e73b6272dfb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/CustomSettingsSheet.kt": {
+    "mtime": 1789723994.7432487,
+    "ast_hash": "8c4648900e5e09de9e4c8dc1a6ce185f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/AddRepoBottomSheet.kt": {
+    "mtime": 1790832228.7657688,
+    "ast_hash": "0e5ce42da3d2ccac290a7968728fc9ed",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/ActivityPickerSheet.kt": {
+    "mtime": 1791483418.8649726,
+    "ast_hash": "20b5b3e78ab8a69e13ac8d2b8ede4d10",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/ImportConfigConfirmationSheet.kt": {
+    "mtime": 1787403204.8445148,
+    "ast_hash": "770b41e29715d8271d9cdd110831e5d2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/PixelSearchContactActionSheet.kt": {
+    "mtime": 1789842858.0086908,
+    "ast_hash": "e9ff62894479911fb27dff268391a1e3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/PerAppRefreshRateSettingsSheet.kt": {
+    "mtime": 1791484178.7166138,
+    "ast_hash": "36f26d22edcf1d068dc238660b1429b0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/FeatureHelpBottomSheet.kt": {
+    "mtime": 1791483418.8651605,
+    "ast_hash": "b44a13ff4d0abe3442c28c721c0638a2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/CalendarStateSheet.kt": {
+    "mtime": 1790315660.170195,
+    "ast_hash": "61c81d2664115f7fcea8548b85429b42",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/HiddenDebuggingHelpBottomSheet.kt": {
+    "mtime": 1791483418.8652837,
+    "ast_hash": "6d5cd1f0b2bc51aaa03f4699c1a3d355",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/AppColorSelectionSheet.kt": {
+    "mtime": 1790315660.1700995,
+    "ast_hash": "0b8c1308513d14adc71f78b521da67b8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/ReorderFavoritesBottomSheet.kt": {
+    "mtime": 1789723994.7439377,
+    "ast_hash": "88be13786196159f491161878908737b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/EssentialsBottomSheet.kt": {
+    "mtime": 1789842858.0085266,
+    "ast_hash": "e7895e4e01df7cf3d1ee14592f7e1d85",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/sheets/PrankBottomSheet.kt": {
+    "mtime": 1787403204.8448415,
+    "ast_hash": "c936d2039fbba4a62c17ed9a9b6ace95",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/AppToggleItem.kt": {
+    "mtime": 1787403204.8408833,
+    "ast_hash": "77072ab64c2db49f2170ff90a02a2dfd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/IconToggleItem.kt": {
+    "mtime": 1791484402.2746212,
+    "ast_hash": "56080f0376194712f22aec881335aaaf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/PermissionCard.kt": {
+    "mtime": 1789723994.7426727,
+    "ast_hash": "0448b01310437ad2503a865d45783667",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/TrackedRepoCard.kt": {
+    "mtime": 1787403204.841902,
+    "ast_hash": "28a8eddc2c6f93c5124933e7ad779855",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/SelectionCardItem.kt": {
+    "mtime": 1787403204.841783,
+    "ast_hash": "38117090730b07ebfd564a908c044078",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/FeatureTagIcon.kt": {
+    "mtime": 1789723994.7422523,
+    "ast_hash": "003e2de05b920c581be8483cf1e293fd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/ConfigPickerItem.kt": {
+    "mtime": 1787403204.8411133,
+    "ast_hash": "d169f436a72bd17bbe14ceeced9ad5ca",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/FeatureDropdownRow.kt": {
+    "mtime": 1787403204.8413615,
+    "ast_hash": "4d0225051d2f5a7866626af86384b502",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/BatteryInfoCard.kt": {
+    "mtime": 1787403204.8410099,
+    "ast_hash": "d38bf05d1d6fa434183a55d1b927c3e4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/FeatureCard.kt": {
+    "mtime": 1789843004.5029907,
+    "ast_hash": "64b2244b926b6a770240bc2e2ddaf30f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/cards/FeatureToggleRow.kt": {
+    "mtime": 1787403204.8414557,
+    "ast_hash": "6e2e1f2b1a116b2382fc68179b69e805",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/components/M3ExpressiveSwitch.kt": {
+    "mtime": 1791486238.3466685,
+    "ast_hash": "0a67ba26fa5ff8ce9a3cb43b7ca1fbcf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/ColorSwatchPicker.kt": {
+    "mtime": 1789987407.7047553,
+    "ast_hash": "69686bd6238fac72ecdb7e145b3ac1a8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/SegmentedPicker.kt": {
+    "mtime": 1788869944.6769998,
+    "ast_hash": "fe3649386cb5ee19bb7f3bc31a6215f9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/PrivilegedModePicker.kt": {
+    "mtime": 1791483418.8647509,
+    "ast_hash": "2a1a51e500eca13bc08fd900be265167",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/CrashReportingPicker.kt": {
+    "mtime": 1787403204.842445,
+    "ast_hash": "8fce33ec8cb8bd1ee8b98a016ccb551a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/HapticFeedbackPicker.kt": {
+    "mtime": 1787403204.8426688,
+    "ast_hash": "040d31afd14826e187b37e3c81c77789",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/AppIconPicker.kt": {
+    "mtime": 1788869944.6761615,
+    "ast_hash": "ac791eca3a849ce77d8e1dd744c77289",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/AlbumArtModePicker.kt": {
+    "mtime": 1787403204.842212,
+    "ast_hash": "425947b9e11d7a1fdb1a880097c9b5f8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/LanguagePicker.kt": {
+    "mtime": 1787403204.8427613,
+    "ast_hash": "dc61ea83dae78235725b1f3bc3df34b8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/NetworkTypePicker.kt": {
+    "mtime": 1787403204.84323,
+    "ast_hash": "44105cb6d68ddcf8ace463e6f07c7e07",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/ScreenOffMethodPicker.kt": {
+    "mtime": 1787403204.8434353,
+    "ast_hash": "e8ccd405a6272801269eabdede353b97",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/MultiSegmentedPicker.kt": {
+    "mtime": 1787403204.8431225,
+    "ast_hash": "95441d19bf214f754cb6a29d836bd81f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/RestoreModePicker.kt": {
+    "mtime": 1787403204.843326,
+    "ast_hash": "9cc8f8723bc7c3b264cbca8fc391f2d9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/pickers/DefaultTabPicker.kt": {
+    "mtime": 1787403204.8425677,
+    "ast_hash": "405d8dc8256ea11a6f32a239d3026777",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/containers/RoundedCardLazyContainer.kt": {
+    "mtime": 1788869944.6760602,
+    "ast_hash": "9158b6cc7e3f76f6146e240135c2577a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/containers/RoundedCardContainer.kt": {
+    "mtime": 1787403204.8420095,
+    "ast_hash": "7a23adedbe80f685f87b240578c764e3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/core/media/FeatureHelpMediaViewer.kt": {
+    "mtime": 1789723994.742815,
+    "ast_hash": "23f21467b971f7a33119c256fb2bee50",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/power/CaffeinateSettingsUI.kt": {
+    "mtime": 1791483418.869717,
+    "ast_hash": "f2509f4b4a06367ac62020be1670592f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/power/PowerAndBatterySettingsUI.kt": {
+    "mtime": 1788869944.6803274,
+    "ast_hash": "f0bdd397fd490b1c892e7e2c2c5cc90d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/power/MapsPowerSavingSettingsUI.kt": {
+    "mtime": 1787403204.8511212,
+    "ast_hash": "636ab4b4bae00f69331f7fc736a7d8af",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/power/BatteryNotificationSettingsUI.kt": {
+    "mtime": 1787403204.8509338,
+    "ast_hash": "ec7ed7c228a5c0e14c0940fdc5a8f09f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/power/sheets/DimWallpaperSettingsSheet.kt": {
+    "mtime": 1789723994.7504969,
+    "ast_hash": "76645aa9929a91631e0bc435decd8cea",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/power/sheets/ScreenOffSettingsSheet.kt": {
+    "mtime": 1789723994.7506223,
+    "ast_hash": "0f09023dbfcce007c18a84176ab651a5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/consciousgate/ConsciousGateSettingsUI.kt": {
+    "mtime": 1789842858.0102947,
+    "ast_hash": "fd0708f53acf2ae62c415d456353fec8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/consciousgate/ConsciousGatePauseScreen.kt": {
+    "mtime": 1791483418.86645,
+    "ast_hash": "df0d36f1048d9be7ee608d2a259fb4b0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/consciousgate/ConsciousGatePreview.kt": {
+    "mtime": 1789842858.0101924,
+    "ast_hash": "cb09f0d166b0cf2e034a1e371b1f09ec",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/hardware/ButtonRemapSettingsUI.kt": {
+    "mtime": 1791483418.868754,
+    "ast_hash": "f603cefa71eaea820528a92b914811ee",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/hardware/FlashlightPulseSettingsUI.kt": {
+    "mtime": 1789723994.7487903,
+    "ast_hash": "c11f4d7aac8293d6867f32bff02e8046",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/hardware/FlashlightSettingsUI.kt": {
+    "mtime": 1787403204.849294,
+    "ast_hash": "ad9e2aab2e1121e10406a85f510f2502",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/hardware/PocketModeSettingsUI.kt": {
+    "mtime": 1791484293.8688376,
+    "ast_hash": "bbd031a4e7d6a777b22c99964c427f2a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/hardware/ActionSequenceEditor.kt": {
+    "mtime": 1791483418.868663,
+    "ast_hash": "78dfdf2f6ea032c8a11734e3425e36e0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/hardware/sheets/DeviceEffectsSettingsSheet.kt": {
+    "mtime": 1789723994.7493258,
+    "ast_hash": "d790549c65210a5e3bd1f74731bfc60a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/freeze/FreezeGridUI.kt": {
+    "mtime": 1788869944.6796296,
+    "ast_hash": "d8880d304536002c413d5d4858a8e6ab",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/freeze/FrozenAppsSearchResultCard.kt": {
+    "mtime": 1789723994.7478335,
+    "ast_hash": "e98aa66c77e585a5fe1880435eb3af49",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/freeze/FreezeSettingsUI.kt": {
+    "mtime": 1791483418.868588,
+    "ast_hash": "281f537bf33ae03344a21027baa414dc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/freeze/sheets/FreezeTagSettingsSheet.kt": {
+    "mtime": 1789723994.747987,
+    "ast_hash": "c1e145c76a011102b568c0f2a625e3a8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/freeze/sheets/AssignTagsSheet.kt": {
+    "mtime": 1787403204.8488114,
+    "ast_hash": "c4695bab4536afefc72b9e99016ef36c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/freeze/sheets/FreezeTagEditorSheet.kt": {
+    "mtime": 1787403204.848893,
+    "ast_hash": "d6198bf31f3c7e916fe26b124edc61a7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/freeze/components/FreezeTagIconPicker.kt": {
+    "mtime": 1787403204.8487191,
+    "ast_hash": "61709b2988da06aca0e1aed298694663",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/freeze/components/FreezeTagColorPicker.kt": {
+    "mtime": 1787403204.84852,
+    "ast_hash": "3104b05b24db44896636274d48dd6127",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/security/RemoteLockSettingsUI.kt": {
+    "mtime": 1787403204.8516147,
+    "ast_hash": "50ee26c2ad5734512703d8fbde5109fb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/security/AppLockSettingsUI.kt": {
+    "mtime": 1789723994.7508614,
+    "ast_hash": "adcd2ece85628774c205762330689f1e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/security/ScreenLockedSecuritySettingsUI.kt": {
+    "mtime": 1791483418.8699796,
+    "ast_hash": "5250f3497b934e848e710cb53a0ada7e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/location/LocationReachedSettingsUI.kt": {
+    "mtime": 1787403204.8502502,
+    "ast_hash": "5e6c20f6e8fc9ea8ecc2344f438f326e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/location/LocationAlarmCard.kt": {
+    "mtime": 1787403204.8500745,
+    "ast_hash": "c293bd7a369051f8dda36853b8e1f45f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/location/LocationIconPicker.kt": {
+    "mtime": 1787403204.8501444,
+    "ast_hash": "433b1b42da6e174b7a0a8ecf0cbefea4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/location/sheets/LocationReachedBottomSheet.kt": {
+    "mtime": 1787403204.8503785,
+    "ast_hash": "1199417ded04a7a3a1ba411028c8466b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/network/NetworksSettingsUI.kt": {
+    "mtime": 1791484353.0552561,
+    "ast_hash": "16ce90febd08999264ab32a44ece545f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/network/DynamicNightLightSettingsUI.kt": {
+    "mtime": 1789723994.7497742,
+    "ast_hash": "77c791e133d5d39ef15f1927a89a4a8c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/network/sheets/InternetDialogSheet.kt": {
+    "mtime": 1791486690.8688893,
+    "ast_hash": "be5b253b5aa00d93154da11e75caffe9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/network/sheets/BluetoothDeviceSelectionSheet.kt": {
+    "mtime": 1787403204.8506882,
+    "ast_hash": "f5562649a0339b22ea84c947c5d556c8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/network/sheets/SimNamesBottomSheet.kt": {
+    "mtime": 1788869944.680152,
+    "ast_hash": "618586a28070e4343e54606c72e8c38c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/network/sheets/WifiNetworkSelectionSheet.kt": {
+    "mtime": 1787403204.8508549,
+    "ast_hash": "73d79e5b97016d7755465e577b7c5b55",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/permissions/PermissionsSearchResultCard.kt": {
+    "mtime": 1789723994.7500653,
+    "ast_hash": "5e25a65aba6450184f8220ffd5fcb42f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/tiles/QSTilesSearchResultCard.kt": {
+    "mtime": 1789723994.751647,
+    "ast_hash": "8163c2a88030a05c1e6c2328bc4d77ad",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/tiles/QuickSettingsTilesSettingsUI.kt": {
+    "mtime": 1789723994.751858,
+    "ast_hash": "7f560fac1a8c9d8e1031ef9037979470",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/tiles/ScreenOffWidgetSettingsUI.kt": {
+    "mtime": 1787403204.8528526,
+    "ast_hash": "ff0b419118acf2cbdebed948a38eaa74",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/LockScreenClockSettingsUI.kt": {
+    "mtime": 1789987407.7130303,
+    "ast_hash": "de09a2393ab7f9279d1597d41afb80e8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/KeyboardSettingsUI.kt": {
+    "mtime": 1787403204.851933,
+    "ast_hash": "5a6066e88f9bee9e1db7f4024e45c86c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/CalendarSyncSettingsUI.kt": {
+    "mtime": 1789723994.751135,
+    "ast_hash": "e30d494349a7323688e6512476567ef0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/StatusBarIconSettingsUI.kt": {
+    "mtime": 1791483418.8708198,
+    "ast_hash": "a405d08757bf510ccbd2b6d406c98d9f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/OtherCustomizationsSettingsUI.kt": {
+    "mtime": 1791483418.8705997,
+    "ast_hash": "d713a52555b242ea15cc869a718e2671",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/FaceUnlockBrightnessSettingsUI.kt": {
+    "mtime": 1791483418.8701594,
+    "ast_hash": "9aa9f038320517ab1559f15b6ddbec8a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/TextAnimationsSettingsUI.kt": {
+    "mtime": 1787403204.8525257,
+    "ast_hash": "8697230e2a48172ccfedf66576072332",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/LockscreenShortcutsSettingsUI.kt": {
+    "mtime": 1791483418.870238,
+    "ast_hash": "2fc855c0a292b4d3ba1d221d07bbbade",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/LiveWallpaperSettingsUI.kt": {
+    "mtime": 1790315660.1761048,
+    "ast_hash": "8f42c83c859b6fbd31194aaf42ef42ca",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/ActivityLauncherSettingsUI.kt": {
+    "mtime": 1791483418.870101,
+    "ast_hash": "d9e2609664c02d4a07dc91fa264d8a98",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/NavigationSettingsUI.kt": {
+    "mtime": 1791483418.8703558,
+    "ast_hash": "ee0cb08eea997211a61a206f9a89dc24",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/system/sheets/SometimesEssentialsSettingsSheet.kt": {
+    "mtime": 1789723994.7515767,
+    "ast_hash": "a1eff436ca714144b8cdb9c9013d949b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watermark/WatermarkScreen.kt": {
+    "mtime": 1787403204.8535843,
+    "ast_hash": "46bd42c1169c8cd991e8da156f7c46e0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watermark/sheets/EditWatermarkSheet.kt": {
+    "mtime": 1787403204.8541362,
+    "ast_hash": "230760c75bb1e81f384e5b3915cc4d5a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watermark/sheets/ExifSettingsSheet.kt": {
+    "mtime": 1787403204.8542268,
+    "ast_hash": "5d172ac6b9794f50241c00aa021868fc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watermark/components/WatermarkSharedComponents.kt": {
+    "mtime": 1787403204.8540187,
+    "ast_hash": "50fb5800a91a5fa4efad84124b906c5f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watermark/components/WatermarkControls.kt": {
+    "mtime": 1788869944.682,
+    "ast_hash": "da506c8acf18a973fbe583a7971c0753",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watermark/components/WatermarkPreview.kt": {
+    "mtime": 1787403204.8537905,
+    "ast_hash": "97749bc79b8bdc014f6a5829595c3b57",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watermark/components/WatermarkPreviewArea.kt": {
+    "mtime": 1787403204.8539102,
+    "ast_hash": "e26747a3e0e045cba39a5f0a5fdd0ec3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/audio/ShutUpSettingsUI.kt": {
+    "mtime": 1791483922.7183056,
+    "ast_hash": "509338023d4c6ae8b86505fbc7045ec6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/audio/SoundModeTileSettingsUI.kt": {
+    "mtime": 1791483418.8661788,
+    "ast_hash": "4d39a4d05723b85a4cb37575714e810e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/audio/SnoozeNotificationsSettingsUI.kt": {
+    "mtime": 1789723994.7448597,
+    "ast_hash": "dd73386f4adeac9028eea7f02ba07dbd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/audio/NotificationSnoozingSettingsUI.kt": {
+    "mtime": 1787403204.845742,
+    "ast_hash": "81ef7854461ebfe4e867abd4a8d57008",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/audio/sheets/SetVolumeSettingsSheet.kt": {
+    "mtime": 1789723994.7450745,
+    "ast_hash": "c4b2817f58d8fc497101fd6e88255751",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/audio/sheets/SoundModeSettingsSheet.kt": {
+    "mtime": 1789723994.7457597,
+    "ast_hash": "010548517242fc7d3394d177b544433d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/audio/sheets/ShutUpPerAppSettingsSheet.kt": {
+    "mtime": 1791483947.3015094,
+    "ast_hash": "8667e34874a15ed83257a9fe5c3ce125",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/audio/sheets/LikeSongSettingsSheet.kt": {
+    "mtime": 1787403204.8463068,
+    "ast_hash": "2c7e5f7064b74bc62939a67dbea270dd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/wallpaper/WallpaperScreen.kt": {
+    "mtime": 1791483418.8709886,
+    "ast_hash": "83e5e8556a0e168930ac161c52cad220",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/wallpaper/WallpaperStagingScreen.kt": {
+    "mtime": 1791483418.8711083,
+    "ast_hash": "26b9e53163a680367954d7eb42316619",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watch/WatchSettingsUI.kt": {
+    "mtime": 1787403204.8533447,
+    "ast_hash": "e444653aa2ae2b30c0de7292d8ea52d6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watch/ComplicationsSettingsUI.kt": {
+    "mtime": 1788869944.6815455,
+    "ast_hash": "c76ede1d45cddc80f7155168c2065127",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watch/WatchfaceSettingsUI.kt": {
+    "mtime": 1788869944.6817923,
+    "ast_hash": "155f29e8206a36fc101e4d9248ecb22f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watch/WatchControlsSettingsUI.kt": {
+    "mtime": 1788869944.6816416,
+    "ast_hash": "7f6fde666f423cbe011337c598fe8fe7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watch/WatchNotificationSettingsUI.kt": {
+    "mtime": 1789842858.0119946,
+    "ast_hash": "d6c23bfca8e6ccb634e506d6d452ef2f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watch/WatchWirelessDebuggingSettingsUI.kt": {
+    "mtime": 1788869944.6817303,
+    "ast_hash": "198e06cfb68c7b6a126df5460f6e2d36",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/watch/sheets/WatchInstallHelpBottomSheet.kt": {
+    "mtime": 1789842858.0120924,
+    "ast_hash": "292baa40f34c89b4d5b0955bd573c35c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/lighting/HilightSettingsUI.kt": {
+    "mtime": 1791483418.8692002,
+    "ast_hash": "36b408920ed1637acab540372a1ca699",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/lighting/NotificationLightingSettingsUI.kt": {
+    "mtime": 1791483418.8693519,
+    "ast_hash": "82768e25b7500508b77cb332d9cb6c33",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/lighting/sheets/NotificationLightingActionSheet.kt": {
+    "mtime": 1791483418.8694448,
+    "ast_hash": "941f0a0abcc29299232b2305ae40d944",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/lighting/sheets/SweepShapesBottomSheet.kt": {
+    "mtime": 1787403204.8499937,
+    "ast_hash": "328c35acd2b9981b1b7d79b27e6a32d3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/lighting/pickers/EdgeLightingColorModePicker.kt": {
+    "mtime": 1787403204.8496616,
+    "ast_hash": "813833d8b5145fd1d88198a9b08ce9b2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/lighting/pickers/EdgeLightingStylePicker.kt": {
+    "mtime": 1789987407.709963,
+    "ast_hash": "2cf928eb7e056e6517af07154270bac9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/lighting/pickers/NotificationLightingSystemModePicker.kt": {
+    "mtime": 1787403204.8499067,
+    "ast_hash": "df32e8218098b8469510427d590c7ebc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/lighting/pickers/GlowSidesPicker.kt": {
+    "mtime": 1787403204.8498259,
+    "ast_hash": "0c8814a2180fa07e44ca7ac156488399",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/RefreshRateSettingsUI.kt": {
+    "mtime": 1787403204.8480544,
+    "ast_hash": "73a521cb96cf1c714f068f29d6916a30",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/StatusGlanceSettingsUI.kt": {
+    "mtime": 1791483418.8675492,
+    "ast_hash": "b233964161628c1a3ebc9f580da75e2f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/EssentialsOnDisplaySettingsUI.kt": {
+    "mtime": 1789723994.7469685,
+    "ast_hash": "1259697aee07abbca280c1ddeb08be4a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/PerAppRefreshRateSettingsUI.kt": {
+    "mtime": 1791484178.7168708,
+    "ast_hash": "594de90eaaa5330eb77af87345866120",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/AlwaysOnDisplaySettingsUI.kt": {
+    "mtime": 1791485182.4492538,
+    "ast_hash": "9da8b62dc9880895d08d0ce6438f642d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/IslandSettingsUI.kt": {
+    "mtime": 1791483418.8670678,
+    "ast_hash": "f32d72d0f9fc5521ec3aea1140bdf8e2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/AodWallpaperSettingsUI.kt": {
+    "mtime": 1791483418.8666105,
+    "ast_hash": "5d90d5a7bfa8ed5625cb18ff59fb4e26",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/IslandPriorityEditor.kt": {
+    "mtime": 1791483418.8668888,
+    "ast_hash": "8c13b848d86c10391673013e2b24ad9c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/AodWallpaperPreviewCard.kt": {
+    "mtime": 1789842858.0104885,
+    "ast_hash": "7c2137c119967f6710266401f86141ad",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/IslandSubSettingsUI.kt": {
+    "mtime": 1791483418.8673582,
+    "ast_hash": "c5077976f2fc8ce69d2d553e7308475b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/SmartPixelsSettingsUI.kt": {
+    "mtime": 1789723994.7470858,
+    "ast_hash": "a6b250ff094303f36e476efb65d049bf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/DuoSettingsUI.kt": {
+    "mtime": 1791483418.8667994,
+    "ast_hash": "b0bf22cab9596dbdbd067641a6908b06",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandPulseShadowOptionsBottomSheet.kt": {
+    "mtime": 1790450399.3342564,
+    "ast_hash": "3f874b7f39afb9fdc1989907707d1c19",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandBriefOptionsBottomSheet.kt": {
+    "mtime": 1790450399.3338032,
+    "ast_hash": "062dece3f17da3c0b13f907c3175efe8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandSignalOptionsBottomSheet.kt": {
+    "mtime": 1791483418.8678823,
+    "ast_hash": "6ff3d258bb6ce3b400568e04945a59ec",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/OverlayControlSettingsSheet.kt": {
+    "mtime": 1791483418.8683212,
+    "ast_hash": "a6d9835c671ea5f9fa918688002740db",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandNotificationOptionsBottomSheet.kt": {
+    "mtime": 1791483418.8677838,
+    "ast_hash": "b6dabc5b3432230c170007ac2658c209",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandLauncherOnlyToggle.kt": {
+    "mtime": 1790832228.7686622,
+    "ast_hash": "6a2f486f301dfc920b81e083b365921c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandWeatherOptionsBottomSheet.kt": {
+    "mtime": 1791483418.8682363,
+    "ast_hash": "ae7b975995c8db21c1f5fe579c068fac",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/DuoBatteryOptionsBottomSheet.kt": {
+    "mtime": 1790315660.1735725,
+    "ast_hash": "4f263a7d52b94c0e6fe08fdd64520f3b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandTimerOptionsBottomSheet.kt": {
+    "mtime": 1791483418.8681042,
+    "ast_hash": "767bff54b7a6662860a4c03418de8673",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/StatusGlanceBatteryOptionsBottomSheet.kt": {
+    "mtime": 1789723994.7476094,
+    "ast_hash": "480fcf955d329f1a4a10a70bfe40341f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/DuoNetworkOptionsBottomSheet.kt": {
+    "mtime": 1789723994.7474256,
+    "ast_hash": "4a17eb9dd45facc750ad545c840f3abd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/DuoTimeOptionsBottomSheet.kt": {
+    "mtime": 1790315660.173653,
+    "ast_hash": "34308475d6db7ff752bb4044b24ad042",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandCallOptionsBottomSheet.kt": {
+    "mtime": 1790450399.3339143,
+    "ast_hash": "f2b12ec8fc1894378eee9595d0378e9e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandBorderOutlineOptionsBottomSheet.kt": {
+    "mtime": 1790832228.7684836,
+    "ast_hash": "668d7aae6a4741cefa98f23027a887bd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandTimeBatteryOptionsBottomSheet.kt": {
+    "mtime": 1791483418.8679972,
+    "ast_hash": "c419417d2dbe99718753663c9d9c02db",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandSoundModeOptionsBottomSheet.kt": {
+    "mtime": 1790832228.7689195,
+    "ast_hash": "f3c0e3c3b005cd6eee2b43c4b8a0cefb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandAlarmOptionsBottomSheet.kt": {
+    "mtime": 1790315660.1737509,
+    "ast_hash": "fb400daaa540b3c6f9a356c38e10bc30",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/DuoBatteryPercentageOptionsBottomSheet.kt": {
+    "mtime": 1789723994.7473629,
+    "ast_hash": "a008ef1a3b6c93232f358b64f434fda9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/StatusGlanceCalendarOptionsBottomSheet.kt": {
+    "mtime": 1790450399.3345113,
+    "ast_hash": "31f155dfdeecb1969e6be90558592af2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/sheets/IslandDevicesBatteryBottomSheet.kt": {
+    "mtime": 1790315660.1739259,
+    "ast_hash": "d4348c40c8c17d1071074aabff7ebe94",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/actions/HorizontalSlideModeSheet.kt": {
+    "mtime": 1790315660.1733217,
+    "ast_hash": "63800904f54c9415d0bb2b9d8d729c8f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/display/actions/GestureActionPickerSheet.kt": {
+    "mtime": 1791483418.8676615,
+    "ast_hash": "000e61638ce8e128fb7eea55d25a22bf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/automation/DIYScreen.kt": {
+    "mtime": 1790315660.1714797,
+    "ast_hash": "ac2f2f588bdbb1c1dd39acfe2797afb4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/automation/sheets/GenAIAutomationPreviewSheet.kt": {
+    "mtime": 1787403204.8469362,
+    "ast_hash": "08578cc88e8c05b4b8e295ab74776ccc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/automation/sheets/NewAutomationSheet.kt": {
+    "mtime": 1788869944.6791005,
+    "ast_hash": "a6614dea29efd9e13d6b90d06269812b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/automation/components/AutomationItem.kt": {
+    "mtime": 1790315660.171691,
+    "ast_hash": "b56619a070a4140681826a9c76dbe520",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/battery/BatteriesSettingsUI.kt": {
+    "mtime": 1787403204.8471394,
+    "ast_hash": "6474f2f358588661ed306f2fe6445e50",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/battery/sheets/ChargingModeSettingsSheet.kt": {
+    "mtime": 1789723994.746043,
+    "ast_hash": "8b5773ea7d951f7e946a2d11e775b808",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/battery/sheets/BatteryDetailsBottomSheet.kt": {
+    "mtime": 1790315660.1720223,
+    "ast_hash": "8c4b73cbeecccb276ba85d93b6cbf8e8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/battery/components/BatteryCommonComponents.kt": {
+    "mtime": 1790315660.1718318,
+    "ast_hash": "ec23c0a385c59af9c4b3e85b3e83ef76",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/battery/components/BatteryInfoTabContent.kt": {
+    "mtime": 1787403204.8474193,
+    "ast_hash": "23806aebc5ee44453928fea7525c6ab0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/battery/components/BatteryAppsTabContent.kt": {
+    "mtime": 1787403204.8472416,
+    "ast_hash": "bd4e246658aefbfcc41ece71ee54d14d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/apps/StandbyAppsSettingsUI.kt": {
+    "mtime": 1791483418.865666,
+    "ast_hash": "9205dd2d1cb4223184aac92f0382b260",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/apps/sheets/UserDictionaryBottomSheet.kt": {
+    "mtime": 1787403204.8455837,
+    "ast_hash": "f9de8352fb5f67a364f744cc8a9fb562",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/apps/sheets/StandbyAppsMoveSheet.kt": {
+    "mtime": 1787403204.8454888,
+    "ast_hash": "bbf8375291c35541b6cf0ee2f139a269",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/apps/sheets/KeyboardSelectionSheet.kt": {
+    "mtime": 1787403204.8454335,
+    "ast_hash": "5f3f1a4a14ac64cc66752d44352e35c1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/features/apps/sheets/AppSelectionSheets.kt": {
+    "mtime": 1791483418.8657625,
+    "ast_hash": "f1fdbd1f2f1e90a0b9c16b900a31aa07",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/state/MenuStateManager.kt": {
+    "mtime": 1786290946.2929215,
+    "ast_hash": "c1aff3140af28df696dde57366820556",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/AppsComponents.kt": {
+    "mtime": 1787403204.83776,
+    "ast_hash": "6523d3bd956835f3677b8bd780883ca7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/ReusableTopAppBar.kt": {
+    "mtime": 1789723994.7405744,
+    "ast_hash": "2ab9eba08c8c5392e5302db981819566",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/CategoryExpandableSection.kt": {
+    "mtime": 1787403204.8378832,
+    "ast_hash": "06a781a580b381d0392c147eac8d067d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/FavoriteCarousel.kt": {
+    "mtime": 1789723994.7404437,
+    "ast_hash": "1ca5b33392a18ec19857c2a51e2d0100",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/MadebySameeraswCard.kt": {
+    "mtime": 1787403204.8386543,
+    "ast_hash": "f35ddd98b77ab86670c04ba54f04bd13",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/EssentialsFloatingToolbar.kt": {
+    "mtime": 1789723994.7402892,
+    "ast_hash": "e81c160b5746de8ec6cf241cd1bbe95a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/EssentialsWatchfacePromoContent.kt": {
+    "mtime": 1791483418.8627145,
+    "ast_hash": "1898933e17496a127b594475933c26eb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/StackedActionCard.kt": {
+    "mtime": 1791483418.8635488,
+    "ast_hash": "5adccf253c17c39c60bc146677d06f78",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/HelpAndGuides.kt": {
+    "mtime": 1791483418.8634667,
+    "ast_hash": "825d761b36fd3f6e1a4df40b69ec00e7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/DeviceHeroCard.kt": {
+    "mtime": 1788869944.6732998,
+    "ast_hash": "19e589f83cdeb94a921adf486159c869",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/WhatsNewCustomContent.kt": {
+    "mtime": 1791483418.8637562,
+    "ast_hash": "cc5fee016da018a7c50cc17a4d84bc42",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/modifiers/ShimmerModifier.kt": {
+    "mtime": 1787403204.8401518,
+    "ast_hash": "e45f64625ff9511d4c75905fca009ac0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/buttons/ListExpandToggleButton.kt": {
+    "mtime": 1787403204.8390288,
+    "ast_hash": "e6a507e536d0cf3f364820fd74ceff6e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/menus/SegmentedMenu.kt": {
+    "mtime": 1787403204.840044,
+    "ast_hash": "56f51c8f19fa31543c9937c728d0bcd5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/linkActions/ShareWithFragment.kt": {
+    "mtime": 1788869944.675014,
+    "ast_hash": "a8dc0dab2eb86802cfbd89f6b3e5ea9e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/linkActions/AppPickerAdapter.kt": {
+    "mtime": 1788869944.6743426,
+    "ast_hash": "f13f66b7c6fffbc334fe0a5c69f93209",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/linkActions/OpenWithFragment.kt": {
+    "mtime": 1787403204.8398232,
+    "ast_hash": "8cd13ee921bca73357130e4f79fd9230",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/linkActions/FloatingWithFragment.kt": {
+    "mtime": 1788869944.674502,
+    "ast_hash": "ba662677f62fe83077d6e7ea94a19ee3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/linkActions/LinkPickerAdapter.kt": {
+    "mtime": 1789723994.7412336,
+    "ast_hash": "f291e651b4076c63260575347e11a3c1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/dialogs/RepoDetailsRow.kt": {
+    "mtime": 1789842858.0065436,
+    "ast_hash": "c48c1f3d7c9bef0b009772a315e167a8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/dialogs/ContributorsCarousel.kt": {
+    "mtime": 1789842858.006478,
+    "ast_hash": "594eb2adba0d640875f5aedc448dc548",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/dialogs/AboutSection.kt": {
+    "mtime": 1791483418.864022,
+    "ast_hash": "a1b5dd7f17fc8b25d3b9ce5c0145c4b3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/text/SimpleMarkdown.kt": {
+    "mtime": 1788869944.6752002,
+    "ast_hash": "baf4c040b7af616cb53497c3f13f2193",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/genai/GenAIFloatingPill.kt": {
+    "mtime": 1789723994.7409902,
+    "ast_hash": "6fc7b423575445031f5bce05c4b0f953",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/sliders/ConfigSliderItem.kt": {
+    "mtime": 1791483418.8641455,
+    "ast_hash": "a58840a94a4db63e07b48481f579229d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/components/animations/LottieFeatureAnimation.kt": {
+    "mtime": 1787403204.8389244,
+    "ast_hash": "a2373f90807e32d1ebfea6c0034403d1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/theme/Color.kt": {
+    "mtime": 1787403204.855077,
+    "ast_hash": "c55e1c838b4fd294a26b2bc54f7b9cbb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/theme/Shapes.kt": {
+    "mtime": 1787403204.8551686,
+    "ast_hash": "9b2d8ba1b597ea499dff2902661f598b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/theme/Theme.kt": {
+    "mtime": 1790832228.77087,
+    "ast_hash": "dd06cc15b1ff72ffafca37f63758ca93",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/theme/Type.kt": {
+    "mtime": 1789987407.714887,
+    "ast_hash": "f5f75b8dbc977101c897c6d8119d5ef9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/TileAuthActivity.kt": {
+    "mtime": 1787403204.8371556,
+    "ast_hash": "d8ecd99aed7674a554c1a83e7a1834ac",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/LiveWallpaperActivity.kt": {
+    "mtime": 1787403204.8358376,
+    "ast_hash": "e0a3afa11a972b37e3e3fea4363299c2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/WatermarkActivity.kt": {
+    "mtime": 1787403204.8375041,
+    "ast_hash": "56b18321b4aad94c7f36d06566d3c572",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/ConsciousGateActivity.kt": {
+    "mtime": 1791483418.8611634,
+    "ast_hash": "c3b1953c3030be51dc429ed889bb0652",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/WallpaperActivity.kt": {
+    "mtime": 1787403204.8374217,
+    "ast_hash": "418908963176f3ed6ba8a197ec5b23aa",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/ShutUpShortcutActivity.kt": {
+    "mtime": 1791483886.662442,
+    "ast_hash": "b6134ffbfde0e397212031ac6a227c58",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/ScreenOffWidgetConfigureActivity.kt": {
+    "mtime": 1787403204.836521,
+    "ast_hash": "a0e8e3fef5ea3d817ed369f09129dbe1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/PinnedActionActivity.kt": {
+    "mtime": 1791483418.861934,
+    "ast_hash": "b9e5cb664030ffc8b65dabc95d7d062c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/YourAndroidActivity.kt": {
+    "mtime": 1789723994.7396302,
+    "ast_hash": "13539a1e4c22173c710a3a7858c67723",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/BubbleWebActivity.kt": {
+    "mtime": 1789723994.738246,
+    "ast_hash": "0a783b94efd3f32c9de57c7a00bc3497",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/ShortcutHandlerActivity.kt": {
+    "mtime": 1787403204.8367083,
+    "ast_hash": "2f1b4fc74d815976ef55697d3cb298e9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/AutomationEditorActivity.kt": {
+    "mtime": 1791483418.860908,
+    "ast_hash": "6066f3537beeec5ab2e782d4d90f0e67",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/QSPreferencesActivity.kt": {
+    "mtime": 1790315660.1688516,
+    "ast_hash": "8cb0182ed14244172b1815490c00643f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/PixelSearchActivity.kt": {
+    "mtime": 1788869944.672142,
+    "ast_hash": "4f01818222014d54e4ad4bc9e8505242",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/PixelSearchbarTapActivity.kt": {
+    "mtime": 1789842858.0053794,
+    "ast_hash": "aa338b1b2c7a60157a6f7c8e409114f1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/AppFreezingActivity.kt": {
+    "mtime": 1787403204.8345487,
+    "ast_hash": "274399949b7db31cbe923589ff47306b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/LinkPickerActivity.kt": {
+    "mtime": 1787403204.835734,
+    "ast_hash": "75a27a156710f71cbacfc04d104f7956",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/SettingsActivity.kt": {
+    "mtime": 1791483418.8622112,
+    "ast_hash": "a209e6ee0fc13d4864f11c8e028a361b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/BatteryDetailsActivity.kt": {
+    "mtime": 1787403204.8350997,
+    "ast_hash": "ae3eeff2126b43c564b48af595210b29",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/AppUpdatesActivity.kt": {
+    "mtime": 1788869944.6706622,
+    "ast_hash": "271073fea3d613b20592389cb0e158e0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/LockscreenActionActivity.kt": {
+    "mtime": 1791483418.8618815,
+    "ast_hash": "99a093ab26ff0783a9c0172133651827",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/DebuggingSettingsActivity.kt": {
+    "mtime": 1791483418.861604,
+    "ast_hash": "6c5a5ad76618305f0394a3a2aaf7f841",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/WallpaperStagingActivity.kt": {
+    "mtime": 1791483418.8626206,
+    "ast_hash": "a5d0fea9f8765fa2d735fb4d347f7ccc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/LocationAlarmActivity.kt": {
+    "mtime": 1790832228.7641313,
+    "ast_hash": "a407c4de735a84d69ed0fe95b1821180",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/FeatureSettingsActivity.kt": {
+    "mtime": 1791484227.4458973,
+    "ast_hash": "4156ecf761bb59528648b494a4ddd99f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/ActionShortcutActivity.kt": {
+    "mtime": 1787403204.8343952,
+    "ast_hash": "35e6d046a7f686837796333b90e48ecb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/RipplePositionPickerActivity.kt": {
+    "mtime": 1789987407.7007706,
+    "ast_hash": "1fa5a27a3e2c57c77f94a8d00f86e3d7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/InternetDialogActivity.kt": {
+    "mtime": 1791486301.632636,
+    "ast_hash": "45b92e55e6632bc3f1d16abe870aac6f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/PixelSearchResultsActivity.kt": {
+    "mtime": 1790315660.168323,
+    "ast_hash": "ce654f6aeb44fd262e9624db55b10f41",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/ColorPickerActivity.kt": {
+    "mtime": 1787403204.8352118,
+    "ast_hash": "da45340e6c00d9dc57c8c7f84cc52023",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/QsTilesWidgetConfigurationActivity.kt": {
+    "mtime": 1787403204.8364134,
+    "ast_hash": "8bb29be92ad2d625d0434be8be5bcf66",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/TravelCompassActivity.kt": {
+    "mtime": 1787403204.8372743,
+    "ast_hash": "83736eb4c9b8bb3f036b2db1955b7fec",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/FlashlightIntensityActivity.kt": {
+    "mtime": 1787403204.8355858,
+    "ast_hash": "160897cf8ac1214f902ee25ad06e0b74",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/AppLockActivity.kt": {
+    "mtime": 1790315660.1670134,
+    "ast_hash": "5b94f549b6d30cefb0b966b3bb4c4ff8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/PrivateDnsSettingsActivity.kt": {
+    "mtime": 1787403204.8362117,
+    "ast_hash": "3ad9900ab8a1b3098508c4c95a9d1d2a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/PixelSearchbarSettingsActivity.kt": {
+    "mtime": 1790315660.168472,
+    "ast_hash": "08da6e07295b68e1fbc82aa714f24759",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ui/activities/SmartPixelsIntensityActivity.kt": {
+    "mtime": 1787403204.837047,
+    "ast_hash": "6efbf6a2c2da98fe55688a44a01abbdf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/MainViewModel.kt": {
+    "mtime": 1791484447.4259315,
+    "ast_hash": "309290f8f7ad5ee910d5f3912585d594",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/AppUpdatesViewModel.kt": {
+    "mtime": 1788869944.6852198,
+    "ast_hash": "2a8b812dc65235fb7995281bd1e023ac",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/PermissionViewModel.kt": {
+    "mtime": 1786290946.29786,
+    "ast_hash": "a1e2fe851d32f375ceba5794abaa0977",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/DIYViewModel.kt": {
+    "mtime": 1790315660.1794841,
+    "ast_hash": "0b1c87f9d251481ff9713d8cb1a16998",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/StatusBarIconViewModel.kt": {
+    "mtime": 1790450399.3373594,
+    "ast_hash": "c75ae89f5bf2d8de6bafdfca1404d24f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/LocationReachedViewModel.kt": {
+    "mtime": 1787403204.8599796,
+    "ast_hash": "8832611d600df183d32a6efdaa3d7f56",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/SettingsViewModel.kt": {
+    "mtime": 1787403204.8606088,
+    "ast_hash": "4514182962e358fe5c5fc99de0dd644c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/BatteryViewModel.kt": {
+    "mtime": 1787403204.8596213,
+    "ast_hash": "0dc655d03d0755a7c6a951e5eb1a06d3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/QuickSettingsTilesViewModel.kt": {
+    "mtime": 1786290946.2979116,
+    "ast_hash": "aa4545f4c3c8227327a635aabbdcf68a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/WatermarkViewModel.kt": {
+    "mtime": 1787403204.8608894,
+    "ast_hash": "439de13d9ce4f64ae4a4f0cd500e588f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/WatchViewModel.kt": {
+    "mtime": 1789842858.016666,
+    "ast_hash": "71e1f03526520c0eb21b0ae6fd400a83",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/GitHubAuthViewModel.kt": {
+    "mtime": 1787403204.8598778,
+    "ast_hash": "e14cdc85ea367897958acceef8efe3f7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/SecurityViewModel.kt": {
+    "mtime": 1787403204.8605251,
+    "ast_hash": "f1e23171cde4622b9d44531ddf3a4802",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/CaffeinateViewModel.kt": {
+    "mtime": 1787403204.8596985,
+    "ast_hash": "2bb58f47493bf04955d066af12c17609",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/state/RippleSettings.kt": {
+    "mtime": 1789987407.7201319,
+    "ast_hash": "4dfb0bba12d841efd89ef19406b9ac0a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/viewmodels/state/DashSettings.kt": {
+    "mtime": 1789987407.7200687,
+    "ast_hash": "9b7c6afc1fc8c3c3a0440b05a7e62a70",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ime/KeyboardLifecycleOwner.kt": {
+    "mtime": 1787403204.819901,
+    "ast_hash": "bcd8bf6b1ebe334446939454ae7fe701",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ime/SuggestionEngine.kt": {
+    "mtime": 1787403204.8200166,
+    "ast_hash": "463436ed78cc730f79f1f968f354b508",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ime/EssentialsInputMethodService.kt": {
+    "mtime": 1787403204.819787,
+    "ast_hash": "b5d9a2d3abb389be64da76ff208a7a01",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/ime/UndoRedoManager.kt": {
+    "mtime": 1787403204.8201206,
+    "ast_hash": "76f2b81866977435bae910146b19434c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/TranslatableText.kt": {
+    "mtime": 1787403204.833135,
+    "ast_hash": "4eb5032f6a2e553d9cd9dea34c2efcd6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/StringLoader.kt": {
+    "mtime": 1789842858.002033,
+    "ast_hash": "7d670e202b0fff2fbb82c870755f4f7f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/TranslationValidator.kt": {
+    "mtime": 1789842858.0022767,
+    "ast_hash": "712d73f35b001e0a8fedc70924901c67",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/TranslationManager.kt": {
+    "mtime": 1789842858.0021763,
+    "ast_hash": "a5adaebca1b9dbd62a71d65d1ba75855",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/ui/TranslationMenuItems.kt": {
+    "mtime": 1789842858.0038576,
+    "ast_hash": "005463719a49a4e98ba9dee83b09f727",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/ui/TranslationBottomSheet.kt": {
+    "mtime": 1789842858.0033708,
+    "ast_hash": "f5aebd9493e1653d68c1a65bf1df825f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/ui/TranslationLongPressMenu.kt": {
+    "mtime": 1789842858.0037467,
+    "ast_hash": "4ef5a0794ca263031ca3a92b11754b2d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/ui/TranslationWarningBottomSheet.kt": {
+    "mtime": 1789842858.0041597,
+    "ast_hash": "4aabfc6ddb2508df7582781e90bfbaae",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/ui/TranslatableCardContainer.kt": {
+    "mtime": 1789842858.0032423,
+    "ast_hash": "ad228b577e37045ed982f1bed1dfafb7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/ui/TranslationFocusOutline.kt": {
+    "mtime": 1787403204.8339229,
+    "ast_hash": "2bad464e9636b95460fd65f7bffe1aa0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/ui/TranslationSessionSheet.kt": {
+    "mtime": 1789842858.0040164,
+    "ast_hash": "63c400cbe73241eba8749beacb339200",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/translation/model/TranslationModels.kt": {
+    "mtime": 1787403204.8333097,
+    "ast_hash": "9a8213f2ad014764b3511c0dc222ee2d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/input/InputEventReader.kt": {
+    "mtime": 1787403204.820384,
+    "ast_hash": "de974eae82c1840346128ed9fe3ae81a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/input/VolumeLongPressDetector.kt": {
+    "mtime": 1787403204.8205218,
+    "ast_hash": "fdc6a3ce66d030930f1b25fb6220e172",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/input/InputEventModels.kt": {
+    "mtime": 1787403204.8203006,
+    "ast_hash": "ad1fc54e360662fd696d8214f296740c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/input/InputDeviceScanner.kt": {
+    "mtime": 1787403204.820215,
+    "ast_hash": "c35694501b2e9f95d32e28d138ae3e50",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/FileSearchUtil.kt": {
+    "mtime": 1789842858.0128531,
+    "ast_hash": "e5582a8e3ff81f47af431bc7b5f46aaa",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/LanguageUtils.kt": {
+    "mtime": 1788869944.6834226,
+    "ast_hash": "3f2a0db0eba45de1fdd69bf0fe87654d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ShutUpManager.kt": {
+    "mtime": 1791484485.2306726,
+    "ast_hash": "6c88110a35bb13d77d3c285dc8d16c41",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/LiveWallpaperUtil.kt": {
+    "mtime": 1790315660.1772223,
+    "ast_hash": "444f6cc260de15080c4c3cbf413b78c8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/DuoOverlayView.kt": {
+    "mtime": 1791483418.871829,
+    "ast_hash": "cf2c76df6a287b6beedfc59eba4ad2ee",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/DeviceUtils.kt": {
+    "mtime": 1791483418.8716037,
+    "ast_hash": "1772495a90467af8594af52e2adc6566",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/QrCodeGenerator.kt": {
+    "mtime": 1788869944.683714,
+    "ast_hash": "f04120307bdc29c1daac7d59f2fbe40d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/PermissionUtils.kt": {
+    "mtime": 1789842858.013549,
+    "ast_hash": "14998f7de3723e65fc4d8b8bef01712a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/StatusBarIconUtils.kt": {
+    "mtime": 1789987407.717887,
+    "ast_hash": "e83394ef78b08946d59c14f658ef6f97",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/FreezeManager.kt": {
+    "mtime": 1789723994.752852,
+    "ast_hash": "dae006b06c5c05efeefed21da8ac514b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ShortcutUtil.kt": {
+    "mtime": 1791483418.8724093,
+    "ast_hash": "4ad235b1c1e4e03161be5149b06b4255",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/AppUtil.kt": {
+    "mtime": 1791483418.8715003,
+    "ast_hash": "67431cd1887586dd5437c714095de493",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/PermissionGrantUtil.kt": {
+    "mtime": 1790315660.1772892,
+    "ast_hash": "3b9ec25b9ef118b0348c6a37920fdfc7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/LockscreenShortcutDetector.kt": {
+    "mtime": 1791483418.8719466,
+    "ast_hash": "7761d93ccd982ee8831da84b90d1d25e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/CallControlUtil.kt": {
+    "mtime": 1790315660.1767466,
+    "ast_hash": "a471fcd836d9926c20300e72f8e106d7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/OmniTriggerUtil.kt": {
+    "mtime": 1787403204.8563304,
+    "ast_hash": "1f1d3f210d9af96270d720c16b807a6f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/TestNotificationUtil.kt": {
+    "mtime": 1789842858.0139906,
+    "ast_hash": "997a6a96fb44151db3835e0c98576624",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/UrlShortener.kt": {
+    "mtime": 1788869944.6842902,
+    "ast_hash": "9308cbdea2eaba5f8c464508e293324d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/CalendarEventUtil.kt": {
+    "mtime": 1790315660.1764703,
+    "ast_hash": "363fb493d85cc1464b5326f4da155a3f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/SimCarrierUtil.kt": {
+    "mtime": 1788869944.6841161,
+    "ast_hash": "e6bfa17949439cae95d0780e4f769d68",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/StatusBarManager.kt": {
+    "mtime": 1790832228.7717774,
+    "ast_hash": "b25bf95799b7fd2189b5e82acea43228",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/BluetoothPairedDevicesUtil.kt": {
+    "mtime": 1787403204.8557346,
+    "ast_hash": "a137e3310ea4f6fbbfe2aee5f53faeb5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ShellUtils.kt": {
+    "mtime": 1791484248.7149634,
+    "ast_hash": "7a05f1f6e64e50453e1c10c03430b44a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/TimeUtil.kt": {
+    "mtime": 1787403204.8574598,
+    "ast_hash": "a015afaf1633366550f56d2d3726822b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/StatusGlanceView.kt": {
+    "mtime": 1790832228.7720535,
+    "ast_hash": "2b5459632ad91b793e57d639977db745",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/PriorityModeUtil.kt": {
+    "mtime": 1789987407.7172666,
+    "ast_hash": "4374449b35319f3a2c3f7fef8705bd8d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/SettingsRecorder.kt": {
+    "mtime": 1787403204.8567617,
+    "ast_hash": "0a7b442f8d30f1f76aa36b80b1d8c294",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/PrivilegedMode.kt": {
+    "mtime": 1791483418.8719919,
+    "ast_hash": "f94d4ca61e9fe3f7710f045df87b48b1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/AppIconUtil.kt": {
+    "mtime": 1788869944.6830378,
+    "ast_hash": "ec4c55b6c770d243dcf850802c90ac4b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/HiddenDebuggingUtils.kt": {
+    "mtime": 1791483418.871882,
+    "ast_hash": "44a0d18bb185d1c66f91dcf762acb69f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/EmojiUtil.kt": {
+    "mtime": 1790315660.177156,
+    "ast_hash": "8f8ddd9619c206622563e5d66c5e940d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/UpdateNotificationHelper.kt": {
+    "mtime": 1787403204.8575578,
+    "ast_hash": "691bb9a1897acd1c5ad77f26c7872023",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/LinearBrightness.kt": {
+    "mtime": 1790832228.771242,
+    "ast_hash": "346c368da6bdf1a8a050c4ced787074e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ServiceUtils.kt": {
+    "mtime": 1791483485.059532,
+    "ast_hash": "52c4d14a25e02a77654163f86d42e8db",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/CarConnectionMonitor.kt": {
+    "mtime": 1789723994.7524066,
+    "ast_hash": "8a689f0bfcc2a737d446439b97e36a18",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/BluetoothBatteryUtils.kt": {
+    "mtime": 1787403204.8556402,
+    "ast_hash": "ae188db785cafa9154cb818acc5121b3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/MathEvaluator.kt": {
+    "mtime": 1789842858.0134249,
+    "ast_hash": "7b520c346cf4d5c4e324d1f411c3ab65",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/LogManager.kt": {
+    "mtime": 1789842858.0133367,
+    "ast_hash": "c28925e3d12b40a42fb32869f3a7aa69",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/OverlayHelper.kt": {
+    "mtime": 1789987407.7171366,
+    "ast_hash": "987af6f6f848dd2bce8053a653c8220d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/AppColorUtil.kt": {
+    "mtime": 1789987407.7149818,
+    "ast_hash": "6b46021b19e8493527266152ac3bb8dd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ActivityLauncherUtil.kt": {
+    "mtime": 1791483418.87141,
+    "ast_hash": "34b039e0ad6387429d36ab7ffbbc8eb5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/AutoUpdateManagerHelper.kt": {
+    "mtime": 1787403204.8555465,
+    "ast_hash": "642180f3b30ff111e1787b9e71c1a144",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/WindowingUtils.kt": {
+    "mtime": 1789723994.7538068,
+    "ast_hash": "6de0da87abdaebac0c8662223ae387bd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ui/HapticUtil.kt": {
+    "mtime": 1790832228.7726698,
+    "ast_hash": "21f073f104c8c10284180994a2f4bf8d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ui/AmbientMusicShapeHelper.kt": {
+    "mtime": 1787403204.8588738,
+    "ast_hash": "e69acc1405ab86162675a7009a8ef9a3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ui/HapticFeedbackUtils.kt": {
+    "mtime": 1790832228.772562,
+    "ast_hash": "d7c1f288beb948efd142380ccc899261",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ui/ColorUtil.kt": {
+    "mtime": 1788869944.684976,
+    "ast_hash": "ea4dbcfff26ee28e278e44e71265dd84",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ui/ColorFormatUtils.kt": {
+    "mtime": 1787403204.8589485,
+    "ast_hash": "5b9cccf5f51ccbca308650708feae5ae",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ui/DeviceImageMapper.kt": {
+    "mtime": 1787403204.8591099,
+    "ast_hash": "cf0b0320b2b88d33e5c85b34cce347ab",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/ui/PermissionUIHelper.kt": {
+    "mtime": 1791483418.8731391,
+    "ast_hash": "cadfcf29d3a1463930801e06ffad0b84",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/chronometer/ChronometerRepository.kt": {
+    "mtime": 1791483418.8727815,
+    "ast_hash": "ca22ff37996a3fbad14bf21b9f5a1bea",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/hardware/WifiUtil.kt": {
+    "mtime": 1791486225.8094912,
+    "ast_hash": "40102019f986aa192200ad2318b4bcb8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/hardware/ThermalUtil.kt": {
+    "mtime": 1789723994.7543044,
+    "ast_hash": "fea07a3cb2511539f9e2c2dd27d388fe",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/hardware/FlashlightUtil.kt": {
+    "mtime": 1787403204.858053,
+    "ast_hash": "ae155e6da01b900cdc7d2aaf3ee00153",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/hardware/SurfaceFlingerControl.kt": {
+    "mtime": 1787403204.8582363,
+    "ast_hash": "aab7393bea70b16912f3286aafce89e7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/hardware/RefreshRateUtils.kt": {
+    "mtime": 1791484178.7173083,
+    "ast_hash": "0ce887a4cb8fbdbb4ea7a1b7cbd41b49",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/hardware/HilightLights.kt": {
+    "mtime": 1791483418.8728468,
+    "ast_hash": "72b7742b5e260998ed985a4b21706a59",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/security/BiometricSecurityHelper.kt": {
+    "mtime": 1787403204.8585591,
+    "ast_hash": "bc042c24bf7fafa979cbcf5307576aa6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/security/DeviceLockUtils.kt": {
+    "mtime": 1789723994.7545319,
+    "ast_hash": "1ac5ccc5d87d61ee0912800992211cdb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/security/ShizukuUtils.kt": {
+    "mtime": 1791483418.873037,
+    "ast_hash": "28682e64916a9eeef0d73061b2790027",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/security/BiometricHelper.kt": {
+    "mtime": 1790315660.1787524,
+    "ast_hash": "6ea5c7655175c3a28f8636a11286c5c3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/security/RootUtils.kt": {
+    "mtime": 1787403204.858707,
+    "ast_hash": "e9cf5b7341890d13d21b7ebedd8575b8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/notification/NotificationRepostFilter.kt": {
+    "mtime": 1790315660.1786363,
+    "ast_hash": "c0118ed12c9897a7913f59b54e87e744",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/call/CallNotificationParser.kt": {
+    "mtime": 1791483418.872601,
+    "ast_hash": "55cf8d09f337ef39c9c410f26ba11c8a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/call/CallStateRepository.kt": {
+    "mtime": 1791483418.8726904,
+    "ast_hash": "5d5619a41e0f99a5b5ba003cbecef96e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/call/CallerLookup.kt": {
+    "mtime": 1790315660.1782258,
+    "ast_hash": "dd2b7e6412bab2bbb1efa85560ae0cf1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/battery/BatteryRingDrawer.kt": {
+    "mtime": 1787403204.8578515,
+    "ast_hash": "154de851cd7212adb53d8aeb4e1752bf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/battery/BatteryInfoUtil.kt": {
+    "mtime": 1790315660.177771,
+    "ast_hash": "9e0e1d71c4ed19c3b186590bc6d10bb5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/battery/BatteryHistoryManager.kt": {
+    "mtime": 1787403204.8576472,
+    "ast_hash": "6856fc730d3c925e6e514c3bca00312d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/battery/ChargingModeUtil.kt": {
+    "mtime": 1789723994.754055,
+    "ast_hash": "fbb6582b0435b4094249fd3be5b7a62f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/battery/BatteryStatsUtil.kt": {
+    "mtime": 1791483418.872514,
+    "ast_hash": "7f22d9fc56cb87cebbd7b143fcbaa236",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/overlay/DashConfigIo.kt": {
+    "mtime": 1789987407.7185483,
+    "ast_hash": "4d320eafb15585d4445d167a608b20bb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/overlay/RippleOverlay.kt": {
+    "mtime": 1789987407.718874,
+    "ast_hash": "1b172ed1389c2d00927e39bf21957679",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/overlay/DashOverlay.kt": {
+    "mtime": 1789987407.7186344,
+    "ast_hash": "bcb37eb5f68bc39b317660dea82ef28f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/overlay/RippleConfigIo.kt": {
+    "mtime": 1789987407.7187157,
+    "ast_hash": "1a7f646bd74f7da9b2d268beeba3b49b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/overlay/RippleGlitterView.kt": {
+    "mtime": 1789987407.7188034,
+    "ast_hash": "f4b29215115a50bdbb1a1dd2b29ba076",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/utils/media/MusicSessionUtil.kt": {
+    "mtime": 1790315660.1785486,
+    "ast_hash": "eefb1cef0597d4dbcf3d4b0e25beceea",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/receivers/UrlShortenerActionReceiver.kt": {
+    "mtime": 1788869944.666233,
+    "ast_hash": "6b4f6a572921a32261b2645de9139cad",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/WeatherRepository.kt": {
+    "mtime": 1791483418.873645,
+    "ast_hash": "cf3d90d0aa41d06de67b0877339d74ba",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/WeatherSources.kt": {
+    "mtime": 1791483418.8736887,
+    "ast_hash": "c0e1d1111b0df29ada0db5b1975eb3e5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/WeatherFormat.kt": {
+    "mtime": 1790315660.1802347,
+    "ast_hash": "6e89fde700a3b8230e3312101c4f3516",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/overcast/OvercastWeather.kt": {
+    "mtime": 1791483418.8738563,
+    "ast_hash": "fa06f51d8c7ce61cc4af83fe02584732",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/work/WeatherRefreshWorker.kt": {
+    "mtime": 1791483418.8739336,
+    "ast_hash": "17b383297343d5c229d68eb5370f362a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/model/WeatherModels.kt": {
+    "mtime": 1791483418.8737733,
+    "ast_hash": "b15ad280361aa7941377a3e71febd594",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/effects/DeviceWeatherHaptics.kt": {
+    "mtime": 1790315660.1804044,
+    "ast_hash": "a61aefc2bfb8ac8f94c124e1458d490b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/effects/WeatherEffectSpec.kt": {
+    "mtime": 1790315660.1804621,
+    "ast_hash": "329c55d6c906c3c6dc69b2cda0b13361",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/weather/effects/WeatherEffects.kt": {
+    "mtime": 1790832228.7741103,
+    "ast_hash": "4af66505adb664be09b2edbceb32a460",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/shizuku/ShizukuProcessHelper.kt": {
+    "mtime": 1787403204.8327441,
+    "ast_hash": "bb74261ef2650c8ca11c04ea506fc795",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/shizuku/ShizukuPermissionHelper.kt": {
+    "mtime": 1787403204.8326495,
+    "ast_hash": "adfa873d6d02473697843f85d2db63c3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/shizuku/CarrierConfigModifier.kt": {
+    "mtime": 1787403204.8325546,
+    "ast_hash": "f75044c47765ccff8edf02ca731d055f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/IslandHaptics.kt": {
+    "mtime": 1790315660.157614,
+    "ast_hash": "0f29ef1363053d12c161ad9a278ce1fe",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/IslandLayoutSpec.kt": {
+    "mtime": 1791483418.8551779,
+    "ast_hash": "d6a304be0c8e5cfd6692e6e1d75cf9f6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/IslandModifiers.kt": {
+    "mtime": 1791483418.8552833,
+    "ast_hash": "1090c2d6f8e90e438534eca193d46c41",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/IslandRoot.kt": {
+    "mtime": 1791483418.855519,
+    "ast_hash": "9aabb04cc09b2f3e038eff90247bec17",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/IslandStack.kt": {
+    "mtime": 1791483418.855679,
+    "ast_hash": "f9d44fea55b5197636181c7eb6f47264",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/CompactInteraction.kt": {
+    "mtime": 1790832228.7569954,
+    "ast_hash": "eb0415c0a26e3f6cd196de170c76314c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/ExpandedHost.kt": {
+    "mtime": 1791483418.8550823,
+    "ast_hash": "83659902e56c845c711228fa7df6cdba",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/LineTemplate.kt": {
+    "mtime": 1790450399.3269188,
+    "ast_hash": "105fa261fdeda3393daa75be84f5aee9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/CompactTemplate.kt": {
+    "mtime": 1791483418.8549864,
+    "ast_hash": "0de8c832e5dad18ad25e3b55de3809e8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/IslandMotion.kt": {
+    "mtime": 1790315660.1578693,
+    "ast_hash": "187dfda6b098f2136842f3481986793c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/IslandBackdrop.kt": {
+    "mtime": 1790315660.1575596,
+    "ast_hash": "96e3e9dbe451f58abc0f832192f32f93",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/components/IslandComponents.kt": {
+    "mtime": 1790832228.7578328,
+    "ast_hash": "119470d1a1356357bb710ea5fd638351",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/components/SlideFeedbackContent.kt": {
+    "mtime": 1790315660.1587322,
+    "ast_hash": "339d02f6ad792ba8c081e33396b1f99e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/components/RollingText.kt": {
+    "mtime": 1790315660.1586373,
+    "ast_hash": "99976ec121fe59299b21002bbf8f842d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/components/ExpandedParts.kt": {
+    "mtime": 1791483418.8557928,
+    "ast_hash": "44c9b82fe0a3b5d314d6b62436fa7074",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/components/MarqueeText.kt": {
+    "mtime": 1790315660.1585598,
+    "ast_hash": "271ee93e20104a50aaf0aca7d1b3ee12",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/ui/components/IslandSeekBar.kt": {
+    "mtime": 1790315660.158499,
+    "ast_hash": "ea640306ce4d42eb001218cdab4dfda7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/PluginUtils.kt": {
+    "mtime": 1790315660.1534956,
+    "ast_hash": "9260bedfdd95c65aeb4f2d00fd7829cd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/BaseIslandPlugin.kt": {
+    "mtime": 1790315660.1534364,
+    "ast_hash": "d5493941d214de655e73a895a6b6cac7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/consciousgate/ConsciousGatePlugin.kt": {
+    "mtime": 1790315660.1545007,
+    "ast_hash": "d8bdbb75c1b0386d4ed20114a4dbf5a1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/soundmode/SoundModePlugin.kt": {
+    "mtime": 1790832228.7557456,
+    "ast_hash": "6f33495dcc20e78efb1dc34f08f35e80",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/calendar/CalendarExpanded.kt": {
+    "mtime": 1790450399.324873,
+    "ast_hash": "caca9da323d9c0c64a700aaed9f44a3d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/calendar/CalendarPlugin.kt": {
+    "mtime": 1790450399.3251674,
+    "ast_hash": "10f91a1c17512caf057f5a6f5fb50882",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/caffeinate/CaffeinatePlugin.kt": {
+    "mtime": 1790315660.1539373,
+    "ast_hash": "4ebb3dfcec501337229e699ba255f0aa",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/progress/ProgressPlugin.kt": {
+    "mtime": 1791483418.8508394,
+    "ast_hash": "fbeebabd0213678b0b9a52070b083e0f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/progress/ProgressExpanded.kt": {
+    "mtime": 1790315660.1556387,
+    "ast_hash": "2087442498901bbb4cb52289ba2cd9a1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/network/NetworkPlugin.kt": {
+    "mtime": 1791483418.8491545,
+    "ast_hash": "a0eb6eee2b9672fac76e196ebb87ca5b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/timer/TimerPlugin.kt": {
+    "mtime": 1791483418.851246,
+    "ast_hash": "0bdad26c66da2d3ae4bdfa71f2f850ae",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/call/CallExpanded.kt": {
+    "mtime": 1790315660.154289,
+    "ast_hash": "2ac1b4575b16f70f75deee8a36b3f62c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/call/CallPlugin.kt": {
+    "mtime": 1791483418.848135,
+    "ast_hash": "8d5806c5e939e165e0a5308152f954a4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/timebattery/TimeBatteryPlugin.kt": {
+    "mtime": 1791483418.8511384,
+    "ast_hash": "2eb904cd5e4be93a164c5cae099fb951",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/brief/BriefPlugin.kt": {
+    "mtime": 1791483418.847909,
+    "ast_hash": "d5bbb2a912a973cc7eb5c4200a86f629",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/flashlight/FlashlightPlugin.kt": {
+    "mtime": 1791483418.8484342,
+    "ast_hash": "b2037c86c7cfe272ef637d57fdc1768d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/weather/WeatherExpanded.kt": {
+    "mtime": 1791483418.8514533,
+    "ast_hash": "5a5d7e7daa6127b14d4aeb13e41206cc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/weather/WeatherPlugin.kt": {
+    "mtime": 1791483418.8516102,
+    "ast_hash": "dce33f7c12f2e243f7d2d23db55f2b35",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/alarm/AlarmPlugin.kt": {
+    "mtime": 1790315660.1535964,
+    "ast_hash": "3c03d5eb0ed2d2a75258c9bcb24915a9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/signal/SignalPlugin.kt": {
+    "mtime": 1791483418.851032,
+    "ast_hash": "337145527617cbc6209ae225d1fd8b78",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/signal/SignalBars.kt": {
+    "mtime": 1791483418.8509557,
+    "ast_hash": "cca9779a177688d8545cade76ec5248c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/travel/TravelPlugin.kt": {
+    "mtime": 1790315660.1562371,
+    "ast_hash": "33b49e406d6573ae95cfbf2769855d7d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/notifications/NotificationExpanded.kt": {
+    "mtime": 1791483418.8494222,
+    "ast_hash": "6633e5a569e0dad2b9e1bfc1b2008538",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/notifications/NotificationsPlugin.kt": {
+    "mtime": 1791483418.849531,
+    "ast_hash": "17edb5959e9f3ad48e97aba093b62d3a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/devices/DevicesPlugin.kt": {
+    "mtime": 1790832228.7554178,
+    "ast_hash": "0e4343421876ebc326cd5f65d449add1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/media/MediaSessionSource.kt": {
+    "mtime": 1790315660.1552472,
+    "ast_hash": "ddccbdf942836753940d92c9bcb5636e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/media/MediaExpanded.kt": {
+    "mtime": 1791483418.8487103,
+    "ast_hash": "2ad3dc50b42804c708fa54307dbbf0f4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/plugins/media/MediaPlugin.kt": {
+    "mtime": 1791483418.8489013,
+    "ast_hash": "223267214c9289bcb016b80b0c091a08",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/state/CameraGeometry.kt": {
+    "mtime": 1791483418.8541346,
+    "ast_hash": "fa2337d88cd7e54901c2641bdeeaf4ab",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/state/IslandController.kt": {
+    "mtime": 1791483418.8547516,
+    "ast_hash": "ecdbec393c903d10950d4b992e18d8ae",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/state/CompactLayoutEngine.kt": {
+    "mtime": 1791483418.8543231,
+    "ast_hash": "c35b51ed89ed1187fa7fdf0f855e9daf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/gestures/HiddenGestureDetector.kt": {
+    "mtime": 1791483418.8472908,
+    "ast_hash": "300494cdc97a7a1d7f339304c720c40c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/gestures/SlideFeedback.kt": {
+    "mtime": 1790315660.1531937,
+    "ast_hash": "8663579b42e0e2b63547833d4c33c73d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/gestures/MediaCue.kt": {
+    "mtime": 1790315660.1531398,
+    "ast_hash": "87ef302278cff476fbd10e63dd72b7bc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/gestures/CompactGestures.kt": {
+    "mtime": 1790832228.7540953,
+    "ast_hash": "be49585399fa14b7d6718fd207f83b57",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/gestures/CompactGestureController.kt": {
+    "mtime": 1790832228.7539725,
+    "ast_hash": "0a98b017b306bc730e6bc3a043d84fed",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/model/IslandModels.kt": {
+    "mtime": 1791483418.8475065,
+    "ast_hash": "7e6920dada9f23f4547ee29294ec5038",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/model/IslandPriorityEntries.kt": {
+    "mtime": 1791483418.847677,
+    "ast_hash": "3c9123998842e35df582a971beaaa945",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/model/IslandPlugin.kt": {
+    "mtime": 1790450399.324169,
+    "ast_hash": "ead0df0d35fa549e8c5b8a06838bdffd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/service/IslandWindowHost.kt": {
+    "mtime": 1791483418.8538861,
+    "ast_hash": "c7fd102c7eaba9a934a96ef30afec23f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/service/CameraGeometryResolver.kt": {
+    "mtime": 1791483418.853053,
+    "ast_hash": "83dc6b29ac3543d7efeb6edb9a8b80f6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/service/IslandCoordinator.kt": {
+    "mtime": 1791483418.8534598,
+    "ast_hash": "087024bdd1b1e4dccaf444140ca7de91",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/service/IslandStatusBarHider.kt": {
+    "mtime": 1790315660.1566675,
+    "ast_hash": "d74df4a2cbf3defde45519ceac0be756",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/island/service/OverlayLifecycleOwner.kt": {
+    "mtime": 1790315660.1569927,
+    "ast_hash": "beb8ad05cee41a1043dfb5b78d335da8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/external/ExternalActionReceiver.kt": {
+    "mtime": 1787403204.8191395,
+    "ast_hash": "a40c366ef971f1ed0fad5e9075138c3f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/external/ExternalRouter.kt": {
+    "mtime": 1787403204.8194213,
+    "ast_hash": "4496a3ae9965f377b509ec30a67bb040",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/external/ExternalHandler.kt": {
+    "mtime": 1787403204.819325,
+    "ast_hash": "96463e841d7605c1d54617c899bd1289",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/external/LocationAlarmExternalHandler.kt": {
+    "mtime": 1787403204.8195302,
+    "ast_hash": "a671ff91919b0463f3a939d613af31d3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/external/SettingsExternalHandler.kt": {
+    "mtime": 1787403204.819628,
+    "ast_hash": "b9a61018b83293038fda38ca09bded11",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/external/ExternalControlProvider.kt": {
+    "mtime": 1787403204.8192368,
+    "ast_hash": "218f352711f641ea6078034470754455",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/UpdateRepository.kt": {
+    "mtime": 1788869944.663669,
+    "ast_hash": "f0e5b04860804d470066380745049128",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/LocationReachedRepository.kt": {
+    "mtime": 1787403204.8135056,
+    "ast_hash": "c2801b30d31eb8f1814c83c15970fc77",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/ProjectDetailsRepository.kt": {
+    "mtime": 1789842857.994439,
+    "ast_hash": "ad5cfa8d189451fdbc5c2327612a4c9b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/GitHubRepository.kt": {
+    "mtime": 1787403204.8133783,
+    "ast_hash": "4ba37efbcedff1afcfc09deff7ac34b7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/WallpaperRepository.kt": {
+    "mtime": 1787403204.814049,
+    "ast_hash": "06cfaaa396aa6ecef3f437c6de147085",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/HelpMediaRepository.kt": {
+    "mtime": 1789723994.7290606,
+    "ast_hash": "57d0ffa3f5e13dc6fba01018718a06be",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/SettingsRepository.kt": {
+    "mtime": 1791484353.0536816,
+    "ast_hash": "f3ac444c5ef108b9a1f3fb8381f24c46",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/WallpaperStagingRepository.kt": {
+    "mtime": 1791483418.8443658,
+    "ast_hash": "a16512b7599cbc860fb674895d538080",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/GitHubAuthRepository.kt": {
+    "mtime": 1787403204.8132458,
+    "ast_hash": "3768e3be4c0931154e1fe048f2a3bf66",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/data/repository/ContributorsRepository.kt": {
+    "mtime": 1789842857.9943423,
+    "ast_hash": "758d607e65f927d2e8e9f63b322f4c73",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/MapsState.kt": {
+    "mtime": 1787403204.8143494,
+    "ast_hash": "d85485280651277886a18d6a2ac1a519",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/DIYTabs.kt": {
+    "mtime": 1787403204.8141475,
+    "ast_hash": "5dc07337cf47027af73add238fec3a33",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/StatusBarIcon.kt": {
+    "mtime": 1789987407.6858127,
+    "ast_hash": "194f3d75d7e42bc900865a1d57b7c9e8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/ScreenOffMethod.kt": {
+    "mtime": 1787403204.8144455,
+    "ast_hash": "a28c0b875d8d6c4c0e2f761fae0fe4e5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/HapticFeedbackType.kt": {
+    "mtime": 1787403204.8142564,
+    "ast_hash": "3ee2189aff9ffc75635c805722864aa6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/diy/Trigger.kt": {
+    "mtime": 1787403204.8155541,
+    "ast_hash": "67f2fd7db977e86f364d82f60b3594c5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/diy/State.kt": {
+    "mtime": 1790832228.7525012,
+    "ast_hash": "d29665dbd5c2d52202c62b6c039a501e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/diy/DIYRepository.kt": {
+    "mtime": 1787403204.8153093,
+    "ast_hash": "6e8419fe88b18b79209ca5facec8ea91",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/diy/ActionRegistry.kt": {
+    "mtime": 1791483418.8451934,
+    "ast_hash": "a4b6a2caf22673d745414e723113d9cc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/diy/ActionGsonAdapter.kt": {
+    "mtime": 1791483418.8449476,
+    "ast_hash": "171df1fc42921955b7a4c150229c2dcb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/diy/Action.kt": {
+    "mtime": 1791483418.8446648,
+    "ast_hash": "263a2e597fa8b940a368d263d103b1e5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/diy/Automation.kt": {
+    "mtime": 1788869944.66386,
+    "ast_hash": "1c47f493fe811833ef8c3f3132d8ad4c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/controller/HotspotController.kt": {
+    "mtime": 1791483418.8445218,
+    "ast_hash": "5054d04e014efdec2235bc58e4f8c742",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/controller/HilightController.kt": {
+    "mtime": 1791483418.8444424,
+    "ast_hash": "db1e6951e99791eac5e35ecdf992528a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/controller/CaffeinateController.kt": {
+    "mtime": 1790315660.1507218,
+    "ast_hash": "706cfb2a869102bedb9d20d15ff9fe4e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/watermark/WatermarkEngine.kt": {
+    "mtime": 1787403204.8189237,
+    "ast_hash": "8f93932c29d86f9061506655ba2d70a2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/watermark/MetadataProvider.kt": {
+    "mtime": 1787403204.8187976,
+    "ast_hash": "948161883688c67a76134df2147f417f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/watermark/WatermarkRepository.kt": {
+    "mtime": 1787403204.8190327,
+    "ast_hash": "486523245a473a22b8ec862fed951fe8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/NotificationLightingSweepPosition.kt": {
+    "mtime": 1787403204.8171325,
+    "ast_hash": "c9060f03bc363fb7b98eddde4fc1229b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/LocationAlarm.kt": {
+    "mtime": 1787403204.816531,
+    "ast_hash": "f2ea917dee413c1e28c8d5f18fa01fd6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/UpdateInfo.kt": {
+    "mtime": 1787403204.8177118,
+    "ast_hash": "a909460547ee7c45bdbca285f1475356",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/NotificationLightingSide.kt": {
+    "mtime": 1787403204.8169172,
+    "ast_hash": "a4416ba9f3793741181d578904c395f0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/DnsPreset.kt": {
+    "mtime": 1787403204.8162427,
+    "ast_hash": "6457a0b58c64b049a0f0a0c2151893aa",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/FreezeMode.kt": {
+    "mtime": 1787403204.8164282,
+    "ast_hash": "5714038e43457639fdc6e9f3913d76ac",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/DuoColorMode.kt": {
+    "mtime": 1789723994.7307024,
+    "ast_hash": "bdd81790d7d5b99a77dc18c1cbfefeec",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/DashConfig.kt": {
+    "mtime": 1789987407.6859171,
+    "ast_hash": "25d921186c1e3c04d3076665c18ae1ab",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/NotificationLightingRipplePosition.kt": {
+    "mtime": 1789987407.686464,
+    "ast_hash": "190d3c395726f768661996352f512776",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/PixelSearchTab.kt": {
+    "mtime": 1789842857.9959226,
+    "ast_hash": "f076a457c94cb0531f056b59859121a0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/WallpaperInfo.kt": {
+    "mtime": 1787403204.8178034,
+    "ast_hash": "af247d9684e2379d90b0719d46aa0680",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/AppRefreshRateConfig.kt": {
+    "mtime": 1791484178.7150347,
+    "ast_hash": "cb35bc6c30bb6db5fc5ba520d7f89436",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/AppIcon.kt": {
+    "mtime": 1788869944.663953,
+    "ast_hash": "11745c7d05492a2d6cc82c424ac11e62",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/NotificationLightingStyle.kt": {
+    "mtime": 1789987407.6868706,
+    "ast_hash": "413f963f863efa22f1b9154d4e0476dd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/NotificationLightingColorMode.kt": {
+    "mtime": 1787403204.8168232,
+    "ast_hash": "e7ff5a09352dc2fee6ea3f9a3216c3b0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/AppListBackup.kt": {
+    "mtime": 1789723994.7305117,
+    "ast_hash": "bdb7e509fb70ebe3a47b184a9ef226be",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/SnoozeChannel.kt": {
+    "mtime": 1787403204.8175318,
+    "ast_hash": "82da338e225b1a25e7f59a7625add42a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/AppStandbyInfo.kt": {
+    "mtime": 1787403204.8160017,
+    "ast_hash": "9c1a52a7d3e763c23942af86d9e56593",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/ScaleAnimationsProfile.kt": {
+    "mtime": 1787403204.8172364,
+    "ast_hash": "69e6bf242ec11090266c239ec7882148",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/RippleConfig.kt": {
+    "mtime": 1789987407.6870234,
+    "ast_hash": "b961413ff1519865220d7a5ac6a5eacb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/TrackedRepo.kt": {
+    "mtime": 1787403204.817627,
+    "ast_hash": "bc8172f60ddbee498d36942b426a89a3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/ShutUpAppConfig.kt": {
+    "mtime": 1791483685.82926,
+    "ast_hash": "03dab6286b13a1e3cdb29706edf014a8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/ActivityIconSource.kt": {
+    "mtime": 1791483418.8453674,
+    "ast_hash": "4ce5c65ebb80b10b305bb1c2b1360e74",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/NotificationActionItem.kt": {
+    "mtime": 1789842857.9957373,
+    "ast_hash": "3958503dd78d9b5f07a6d5ceec00db49",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/LockscreenShortcut.kt": {
+    "mtime": 1791483418.845807,
+    "ast_hash": "f403a0731099b2c58dfa17bb24bdfc5b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/PixelSearchResultItem.kt": {
+    "mtime": 1789842857.995838,
+    "ast_hash": "6555f44c1547c9c60c49d3fdf2a55752",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/MapsChannel.kt": {
+    "mtime": 1787403204.8166282,
+    "ast_hash": "4c934c1389091e7c6739162619ea3ba4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/SearchableItem.kt": {
+    "mtime": 1789723994.7312057,
+    "ast_hash": "2d211d3d3f8c803603265e278bfecbfd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/ActiveNotificationAlert.kt": {
+    "mtime": 1791483418.8453,
+    "ast_hash": "57842df6db188bfce4b0a92db7adafc2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/RemapSlot.kt": {
+    "mtime": 1791483418.845893,
+    "ast_hash": "9eb567d149be1e43f40a49617a6de692",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/AppPermission.kt": {
+    "mtime": 1791483418.8455908,
+    "ast_hash": "fb5ad8203ad4bc422350a4b0da354250",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/NotificationApp.kt": {
+    "mtime": 1787403204.816717,
+    "ast_hash": "4a534d9e18a2d6cc9b01cca250dfc430",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/Feature.kt": {
+    "mtime": 1791483624.867704,
+    "ast_hash": "305bb3eed47840f54f71aca0dfc025b3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/HilightEffect.kt": {
+    "mtime": 1791483418.845751,
+    "ast_hash": "c1ee50e002879e1cd3ab34f55fbcc2db",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/AppTag.kt": {
+    "mtime": 1787403204.81613,
+    "ast_hash": "771f5b1491f1cda62ca453ab4b1c5ac4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/ProgressNotificationData.kt": {
+    "mtime": 1790315660.152143,
+    "ast_hash": "df6901899c381654f71d5af50b29ec25",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/AppSelection.kt": {
+    "mtime": 1787403204.8158913,
+    "ast_hash": "8cbceb32c5e89172535b9767fd5307b1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/AppSetting.kt": {
+    "mtime": 1791483485.0569015,
+    "ast_hash": "514027eacda65a8176baf6ffd9a1bbdd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/github/GitHubModels.kt": {
+    "mtime": 1787403204.817894,
+    "ast_hash": "35f2e20b5d00a1ebbd42e3928348453e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/github/GitHubContributor.kt": {
+    "mtime": 1789842857.9963129,
+    "ast_hash": "e47f41da1e1eee0fedf6a80db27c3abf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/github/ProjectDetails.kt": {
+    "mtime": 1789842857.9964857,
+    "ast_hash": "40d00bb8904db0ce54bddd1e96763d69",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/github/GitHubUser.kt": {
+    "mtime": 1787403204.8180969,
+    "ast_hash": "d06d0b847f30cbef2d5f0c92d4e1eee5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/model/github/GitHubPullRequest.kt": {
+    "mtime": 1787403204.817993,
+    "ast_hash": "28e876b4ddf2580965837b763618a0ec",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/registry/FeatureRegistry.kt": {
+    "mtime": 1791484353.0539086,
+    "ast_hash": "3915087f912145b3e7dbd30210496b67",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/registry/SearchRegistry.kt": {
+    "mtime": 1789723994.7322366,
+    "ast_hash": "c85f1637d752e8c9d32ca0e088c4fb60",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/registry/PermissionRegistry.kt": {
+    "mtime": 1791483485.0575182,
+    "ast_hash": "9f6ed2e438b8b9e0fc82d846a6428694",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/registry/QSTileRegistry.kt": {
+    "mtime": 1791486377.1023984,
+    "ast_hash": "b5cd72af201e51c6d6eaf67d6bca583e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/genai/GenAIAutomationService.kt": {
+    "mtime": 1789723994.7304468,
+    "ast_hash": "fb6f8daa0a36060c53c2238874e1cbb5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/domain/genai/AutomationSuggestion.kt": {
+    "mtime": 1787403204.8156657,
+    "ast_hash": "96a86d5a20b0a06981ff8b72cbe9cc19",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/ShutUpForegroundService.kt": {
+    "mtime": 1791483485.057902,
+    "ast_hash": "103d17b00a2f5c1118dd73a494e2a1b3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/AppDetectionService.kt": {
+    "mtime": 1791484423.6473248,
+    "ast_hash": "4fb0c967c4089e619e6fdc7b7e15c5ff",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/AppUpdateWorker.kt": {
+    "mtime": 1787403204.8207967,
+    "ast_hash": "dda6d3f8fc3cc211cb633bfb495eb13f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/NotificationListener.kt": {
+    "mtime": 1791484178.715504,
+    "ast_hash": "86815f2f6400e69d2963f413f9ddeef6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/InputEventListenerService.kt": {
+    "mtime": 1791483418.8565133,
+    "ast_hash": "d959d03732cd955abd585b76b1781904",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/CallReceiver.kt": {
+    "mtime": 1790315660.1612008,
+    "ast_hash": "5c7492f001dbc3dd32a1728007f11689",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/ScreenOffWidgetProvider.kt": {
+    "mtime": 1787403204.8226135,
+    "ast_hash": "0d27cf13af1a250f81923aa3b2f0bc0d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/EssentialsConditionProvider.kt": {
+    "mtime": 1787403204.8216114,
+    "ast_hash": "03d69293c4e24fcf868ce3b7a9a64729",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/DeviceInfoSyncManager.kt": {
+    "mtime": 1791483418.8563232,
+    "ast_hash": "4cd9f7282bba8e2dbf14ead00a72d17f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/CalendarSyncManager.kt": {
+    "mtime": 1788869944.6670706,
+    "ast_hash": "5963684af07bf09e4d1fc8fd41a02593",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/WatchCallSyncManager.kt": {
+    "mtime": 1790315660.1622338,
+    "ast_hash": "43bb9d8b251b150c0712f9001e49ad33",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/DailyWallpaperWorker.kt": {
+    "mtime": 1787403204.8214211,
+    "ast_hash": "f6a9ffc8f03ca48eeca57c50fd1581fa",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/EssentialsVoiceInteractionSessionService.kt": {
+    "mtime": 1789842857.9978461,
+    "ast_hash": "b162c8c8f190d831b407f4a80fe84b54",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/LiveWallpaperService.kt": {
+    "mtime": 1787403204.8220332,
+    "ast_hash": "ab78e36d7d8ca1fd0f22bcf94d336d08",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/CalendarSyncWorker.kt": {
+    "mtime": 1787403204.821198,
+    "ast_hash": "982025083784245f4216ff69d327e96b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/LiveUpdateOpSuppressor.kt": {
+    "mtime": 1791483418.856577,
+    "ast_hash": "6bc198663e8ceeef2d543e5013ce6102",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/WatchNotificationSyncManager.kt": {
+    "mtime": 1787403204.8228598,
+    "ast_hash": "36ba5614d5b00d1a10047a8068b9a8b4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/EssentialsVoiceInteractionService.kt": {
+    "mtime": 1789842857.9977705,
+    "ast_hash": "7666a565d270c5dba911c64b25247bca",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/EssentialsRecognitionService.kt": {
+    "mtime": 1789842857.9976978,
+    "ast_hash": "1f1a5145b24e9196b0c77ee7adfe654c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/LocationReachedService.kt": {
+    "mtime": 1789842857.9979808,
+    "ast_hash": "9ca236c61826107e85c317a304ed2d60",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/CaffeinateWakeLockService.kt": {
+    "mtime": 1790315660.1593795,
+    "ast_hash": "bd324245007b29e820211bded401db1b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/LiveUpdateSnoozer.kt": {
+    "mtime": 1791483418.8566442,
+    "ast_hash": "7198b6d2b0d4715ba0edc601e29ef091",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/AccessibilityShortcutService.kt": {
+    "mtime": 1788869944.6663227,
+    "ast_hash": "37fe031e6b31936d974e6ca3e37aac5c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/EssentialsWearableListenerService.kt": {
+    "mtime": 1789723994.7328694,
+    "ast_hash": "65b1631446dc9d422b2a2a98e9b0392c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/NotificationLightingService.kt": {
+    "mtime": 1790315660.1616547,
+    "ast_hash": "5a590a722dfbc64f53f88b6b6dadffd9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/BatteryNotificationService.kt": {
+    "mtime": 1790315660.1591628,
+    "ast_hash": "d772f136893d5ade65279ac49b20158a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/AppBootReceiver.kt": {
+    "mtime": 1787403204.8262873,
+    "ast_hash": "778df44a1ad357eb770f161dcaac66ff",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/QsTileActionRouter.kt": {
+    "mtime": 1791486420.84645,
+    "ast_hash": "ae2a1f28d9faa11855279938d2aefdf5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/DownloadUpdateReceiver.kt": {
+    "mtime": 1787403204.826662,
+    "ast_hash": "fbb14e940131dcc7832ecc258293ddba",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/CallVibrationReceiver.kt": {
+    "mtime": 1787403204.8265343,
+    "ast_hash": "7c29978b434b5fa91846f7f745736be0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/AirSyncBridgeReceiver.kt": {
+    "mtime": 1787403204.826166,
+    "ast_hash": "594048633f7ce211a1e48d50a4e06a78",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/SecurityReceiver.kt": {
+    "mtime": 1791483418.8593688,
+    "ast_hash": "bc084063422f0b661825a0549ca5e4be",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/FlashlightActionReceiver.kt": {
+    "mtime": 1790315660.165274,
+    "ast_hash": "5a64086ed2d3a958c84ad4af2743ce2d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/ShizukuActionReceiver.kt": {
+    "mtime": 1791483418.8595433,
+    "ast_hash": "efd6f585d2923c9e7a77e3f737a58791",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/StatusBarAutomationReceiver.kt": {
+    "mtime": 1790450399.3295107,
+    "ast_hash": "86243c83103baea606483bd90f057ca4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/SecurityDeviceAdminReceiver.kt": {
+    "mtime": 1786290946.2660651,
+    "ast_hash": "641a7db49168732e3cfc657b42efb9a1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/receivers/BatteryAutomationReceiver.kt": {
+    "mtime": 1787403204.8264143,
+    "ast_hash": "08ded283c7cb883423a992ae5a7e2094",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/TapToWakeTileService.kt": {
+    "mtime": 1787403204.830876,
+    "ast_hash": "c77eaeb12ace9b44d7ab218e92a2baa1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/MapsPowerSavingTileService.kt": {
+    "mtime": 1787403204.8292267,
+    "ast_hash": "606c8dd144aa5aa1dfa93e54b21db8a9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/ScreenLockedSecurityTileService.kt": {
+    "mtime": 1787403204.830369,
+    "ast_hash": "16281d10aec96487632eae042d09bc4b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/BubblesTileService.kt": {
+    "mtime": 1787403204.8280976,
+    "ast_hash": "73257c0da84ff65ffeeef44667789390",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/AppLockTileService.kt": {
+    "mtime": 1787403204.827726,
+    "ast_hash": "3ecd5b8f1589d32162cd19fd84fdc2a8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/UiBlurTileService.kt": {
+    "mtime": 1787403204.8309655,
+    "ast_hash": "4010b0227237d88097f0025d8a778e0e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/ScaleAnimationsTileService.kt": {
+    "mtime": 1787403204.8302686,
+    "ast_hash": "1ef3905b5b4847a06072747ab099ad39",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/MonoAudioTileService.kt": {
+    "mtime": 1789723994.7369545,
+    "ast_hash": "22cbb7f85f422939c9ef9f3d44f7b16c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/EssentialsOnDisplayTileService.kt": {
+    "mtime": 1787403204.8287997,
+    "ast_hash": "68bb44580bf20aea49ed6a3f195d6768",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/FlashlightTileService.kt": {
+    "mtime": 1791483418.8599365,
+    "ast_hash": "436c2af7a4fa7f47f6c1971c85169017",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/PrivateDnsTileService.kt": {
+    "mtime": 1789723994.737169,
+    "ast_hash": "0216b341ffc90d22c99cd83887b3249b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/IslandTileService.kt": {
+    "mtime": 1791483418.859987,
+    "ast_hash": "73a5873d1388b8baf5295c16968674cd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/UsbDebuggingTileService.kt": {
+    "mtime": 1791483418.8605087,
+    "ast_hash": "95e5a22604a4537ddbbdf6342a3f63ba",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/SmartPixelsTileService.kt": {
+    "mtime": 1787403204.8306162,
+    "ast_hash": "79478511ea2b859fc62a8b9008f59caa",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/ChargeQuickTileService.kt": {
+    "mtime": 1787403204.8283234,
+    "ast_hash": "6aa6a91f39e4c1a40c0ab0d7f416164f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/PrivateNotificationsTileService.kt": {
+    "mtime": 1789723994.7372627,
+    "ast_hash": "6e7a7f27b8055c4ce94a86e68f42891c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/NfcTileService.kt": {
+    "mtime": 1789723994.7370608,
+    "ast_hash": "200c841d1a292ec6fe1f54c8072cb5b8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/SoundModeTileService.kt": {
+    "mtime": 1790832228.7632504,
+    "ast_hash": "3153659310f46e9f6020848b4e94c636",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/DataSimTileService.kt": {
+    "mtime": 1790315660.1656692,
+    "ast_hash": "365df330fee6feb6c08fc7611f2cd25a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/StayAwakeTileService.kt": {
+    "mtime": 1787403204.830791,
+    "ast_hash": "8cc914520f4d2e6351634dcf4df4405a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/AppFreezingTileService.kt": {
+    "mtime": 1789723994.7363102,
+    "ast_hash": "aac91cb0d9d28fd1bea0ede33c13f587",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/BaseTileService.kt": {
+    "mtime": 1790832228.7625866,
+    "ast_hash": "e64a811ebf7f0ce2fc65e882dc2136c2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/NotificationLightingTileService.kt": {
+    "mtime": 1787403204.8295174,
+    "ast_hash": "0f04b95c0e1c11d3b4446efc134be196",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/RefreshRateTileService.kt": {
+    "mtime": 1787403204.8300624,
+    "ast_hash": "2db3d2f9f5da4bcfba9083e94d8d1887",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/CaffeinateTileService.kt": {
+    "mtime": 1787403204.8282063,
+    "ast_hash": "e7260555ec6505f1cf1275ebcef20df5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/ColorPickerTileService.kt": {
+    "mtime": 1787403204.8284438,
+    "ast_hash": "e16ccc968a547f183500c780a8b5b42c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/DataSimController.kt": {
+    "mtime": 1790315660.1656067,
+    "ast_hash": "a4d55a4b5230450ee12090503a52f2d2",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/AdaptiveBrightnessTileService.kt": {
+    "mtime": 1787403204.827364,
+    "ast_hash": "7cdf6a078d59105136161a3e1c51021a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/InternetTileService.kt": {
+    "mtime": 1791486319.0463958,
+    "ast_hash": "026d6ac3804d638c52118fa8a32483be",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/LockdownTileService.kt": {
+    "mtime": 1787403204.8291004,
+    "ast_hash": "0378eba447618c210e1757a91e441844",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/BatteryNotificationTileService.kt": {
+    "mtime": 1787403204.8279767,
+    "ast_hash": "9bb0ab7c041b3b70207f353d46749fb1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/DuoTileService.kt": {
+    "mtime": 1791483418.8596876,
+    "ast_hash": "cf0c21d352abe6aa8d62376039290d73",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/QsTileRegistry.kt": {
+    "mtime": 1791486394.8547952,
+    "ast_hash": "7d32f924458e4d6bae23ae2003c633f1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/UrlShortenerTileService.kt": {
+    "mtime": 1789723994.737745,
+    "ast_hash": "b8b72879de49ba2991938628a20d2048",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/DynamicNightLightTileService.kt": {
+    "mtime": 1787403204.8287046,
+    "ast_hash": "dc66e7d3035e69b409f846f542ca1908",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/AlwaysOnDisplayTileService.kt": {
+    "mtime": 1787403204.8274932,
+    "ast_hash": "debbf622af05b02c553947fa71d9cd96",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/PocketModeTileService.kt": {
+    "mtime": 1787403204.8296387,
+    "ast_hash": "8407cf4035a6cc89ccff9c59b53961d5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/FlashlightPulseTileService.kt": {
+    "mtime": 1791483418.8598466,
+    "ast_hash": "d8b2f692d5dded5e0fe5d6c3852b115f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/RestartSystemUiTileService.kt": {
+    "mtime": 1789723994.73735,
+    "ast_hash": "8528dfed6fd7154b0824600c373718e3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/HapticsTileService.kt": {
+    "mtime": 1790832228.7627184,
+    "ast_hash": "c916336bdb87f3791f47b6ea149f04b3",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/ScreenOffAccessibilityService.kt": {
+    "mtime": 1791484485.2303748,
+    "ast_hash": "e8aaa05101597acbd8e4fb248fd45880",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/DeveloperOptionsTileService.kt": {
+    "mtime": 1791483418.8596342,
+    "ast_hash": "4652e3773c96624f48bac7920c72718b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/tiles/HeadsUpNotificationsTileService.kt": {
+    "mtime": 1790315660.1658037,
+    "ast_hash": "4ff61bd23829f366d9db6653b4024a50",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/AutomationManager.kt": {
+    "mtime": 1790832228.758618,
+    "ast_hash": "67be52a5a88ee5bb6705417eb9c0c593",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/AutomationService.kt": {
+    "mtime": 1790315660.1625206,
+    "ast_hash": "b228707b0b2dd784c7a2570c3defe506",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/receivers/TimeAutomationReceiver.kt": {
+    "mtime": 1787403204.8240523,
+    "ast_hash": "97afa808a212b69da8b615e7ce19d181",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/executors/ActionExecutor.kt": {
+    "mtime": 1787403204.8231678,
+    "ast_hash": "2435f81df3a8d432673410234ba901bb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/executors/CombinedActionExecutor.kt": {
+    "mtime": 1791483418.8573077,
+    "ast_hash": "bce5d2a56235bf6a872ce661973085db",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/modules/BluetoothModule.kt": {
+    "mtime": 1787403204.8235195,
+    "ast_hash": "684af9e2eb5745eb9c76e0aa1ffdac61",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/modules/PowerModule.kt": {
+    "mtime": 1790832228.759813,
+    "ast_hash": "2711f3249cc5fc11dae9a804cd6bc547",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/modules/AutomationModule.kt": {
+    "mtime": 1787403204.8234267,
+    "ast_hash": "e5952ad8fd81f78455fe09a08f639ea9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/modules/CalendarModule.kt": {
+    "mtime": 1790315660.1630602,
+    "ast_hash": "09d848b6a526bcf83b2744cf8b60eb87",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/modules/DisplayModule.kt": {
+    "mtime": 1787403204.8235962,
+    "ast_hash": "e33d77e643f4a37d983c0497f782176e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/modules/WifiModule.kt": {
+    "mtime": 1787403204.823951,
+    "ast_hash": "9c2ba34b4e3ef703598d5c1577a80a74",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/automation/modules/TimeModule.kt": {
+    "mtime": 1787403204.823814,
+    "ast_hash": "fcec4ff35993423a9a4ddf0e5c41d90f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/dreams/AmbientDreamService.kt": {
+    "mtime": 1790315660.163378,
+    "ast_hash": "b095b6bcd8c3c70b1ae51e612cd66a62",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/FaceUnlockBrightnessHandler.kt": {
+    "mtime": 1791483418.8584213,
+    "ast_hash": "10d4f02a4b912f5db1d13d4d7dff3ce8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/DuoOverlayHandler.kt": {
+    "mtime": 1791483418.858329,
+    "ast_hash": "727f6eec26f5880010d75c87c0a1ac11",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/WifiAutoOffHandler.kt": {
+    "mtime": 1791484423.64922,
+    "ast_hash": "9334f701bf5ad9ac1dbb4a349908ea63",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/ButtonRemapHandler.kt": {
+    "mtime": 1791483418.8580415,
+    "ast_hash": "26e7824985b5dbf77cb2a38ef1f5a899",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/PocketModeHandler.kt": {
+    "mtime": 1791484423.6486633,
+    "ast_hash": "753af39df17fba9248d1e8658ceb398e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/OmniGestureOverlayHandler.kt": {
+    "mtime": 1790832228.7616794,
+    "ast_hash": "d3b3345e25004cc3de1ba5277eb84e33",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/AppFlowHandler.kt": {
+    "mtime": 1791484423.648037,
+    "ast_hash": "826a379b528b03b042c03e6212a53e6b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/SmartPixelsHandler.kt": {
+    "mtime": 1787403204.825671,
+    "ast_hash": "ff7c6db881b55d3d83f2d3b847d8caaf",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/AodForceTurnOffHandler.kt": {
+    "mtime": 1787403204.8247876,
+    "ast_hash": "6471832453516aa78b748757e6abb2aa",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/DuoTouchHandler.kt": {
+    "mtime": 1790832228.7609015,
+    "ast_hash": "f87c72b60e69e3b7958af2d26212948e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/AodWallpaperOverlayHandler.kt": {
+    "mtime": 1791483418.857626,
+    "ast_hash": "9da3621fd9948c3b5204f6bf7fc54eb1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/NotificationLightingHandler.kt": {
+    "mtime": 1789987407.6956832,
+    "ast_hash": "32c1896aaff5fbb485c6759bb5887f20",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/FlashlightHandler.kt": {
+    "mtime": 1791484293.867894,
+    "ast_hash": "704e909fcff0bde5dc5e09d7bc7969d1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/LockscreenShortcutsHandler.kt": {
+    "mtime": 1791483418.8587239,
+    "ast_hash": "28c0f984dfef42efc7bb7de6f51a568f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/StatusGlanceTouchHandler.kt": {
+    "mtime": 1789723994.7359338,
+    "ast_hash": "0069e8c43d488393e2175c49c138ca35",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/SoundModeHandler.kt": {
+    "mtime": 1788869944.6688573,
+    "ast_hash": "f460fda69f885f864c01c72a522fe903",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/StatusGlanceHandler.kt": {
+    "mtime": 1791483418.8591893,
+    "ast_hash": "280225d1491d82c900d9aa4879e7f901",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/WifiAutoOffManager.kt": {
+    "mtime": 1791484353.0541434,
+    "ast_hash": "307fb189423f86c6bf63aec092c7b5f5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/AmbientGlanceHandler.kt": {
+    "mtime": 1790315660.1636317,
+    "ast_hash": "9ed5057faf6fc16d116e5a84a4a49c77",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/handlers/StatusBarIconHandler.kt": {
+    "mtime": 1790450399.3291552,
+    "ast_hash": "a24263a05734db5a733ce2dcd0586954",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/MusicClickActionCallback.kt": {
+    "mtime": 1787403204.8318458,
+    "ast_hash": "1f88bee32c4efc2ecafeb448c4494ff1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/WidgetScraperService.kt": {
+    "mtime": 1789842858.0017152,
+    "ast_hash": "f5351939958856f725c75e3863a192b6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/MusicBroadcastReceiver.kt": {
+    "mtime": 1787403204.8316655,
+    "ast_hash": "cabb9e540d09aa169ba8197657052119",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/PixelSearchbarWidget.kt": {
+    "mtime": 1789842858.0015678,
+    "ast_hash": "bd617ed82f20733f255186d839c2872c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/QsTilesWidgetReceiver.kt": {
+    "mtime": 1787403204.8323781,
+    "ast_hash": "add7d50e09c6b62e95dba112096cc13c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/FavoritesWidget.kt": {
+    "mtime": 1787403204.8314404,
+    "ast_hash": "6e31dea89cc4c217c05fc5086e943786",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/QsTilesWidget.kt": {
+    "mtime": 1790315660.1666036,
+    "ast_hash": "6132d71397174ece226f56dba6ecc12d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/BatteriesWidget.kt": {
+    "mtime": 1790315660.1664062,
+    "ast_hash": "711f2d7a93b595e95681bbb063051726",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/QsTileClickActionCallback.kt": {
+    "mtime": 1787403204.832199,
+    "ast_hash": "cd4477d4e553235dbfb09f056d710dfb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/BatteriesWidgetReceiver.kt": {
+    "mtime": 1787403204.8312454,
+    "ast_hash": "056d8afdef35a1e6e43fbb930b3ed6a5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/FavoritesWidgetReceiver.kt": {
+    "mtime": 1787403204.8315609,
+    "ast_hash": "fc5728b11f35765280bf7bdb2ca6b83c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/services/widgets/PixelSearchbarWidgetReceiver.kt": {
+    "mtime": 1787403204.8321028,
+    "ast_hash": "9b24d0f0836aceaa7d3371ca0ed78123",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/appfunctions/BaseEssentialsAppFunctionService.kt": {
+    "mtime": 1787403204.812625,
+    "ast_hash": "78bdefd0dc29b0217349cb09e6031b91",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/appfunctions/AppFunctionAvailabilityManager.kt": {
+    "mtime": 1786290946.2437007,
+    "ast_hash": "948921ec7cd56ebce7a3a8dcc230f896",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/appfunctions/dto/DeviceStatusResponse.kt": {
+    "mtime": 1787403204.813048,
+    "ast_hash": "e877ee6950a2328a9ffe3d422b38b46e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/appfunctions/dto/AutomationSummary.kt": {
+    "mtime": 1787403204.8128512,
+    "ast_hash": "35316d9793be1fa0cbaf562db16c2aec",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/appfunctions/dto/AppFunctionResult.kt": {
+    "mtime": 1787403204.8127546,
+    "ast_hash": "a3afd32fe797e27460bfa57484f3cceb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/appfunctions/dto/FreezeTagSummary.kt": {
+    "mtime": 1787403204.8131392,
+    "ast_hash": "307e731efd0126ed387cc967e88b3ea7",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/java/com/sameerasw/essentials/appfunctions/dto/CreateAutomationParams.kt": {
+    "mtime": 1787403204.8129523,
+    "ast_hash": "ffcfc101631ec28a4fe3941c7603fcc6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/assets/emojis.json": {
+    "mtime": 1785681443.4673767,
+    "ast_hash": "3fa12da77558c6790d831f3fcc3013f8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/assets/kaomoji.json": {
+    "mtime": 1785681443.467513,
+    "ast_hash": "fe2b6feac390fe7757915139e213fe29",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/scripts/validate_strings.py": {
+    "mtime": 1789842858.0439668,
+    "ast_hash": "5049ab3a8e3bee0c4a464f382f3005fc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/scripts/resolve_strings_conflict.py": {
+    "mtime": 1790832228.778113,
+    "ast_hash": "bdd66c3cda6a03fd8bb3380cf38239ae",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/scripts/fix_translations.py": {
+    "mtime": 1789842858.0438592,
+    "ast_hash": "4e4b7ec252ff0fe44e6b507e84dcb6da",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/scripts/merge_translation_prs.sh": {
+    "mtime": 1790832228.7780356,
+    "ast_hash": "be7df75441b07e62f29feec53b9c5e9a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/scripts/parse_comment_json.py": {
+    "mtime": 1785681443.46592,
+    "ast_hash": "83473e218da558c4c2f296a98afb359a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/scripts/clean_release_notes.py": {
+    "mtime": 1786190497.9486072,
+    "ast_hash": "330f3fd4a6ded834b27d0f46757ba983",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/stub/build.gradle.kts": {
+    "mtime": 1787403204.863877,
+    "ast_hash": "3ed50ebb0f58f93e324c0e9494e79d24",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/stub/src/main/java/android/app/IUiAutomationConnection.java": {
+    "mtime": 1787403204.8642743,
+    "ast_hash": "6bd8a163933059b007aa21ed730083b8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/stub/src/main/java/android/app/UiAutomationConnection.java": {
+    "mtime": 1787403204.8643324,
+    "ast_hash": "9a5fd4e76256bf30d25e0113fa679a9b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/stub/src/main/java/android/app/IActivityManager.java": {
+    "mtime": 1787403204.8642206,
+    "ast_hash": "769376198cf29deabdd22cb103b06ee8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/stub/src/main/java/android/os/ServiceManager.java": {
+    "mtime": 1787403204.8644233,
+    "ast_hash": "78d19b0e70a5e783d5cc20e49d1216c1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/CODE_OF_CONDUCT.md": {
+    "mtime": 1785681443.4662507,
+    "ast_hash": "e428ff36a5439df8456fc6524e51e8d6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/crowdin.yml": {
+    "mtime": 1785681443.548861,
+    "ast_hash": "f499bdb78c052d5daa9d0dbbaafa3dfb",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/README.md": {
+    "mtime": 1791483418.8432593,
+    "ast_hash": "457993153f6d2e1376cf6a1864a2ad22",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/CONTRIBUTING.md": {
+    "mtime": 1789723994.728055,
+    "ast_hash": "97aa59c5dc33b6f954eb0c4da34434a0",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/SECURITY.md": {
+    "mtime": 1785681443.4664552,
+    "ast_hash": "0f23937f8205d789672683ca3f1b9596",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/ISLAND.md": {
+    "mtime": 1790315660.1922119,
+    "ast_hash": "8354bba70684baacbcdc29e6dd06c2d6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/ARCHITECTURE.md": {
+    "mtime": 1786290946.3023815,
+    "ast_hash": "843d33367223f5ce5b35906eeb560ff5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/STRUCTURE.md": {
+    "mtime": 1786290946.3027444,
+    "ast_hash": "dd87323e735c97bfe03810cfc2733bdd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/statusbar-detection-test.md": {
+    "mtime": 1789723994.7625115,
+    "ast_hash": "a5347cc5e4dbd0d04ed7c633afddc057",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/foldable-camera-profiles.md": {
+    "mtime": 1791483418.8799665,
+    "ast_hash": "2415b6402b2321376adbcda488d663c6",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/ADD_QS_TILE.md": {
+    "mtime": 1789723994.762131,
+    "ast_hash": "6e09fc6fd03b23f9a699ee21799e3cfd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/SERVICES_AND_PERMISSIONS.md": {
+    "mtime": 1790315660.1923242,
+    "ast_hash": "8de5742178da2cd211ac63929f7dd63d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/android_settings_reference.md": {
+    "mtime": 1787237762.9953637,
+    "ast_hash": "dc604339d7a097aceff8004807125c85",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/FEATURES_MODULES.md": {
+    "mtime": 1786290946.302633,
+    "ast_hash": "a5ca868af9025d0d24ef95bbf258d453",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/docs/Improvements.md": {
+    "mtime": 1791483485.0610232,
+    "ast_hash": "9dac6058f6bce9850344f7c11f34aab9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/full_description.txt": {
+    "mtime": 1785681443.5490744,
+    "ast_hash": "c3e51cb5223324d61f2f5c01d7602c3b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/title.txt": {
+    "mtime": 1785681443.5512266,
+    "ast_hash": "b35ddf6178e13dc6e2f84006fc573ad4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/short_description.txt": {
+    "mtime": 1785681443.5511923,
+    "ast_hash": "d6bb5d9a6a9810fd54003c1be59c3087",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/changelogs/52.txt": {
+    "mtime": 1785681443.5490217,
+    "ast_hash": "fb406ed3090a339f9a955f2ebd7484da",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/FUNDING.yml": {
+    "mtime": 1785681443.465724,
+    "ast_hash": "d11a53ade3281e45bb47a6ef22963fcc",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/pull_request_template.md": {
+    "mtime": 1789723994.7268877,
+    "ast_hash": "78649cc1b69c7fd9d1a18951894bc645",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/workflows/apply-translations.yml": {
+    "mtime": 1785681443.4660482,
+    "ast_hash": "d574774791786c79edce94df10f58d10",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/workflows/notify.yml": {
+    "mtime": 1787403204.8109891,
+    "ast_hash": "e60ad3e225c0941373bb3c0a88f40b2b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/workflows/validate-translations.yml": {
+    "mtime": 1789723994.7270536,
+    "ast_hash": "ea0f4606085dabd3e58165f2b6b4e04c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/workflows/ci.yml": {
+    "mtime": 1789723994.7269623,
+    "ast_hash": "9ae9f9485fabc37e78e1fdd116df6221",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/ISSUE_TEMPLATE/feature_request.yml": {
+    "mtime": 1785681443.4658463,
+    "ast_hash": "6d0ceaf37e043f22aee58f32b66c72fe",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/.github/ISSUE_TEMPLATE/bug_report.yml": {
+    "mtime": 1785681443.465797,
+    "ast_hash": "037b09ab750f48d140ac83d1940d082a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/ic_launcher-playstore.png": {
+    "mtime": 1788869944.662582,
+    "ast_hash": "358562fd6223f3e9f8c889088c8197d4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/avatar-t.png": {
+    "mtime": 1785681443.4984143,
+    "ast_hash": "646649c794486b7bcb06903182aa136c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-mdpi/ic_launcher.webp": {
+    "mtime": 1788869944.68953,
+    "ast_hash": "4b82055bcae9eb1cf541b53dd9fe5aac",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp": {
+    "mtime": 1788869944.689655,
+    "ast_hash": "6a0d763d52741317cd8be58e6414d404",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-hdpi/ic_launcher.webp": {
+    "mtime": 1788869944.6892302,
+    "ast_hash": "1d5e010e8d8a4aafb198bff179b227db",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp": {
+    "mtime": 1788869944.6894238,
+    "ast_hash": "cb1053598b2dea5834369ee717932988",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/android17.webp": {
+    "mtime": 1785681443.4999459,
+    "ast_hash": "52d06e455b2892dd2ac029c6642345bd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_bignum.webp": {
+    "mtime": 1785681443.501022,
+    "ast_hash": "2208c3de6edf2d9e0914512396609424",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/android16.webp": {
+    "mtime": 1785681443.4997768,
+    "ast_hash": "6057b4bb2afa1f6b851c608f1c54ffa1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_metro.webp": {
+    "mtime": 1785681443.5015156,
+    "ast_hash": "174acfbe077b13acadc066535a2a6ed5",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/accessibility_1.webp": {
+    "mtime": 1785681443.4990032,
+    "ast_hash": "0854f1128df27e888e8cf1a4cf8e95c4",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/feature_help.gif": {
+    "mtime": 1785681443.5030234,
+    "ast_hash": "6cbc24dcb3e5d10faa048c0f76e50d4c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/madebysameerasw_cover.webp": {
+    "mtime": 1785681443.5043676,
+    "ast_hash": "2769b313e3f06d71eab60dde406695f1",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_growth.webp": {
+    "mtime": 1785681443.5012012,
+    "ast_hash": "9a224fafdb04c05be72edfbe56155169",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/avatar.webp": {
+    "mtime": 1785681443.5001903,
+    "ast_hash": "4a297d0f768c2a935c36933209c8db8d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_handwritten.webp": {
+    "mtime": 1785681443.5012538,
+    "ast_hash": "4f3ecf2ab659c8d159f254cdd8d86f85",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/android13.webp": {
+    "mtime": 1785681443.4994037,
+    "ast_hash": "29e7fd1a065baf8773f97433bb4fd4b8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_calligraphy.webp": {
+    "mtime": 1785681443.5010867,
+    "ast_hash": "5193a6889f6c1ca550497189b2c6ab3b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_flex.webp": {
+    "mtime": 1785681443.5011425,
+    "ast_hash": "1c35b32283e1b14c9b9cf5d650b9e7e9",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/tile_help.gif": {
+    "mtime": 1785681443.5199046,
+    "ast_hash": "8400f092c17ffad2391bda60260594db",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_overlap.webp": {
+    "mtime": 1785681443.5015826,
+    "ast_hash": "01409aeff548651239e3202119d7fe4a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/flashbang.gif": {
+    "mtime": 1785681443.5033224,
+    "ast_hash": "84ad6d1ce682beb3902cd9dd8710698a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/android12.webp": {
+    "mtime": 1785681443.499322,
+    "ast_hash": "30928d43155be4a26e71515b21f0ed5b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_weather.webp": {
+    "mtime": 1785681443.5016408,
+    "ast_hash": "df6afe035219fc9e1a5fad9dacc3eedd",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/accessibility_2.webp": {
+    "mtime": 1785681443.4991026,
+    "ast_hash": "f4a5655448eccf1a9c745757daf5fa70",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/android15.webp": {
+    "mtime": 1785681443.4996831,
+    "ast_hash": "32f21aebfd68b547aaf5927c16cfdd9a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/clock_inflate.webp": {
+    "mtime": 1785681443.5013337,
+    "ast_hash": "b9b458c124ca406eb41ef66918d3dd4b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/android14.webp": {
+    "mtime": 1785681443.4994774,
+    "ast_hash": "80254bbf81d0acaaaa3d669b48739e35",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable/accessibility_3.webp": {
+    "mtime": 1785681443.4992418,
+    "ast_hash": "62fa8d159412ad79da27cdbd2668963c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp": {
+    "mtime": 1788869944.6902544,
+    "ast_hash": "38cf469f24ad7c91a57c180eb3c0aa0c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp": {
+    "mtime": 1788869944.6904747,
+    "ast_hash": "a00d74710c212b22b6f5fe3859dd333c",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp": {
+    "mtime": 1788869944.6899695,
+    "ast_hash": "f199979967ffd677b6c8d50790a3ea23",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp": {
+    "mtime": 1788869944.6901486,
+    "ast_hash": "4a540920f1521e14e19c97b546d10664",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable-xhdpi/ic_stat_name.png": {
+    "mtime": 1785681443.4987407,
+    "ast_hash": "b88c92d6372efa5446acc1f34d4f6fe8",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable-xxhdpi/ic_stat_name.png": {
+    "mtime": 1785681443.4988136,
+    "ast_hash": "91f48de8ed04dd0e88d828ac31d890ef",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable-hdpi/ic_stat_name.png": {
+    "mtime": 1785681443.4985,
+    "ast_hash": "df3b41aa3741f8f3a8cdc6374e781c5b",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable-mdpi/ic_stat_name.png": {
+    "mtime": 1785681443.4985864,
+    "ast_hash": "4a1d14f6961e72f76a5f68828a1a788f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-xhdpi/ic_launcher.webp": {
+    "mtime": 1788869944.689753,
+    "ast_hash": "12ac1d4d9f2dd39712d22633d614bf8e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp": {
+    "mtime": 1788869944.689859,
+    "ast_hash": "aa437619a80b0fcf58939f86ee775e2e",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/app/src/main/res/drawable-xxxhdpi/ic_stat_name.png": {
+    "mtime": 1785681443.498893,
+    "ast_hash": "083d84d425ac72665757dca3d24f70be",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/images/icon.png": {
+    "mtime": 1785681443.5492225,
+    "ast_hash": "1ff53ef14d0ef3ec7c362944b25b48be",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpeg": {
+    "mtime": 1785681443.549665,
+    "ast_hash": "99d80ddeae49b9b1476a57106a67de9f",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpeg": {
+    "mtime": 1785681443.5508888,
+    "ast_hash": "325e976e766bb52560272feab8e1896d",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpeg": {
+    "mtime": 1785681443.551146,
+    "ast_hash": "458c4cbc5a079beb55f946badaa26d2a",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpeg": {
+    "mtime": 1785681443.549997,
+    "ast_hash": "4fc92adfc9e45cc265023e4d6b940742",
+    "semantic_hash": ""
+  },
+  "/Users/muditpurohit/Projects/ess/essentials/fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpeg": {
+    "mtime": 1785681443.550309,
+    "ast_hash": "a35f3be22d45aadf5b600e56f7a5fbf2",
+    "semantic_hash": ""
+  }
+}

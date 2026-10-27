@@ -22,6 +22,8 @@ import com.sameerasw.essentials.services.tiles.CaffeinateTileService
 import com.sameerasw.essentials.services.tiles.DataSimController
 import com.sameerasw.essentials.services.tiles.DataSimTileService
 import com.sameerasw.essentials.services.tiles.FlashlightTileService
+import com.sameerasw.essentials.services.tiles.InternetTileService
+import com.sameerasw.essentials.ui.activities.InternetDialogActivity
 import com.sameerasw.essentials.utils.HapticUtil
 import com.sameerasw.essentials.utils.PermissionUtils
 import com.sameerasw.essentials.utils.ShellUtils
@@ -86,6 +88,13 @@ class QsTileActionRouter : BroadcastReceiver() {
                         }
                     }
                     return
+                }
+
+                InternetTileService::class.java.name -> {
+                    val intent = Intent(context, InternetDialogActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
+                    context.startActivity(intent)
                 }
 
                 else -> {

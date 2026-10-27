@@ -96,6 +96,7 @@ object QsTileRegistry {
             ),
             QsTileEntry(R.drawable.rounded_mobile_vibrate_24, HapticsTileService::class.java),
             QsTileEntry(R.drawable.rounded_sim_card_24, DataSimTileService::class.java),
+            QsTileEntry(R.drawable.rounded_cell_wifi_24, InternetTileService::class.java),
             QsTileEntry(
                 R.drawable.rounded_front_hand_24,
                 ScaleAnimationsTileService::class.java,

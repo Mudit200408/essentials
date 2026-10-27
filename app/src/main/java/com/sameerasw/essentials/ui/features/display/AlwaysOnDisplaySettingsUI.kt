@@ -7,7 +7,7 @@
  * Description: UI component and settings composable for Display feature domain.
  */
 
-package com.sameerasw.essentials.ui.features.system
+package com.sameerasw.essentials.ui.features.display
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

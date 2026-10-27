@@ -29,6 +29,7 @@ import com.sameerasw.essentials.services.tiles.EssentialsOnDisplayTileService
 import com.sameerasw.essentials.services.tiles.FlashlightPulseTileService
 import com.sameerasw.essentials.services.tiles.FlashlightTileService
 import com.sameerasw.essentials.services.tiles.HapticsTileService
+import com.sameerasw.essentials.services.tiles.InternetTileService
 import com.sameerasw.essentials.services.tiles.IslandTileService
 import com.sameerasw.essentials.services.tiles.LockdownTileService
 import com.sameerasw.essentials.services.tiles.MapsPowerSavingTileService
@@ -263,6 +264,16 @@ object QSTileRegistry {
                     "READ_PHONE_STATE",
                 ),
                 R.string.about_desc_data_sim,
+                R.string.cat_connectivity,
+            ),
+            QSTileInfo(
+                R.string.tile_internet,
+                R.drawable.rounded_cell_wifi_24,
+                InternetTileService::class.java,
+                listOf(
+                    if (ShellUtils.isRootEnabled(context)) "ROOT" else "SHIZUKU",
+                ),
+                R.string.about_desc_internet_tile,
                 R.string.cat_connectivity,
             ),
             QSTileInfo(
