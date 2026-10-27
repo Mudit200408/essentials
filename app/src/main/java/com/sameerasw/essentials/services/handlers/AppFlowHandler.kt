@@ -166,9 +166,6 @@ class AppFlowHandler private constructor(
     }
 
     private val prefs by lazy { context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE) }
-    private val notificationListenerComponent by lazy {
-        ComponentName(context, NotificationListener::class.java)
-    }
 
     private var appLockSessionActive = false
     private var appLockLeftAt = 0L
