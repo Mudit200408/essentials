@@ -120,7 +120,7 @@ import com.sameerasw.essentials.ui.features.system.LocationReachedSettingsUI
 import com.sameerasw.essentials.ui.features.system.LockScreenClockSettingsUI
 import com.sameerasw.essentials.ui.features.system.MapsPowerSavingSettingsUI
 import com.sameerasw.essentials.ui.features.system.NavigationSettingsUI
-import com.sameerasw.essentials.ui.features.system.NetworksSettingsUI
+import com.sameerasw.essentials.ui.features.network.NetworksSettingsUI
 import com.sameerasw.essentials.ui.features.system.NotificationLightingSettingsUI
 import com.sameerasw.essentials.ui.features.system.NotificationSnoozingSettingsUI
 import com.sameerasw.essentials.ui.features.system.OtherCustomizationsSettingsUI
@@ -136,7 +136,7 @@ import com.sameerasw.essentials.ui.features.system.RefreshRateSettingsUI
 import com.sameerasw.essentials.ui.features.system.RemoteLockSettingsUI
 import com.sameerasw.essentials.ui.features.system.ScreenLockedSecuritySettingsUI
 import com.sameerasw.essentials.ui.features.system.ScreenOffWidgetSettingsUI
-import com.sameerasw.essentials.ui.features.system.ShutUpSettingsUI
+import com.sameerasw.essentials.ui.features.audio.ShutUpSettingsUI
 import com.sameerasw.essentials.ui.features.system.SnoozeNotificationsSettingsUI
 import com.sameerasw.essentials.ui.features.system.SoundModeTileSettingsUI
 import com.sameerasw.essentials.ui.features.system.StandbyAppsSettingsUI
