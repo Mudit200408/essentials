@@ -1645,9 +1645,9 @@ class AppFlowHandler private constructor(
             perAppCurrentPackage = null
 
             if (perAppRateSnapshot != null && pendingRestoreRunnable == null) {
-                Log.d("AppFlowHandler", "per-app refresh rate: scheduling delayed restoration (1000ms) for leaving $packageName")
+                Log.d("AppFlowHandler", "per-app refresh rate: scheduling restoration (150ms) for leaving $packageName")
                 refreshRateJob = scope.launch(Dispatchers.IO) {
-                    delay(1000L)
+                    delay(150L)
                     if (perAppCurrentPackage == null && perAppRateSnapshot != null) {
                         val snapshot = perAppRateSnapshot
                         perAppRateSnapshot = null

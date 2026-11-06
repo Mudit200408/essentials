@@ -122,9 +122,9 @@ object ShutUpManager {
         val resolver = context.contentResolver
         val resolverSuccess = try {
             val result = when (type.uppercase()) {
-                "GLOBAL" -> Settings.Global.putString(resolver, key, value)
-                "SECURE" -> Settings.Secure.putString(resolver, key, value)
-                "SYSTEM" -> Settings.System.putString(resolver, key, value)
+                "GLOBAL" -> if (value.isBlank()) Settings.Global.putString(resolver, key, null) else Settings.Global.putString(resolver, key, value)
+                "SECURE" -> if (value.isBlank()) Settings.Secure.putString(resolver, key, null) else Settings.Secure.putString(resolver, key, value)
+                "SYSTEM" -> if (value.isBlank()) Settings.System.putString(resolver, key, null) else Settings.System.putString(resolver, key, value)
                 else -> false
             }
             Log.d(TAG, "Wrote setting via ContentResolver: [$type] $key = $value (success=$result)")
@@ -148,12 +148,20 @@ object ShutUpManager {
         if (ShellUtils.isAvailable(context) && ShellUtils.hasPermission(context)) {
             try {
                 val shellType = type.lowercase()
-                ShellUtils.runCommand(context, "settings put $shellType $key $value")
+                if (value.isBlank()) {
+                    ShellUtils.runCommand(context, "settings delete $shellType $key")
+                } else {
+                    ShellUtils.runCommand(context, "settings put $shellType $key $value")
+                }
                 shellSuccess = true
                 if (key == "adb_wifi_enabled" && shellType != "global") {
-                    ShellUtils.runCommand(context, "settings put global $key $value")
+                    if (value.isBlank()) {
+                        ShellUtils.runCommand(context, "settings delete global $key")
+                    } else {
+                        ShellUtils.runCommand(context, "settings put global $key $value")
+                    }
                 }
-                Log.d(TAG, "Executed setting put via Shell: [$type] $key = $value (success=$shellSuccess)")
+                Log.d(TAG, "Executed setting via Shell: [$type] $key = $value (success=$shellSuccess)")
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to write setting via Shell: [$type] $key = $value", e)
             }
@@ -222,6 +230,15 @@ object ShutUpManager {
                 ) ?: ""
                 backupChanged = true
             }
+
+            val sysMinKey = "system:min_refresh_rate"
+            if (!currentBackup.containsKey(sysMinKey)) {
+                currentBackup[sysMinKey] = safeReadSetting(context, "SYSTEM", "min_refresh_rate") ?: ""
+                currentBackup["system:peak_refresh_rate"] = safeReadSetting(context, "SYSTEM", "peak_refresh_rate") ?: ""
+                currentBackup["global:min_refresh_rate"] = safeReadSetting(context, "GLOBAL", "min_refresh_rate") ?: ""
+                currentBackup["global:peak_refresh_rate"] = safeReadSetting(context, "GLOBAL", "peak_refresh_rate") ?: ""
+                backupChanged = true
+            }
         }
 
         if (backupChanged) {
@@ -255,6 +272,20 @@ object ShutUpManager {
                 )
             } catch (e: Exception) {
                 Log.w(TAG, "preApplyShutUpSettings: failed to disable accessibility services", e)
+            }
+
+            // Pin min refresh rate to peak to prevent Android's LTPO governor from dropping to 60Hz idle
+            val perAppConfig = repository.loadPerAppRefreshRateConfigs()
+                .find { it.packageName == config.packageName && it.isEnabled }
+            if (perAppConfig == null) {
+                val peakRate = RefreshRateUtils.getHighestSupportedRefreshRate(context)
+                val formatted = String.format(java.util.Locale.US, "%.0f", peakRate)
+                try {
+                    Settings.System.putString(resolver, "peak_refresh_rate", formatted)
+                    Settings.System.putString(resolver, "min_refresh_rate", formatted)
+                    Settings.Global.putString(resolver, "peak_refresh_rate", formatted)
+                    Settings.Global.putString(resolver, "min_refresh_rate", formatted)
+                } catch (_: Exception) {}
             }
         }
 
@@ -302,6 +333,13 @@ object ShutUpManager {
                             Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
                         ) ?: ""
                     }
+                    val sysMinKey = "system:min_refresh_rate"
+                    if (!originalSettings.containsKey(sysMinKey)) {
+                        originalSettings[sysMinKey] = safeReadSetting(context, "SYSTEM", "min_refresh_rate") ?: ""
+                        originalSettings["system:peak_refresh_rate"] = safeReadSetting(context, "SYSTEM", "peak_refresh_rate") ?: ""
+                        originalSettings["global:min_refresh_rate"] = safeReadSetting(context, "GLOBAL", "min_refresh_rate") ?: ""
+                        originalSettings["global:peak_refresh_rate"] = safeReadSetting(context, "GLOBAL", "peak_refresh_rate") ?: ""
+                    }
                 }
 
                 if (originalSettings != currentBackup) {
@@ -321,6 +359,13 @@ object ShutUpManager {
             if (disableAccessibility) {
                 isAccessibilityMuted = true
                 safeWriteSettingSync(context, "SECURE", Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, "")
+
+                val perAppConfig = repo.loadPerAppRefreshRateConfigs()
+                    .find { it.packageName == config.packageName && it.isEnabled }
+                if (perAppConfig == null) {
+                    val peakRate = RefreshRateUtils.getHighestSupportedRefreshRate(context)
+                    RefreshRateUtils.applyFixedRefreshRate(context, peakRate)
+                }
             }
             settingsCurrentlyApplied = true
         }

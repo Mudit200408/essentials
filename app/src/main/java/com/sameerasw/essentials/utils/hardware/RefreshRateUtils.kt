@@ -238,7 +238,7 @@ object RefreshRateUtils {
             trimmed.equals("inf", ignoreCase = true)
     }
 
-    private fun getHighestSupportedRefreshRate(context: Context): Float =
+    fun getHighestSupportedRefreshRate(context: Context): Float =
         try {
             val displayManager = context.getSystemService(DisplayManager::class.java)
             val display = displayManager?.getDisplay(Display.DEFAULT_DISPLAY)
