@@ -1508,6 +1508,33 @@ object FeatureRegistry {
                 ) = viewModel.setFlashlightPulseEnabled(enabled, context)
             },
             object : Feature(
+                id = "Live Media",
+                title = R.string.feat_live_media_title,
+                iconRes = R.drawable.rounded_play_arrow_24,
+                category = R.string.cat_system,
+                description = R.string.feat_live_media_desc,
+                aboutDescription = R.string.about_desc_live_media,
+                permissionKeys = listOf("NOTIFICATION_LISTENER", "POST_NOTIFICATIONS", "ACCESSIBILITY"),
+                showToggle = true,
+                hasMoreSettings = true,
+                parentFeatureId = "Notifications",
+            ) {
+                override fun isEnabled(viewModel: MainViewModel) = viewModel.isLiveMediaEnabled.value
+
+                override fun isToggleEnabled(
+                    viewModel: MainViewModel,
+                    context: Context,
+                ) = viewModel.isNotificationListenerEnabled.value &&
+                    viewModel.isPostNotificationsEnabled.value &&
+                    viewModel.isAccessibilityEnabled.value
+
+                override fun onToggle(
+                    viewModel: MainViewModel,
+                    context: Context,
+                    enabled: Boolean,
+                ) = viewModel.setLiveMediaEnabled(enabled, context)
+            },
+            object : Feature(
                 id = "Activity launcher",
                 contributors = listOf("jawzf"),
                 title = R.string.feat_activity_launcher_title,

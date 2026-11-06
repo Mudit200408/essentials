@@ -1442,6 +1442,16 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".services.livemedia.LiveMediaReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.sameerasw.essentials.livemedia.PLAY_PAUSE" />
+                <action android:name="com.sameerasw.essentials.livemedia.PREVIOUS" />
+                <action android:name="com.sameerasw.essentials.livemedia.NEXT" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".services.tiles.BatteryNotificationTileService"
             android:exported="true"

@@ -203,6 +203,21 @@ class SettingsRepository(
         const val PREFS_NAME = "essentials_prefs"
 
         // Keys
+        const val KEY_LIVE_MEDIA_ENABLED = "live_media_enabled"
+        const val KEY_LIVE_MEDIA_SHOW_ALBUM_ART = "live_media_show_album_art"
+        const val KEY_LIVE_MEDIA_SHOW_ARTIST_NAME = "live_media_show_artist_name"
+        const val KEY_LIVE_MEDIA_SHOW_ALBUM_NAME = "live_media_show_album_name"
+        const val KEY_LIVE_MEDIA_SHOW_ACTION_BUTTONS = "live_media_show_action_buttons"
+        const val KEY_LIVE_MEDIA_SHOW_PROGRESS = "live_media_show_progress"
+        const val KEY_LIVE_MEDIA_SHOW_PROVIDER_NAME = "live_media_show_provider_name"
+        const val KEY_LIVE_MEDIA_SHOW_TIMESTAMP = "live_media_show_timestamp"
+        const val KEY_LIVE_MEDIA_HIDE_ON_QS = "live_media_hide_on_qs"
+        const val KEY_LIVE_MEDIA_PILL_CONTENT = "live_media_pill_content"
+        const val KEY_LIVE_MEDIA_SCROLL_ENABLED = "live_media_scroll_enabled"
+        const val KEY_LIVE_MEDIA_HIDE_ON_PAUSE = "live_media_hide_on_pause"
+        const val KEY_LIVE_MEDIA_HIDE_ON_PAUSE_OPTION = "live_media_hide_on_pause_option"
+        const val KEY_LIVE_MEDIA_DISABLED_PACKAGES = "live_media_disabled_packages"
+
         const val KEY_DEBUGGING_TILE_TAP_ACTION = "debugging_tile_tap_action"
         const val KEY_GENAI_AUTOMATION_ENABLED = "genai_automation_enabled"
         const val KEY_SMART_PIXELS_ENABLED = "smart_pixels_enabled"
@@ -1106,6 +1121,18 @@ class SettingsRepository(
         default: Long = 0L,
     ): Long = prefs.getLong(key, default)
 
+    /**
+     * Retrieves a set of string preference values by key.
+     *
+     * @param key [String] Preference key name.
+     * @param default [Set<String>] Fallback set if key is absent.
+     * @return The stored string set or default.
+     */
+    fun getStringSet(
+        key: String,
+        default: Set<String> = emptySet(),
+    ): Set<String> = prefs.getStringSet(key, default) ?: default
+
     // General Setters
 
     /**
@@ -1142,6 +1169,17 @@ class SettingsRepository(
         key: String,
         value: String?,
     ) = prefs.edit().putString(key, value).apply()
+
+    /**
+     * Asynchronously stores a string set preference value.
+     *
+     * @param key [String] Preference key name.
+     * @param value [Set<String>] Set of string values to store.
+     */
+    fun putStringSet(
+        key: String,
+        value: Set<String>,
+    ) = prefs.edit().putStringSet(key, value).apply()
 
     /**
      * Asynchronously stores an integer preference value.

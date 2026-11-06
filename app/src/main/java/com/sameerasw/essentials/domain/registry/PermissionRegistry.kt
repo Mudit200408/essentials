@@ -62,6 +62,7 @@ fun initPermissionRegistry() {
     PermissionRegistry.register("ACCESSIBILITY", R.string.feat_status_glance_title)
     PermissionRegistry.register("READ_CALENDAR", R.string.feat_status_glance_title)
     PermissionRegistry.register("ACCESSIBILITY", R.string.feat_conscious_gate_title)
+    PermissionRegistry.register("ACCESSIBILITY", R.string.feat_live_media_title)
 
     // Write secure settings permission
     PermissionRegistry.register("WRITE_SECURE_SETTINGS", R.string.feat_statusbar_icons_title)
@@ -128,6 +129,7 @@ fun initPermissionRegistry() {
     PermissionRegistry.register("WRITE_SECURE_SETTINGS", R.string.feat_aod_wallpaper_extended_media)
     PermissionRegistry.register("NOTIFICATION_LISTENER", R.string.duo_title)
     PermissionRegistry.register("NOTIFICATION_LISTENER", R.string.feat_status_glance_title)
+    PermissionRegistry.register("NOTIFICATION_LISTENER", R.string.feat_live_media_title)
 
     // Bluetooth permissions
     PermissionRegistry.register("BLUETOOTH_CONNECT", R.string.feat_batteries_title)
@@ -144,6 +146,7 @@ fun initPermissionRegistry() {
     PermissionRegistry.register("LOCAL_NETWORK", R.string.feat_watch_wireless_debugging_title)
     PermissionRegistry.register("SENSITIVE_NOTIFICATIONS", R.string.island_otp_section)
     PermissionRegistry.register("POST_NOTIFICATIONS", R.string.feat_battery_notification_title)
+    PermissionRegistry.register("POST_NOTIFICATIONS", R.string.feat_live_media_title)
 
     // Read phone state permission
     PermissionRegistry.register("READ_PHONE_STATE", R.string.search_smart_data_title)

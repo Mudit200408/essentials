@@ -541,6 +541,7 @@ class MainViewModel : ViewModel() {
     val edgeLightingSweepSelectedShapes = mutableStateOf<Set<String>>(emptySet())
 
     val isPerAppRefreshRateEnabled = mutableStateOf(false)
+    val isLiveMediaEnabled = mutableStateOf(false)
     val perAppRefreshRateConfigs =
         mutableStateOf<List<AppRefreshRateConfig>>(emptyList())
     data class CalendarAccount(
@@ -1641,6 +1642,13 @@ class MainViewModel : ViewModel() {
                         appContext?.let { updateAppDetectionService(it) }
                     }
 
+                    SettingsRepository.KEY_LIVE_MEDIA_ENABLED -> {
+                        isLiveMediaEnabled.value = settingsRepository.getBoolean(key)
+                        appContext?.let {
+                            com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(it).onEnabledChanged(isLiveMediaEnabled.value)
+                        }
+                    }
+
                     SettingsRepository.KEY_PER_APP_REFRESH_RATE_CONFIGS -> {
                         loadPerAppRefreshRateConfigs()
                     }
@@ -1839,6 +1847,12 @@ class MainViewModel : ViewModel() {
         isPerAppRefreshRateEnabled.value = enabled
         settingsRepository.putBoolean(SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED, enabled)
         updateAppDetectionService(context)
+    }
+
+    fun setLiveMediaEnabled(enabled: Boolean, context: Context) {
+        isLiveMediaEnabled.value = enabled
+        settingsRepository.putBoolean(SettingsRepository.KEY_LIVE_MEDIA_ENABLED, enabled)
+        com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(context).onEnabledChanged(enabled)
     }
 
 
@@ -2109,6 +2123,8 @@ class MainViewModel : ViewModel() {
         loadShutUpConfigs()
         isPerAppRefreshRateEnabled.value =
             settingsRepository.getBoolean(SettingsRepository.KEY_PER_APP_REFRESH_RATE_ENABLED, false)
+        isLiveMediaEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_LIVE_MEDIA_ENABLED, false)
         loadPerAppRefreshRateConfigs()
         recentSearches.value = settingsRepository.getRecentSearches()
         loadCachedWallpaper()

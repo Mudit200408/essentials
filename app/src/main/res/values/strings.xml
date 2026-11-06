@@ -1,5 +1,46 @@
 <resources>
     <string name="app_name" translatable="false">Essentials</string>
+    <string name="feat_live_media_title">Live Media</string>
+    <string name="feat_live_media_desc">Promoted ongoing media notification with status bar pill for Android 16+</string>
+    <string name="about_desc_live_media">Transforms active media playback into a persistent Live Update in the status bar pill and expanded notification with live progress, album art, and controls.</string>
+    <string name="live_media_section_status_bar_pill">Status Bar Pill</string>
+    <string name="live_media_section_notification_body">Notification Body</string>
+    <string name="live_media_setting_show_album_art">Show Album Art</string>
+    <string name="live_media_setting_show_album_art_desc">Display the album cover art in the notification.</string>
+    <string name="live_media_setting_show_artist_name">Show Artist Name</string>
+    <string name="live_media_setting_show_artist_name_desc">Include the artist\'s name below the track title.</string>
+    <string name="live_media_setting_show_album_name">Show Album Name</string>
+    <string name="live_media_setting_show_album_name_desc">Display the album name in the notification details.</string>
+    <string name="live_media_setting_show_action_buttons">Show Action Buttons</string>
+    <string name="live_media_setting_show_action_buttons_desc">Include controls like Play/Pause, Next, and Previous.</string>
+    <string name="live_media_setting_show_progress">Show Progress</string>
+    <string name="live_media_setting_show_progress_desc">Show song progress bar in notification.</string>
+    <string name="live_media_setting_show_music_provider">Show Music Provider</string>
+    <string name="live_media_setting_show_music_provider_desc">Show what music app you\'re using (Spotify, YouTube Music, etc.)</string>
+    <string name="live_media_setting_show_timestamp">Show Timestamps</string>
+    <string name="live_media_setting_show_timestamp_desc">Show elapsed time and total duration on the player.</string>
+    <string name="live_media_setting_hide_on_qs">Hide on Quick Settings</string>
+    <string name="live_media_setting_hide_on_qs_desc">Hide the media notification when Quick Settings or Notification Shade are opened.</string>
+    <string name="live_media_pill_option_title">Song Title</string>
+    <string name="live_media_pill_option_title_desc">Show the track title in the status bar pill</string>
+    <string name="live_media_setting_scroll_text">Scroll Track Title</string>
+    <string name="live_media_setting_scroll_text_desc">Animate the track title if it exceeds 7 characters</string>
+    <string name="live_media_pill_option_elapsed">Elapsed Time</string>
+    <string name="live_media_pill_option_elapsed_desc">Show current playback position. Title is shown when paused.</string>
+    <string name="live_media_pill_option_remaining">Remaining Time</string>
+    <string name="live_media_pill_option_remaining_desc">Show time left in the song. Title is shown when paused.</string>
+    <string name="live_media_setting_hide_on_pause">Hide on Pause</string>
+    <string name="live_media_setting_hide_on_pause_desc">Automatically hide notification when playback is paused.</string>
+    <string name="live_media_setting_hide_on_pause_immediately">Hide immediately</string>
+    <string name="live_media_setting_hide_on_pause_immediately_desc">Dismiss notification as soon as playback is paused</string>
+    <string name="live_media_setting_hide_on_pause_1min">Hide in 1 min</string>
+    <string name="live_media_setting_hide_on_pause_1min_desc">Dismiss notification 1 minute after playback is paused</string>
+    <string name="live_media_section_app_selection">App Control</string>
+    <string name="live_media_setting_app_selection">Select Apps</string>
+    <string name="live_media_setting_app_selection_desc">Choose which apps Live Media should work with.</string>
+    <string name="live_media_app_selection_title">Select Media Apps</string>
+    <string name="live_media_app_selection_enable_all">Enable All</string>
+    <string name="live_media_app_selection_disable_all">Disable All</string>
     <string name="diy_genai_lazy_title">I’m lazy, Do it for me</string>
     <string name="settings_genai_automation_title">Enable GenAI use</string>
 
