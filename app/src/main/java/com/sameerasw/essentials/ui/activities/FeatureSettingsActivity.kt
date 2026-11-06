@@ -126,6 +126,7 @@ import com.sameerasw.essentials.ui.features.system.NotificationSnoozingSettingsU
 import com.sameerasw.essentials.ui.features.system.OtherCustomizationsSettingsUI
 import com.sameerasw.essentials.ui.features.system.FaceUnlockBrightnessSettingsUI
 import com.sameerasw.essentials.ui.features.display.PerAppRefreshRateSettingsUI
+import com.sameerasw.essentials.ui.features.livemedia.LiveMediaSettingsUI
 import com.sameerasw.essentials.utils.ShellUtils
 import com.sameerasw.essentials.ui.features.system.PocketModeSettingsUI
 import com.sameerasw.essentials.ui.features.system.VolumeStepsSettingsUI
@@ -374,6 +375,7 @@ fun FeatureSettingsScreen(
                                 !isNotificationLightingAccessibilityEnabled ||
                                 !isNotificationListenerEnabled
                         "Flashlight pulse" -> !isNotificationListenerEnabled
+                        "Live Media" -> !isNotificationListenerEnabled || !isPostNotificationsEnabled || !isAccessibilityEnabled
                         "Hilight", "Hilight notifications", "Hilight live progress" -> !isNotificationListenerEnabled || !isShizukuPermissionGranted
                         "Notification Sync" -> !isNotificationListenerEnabled
                         "Button remap" -> !isAccessibilityEnabled
@@ -707,6 +709,7 @@ fun FeatureSettingsScreen(
                                                     "Notification lighting",
                                                     "Flashlight pulse",
                                                     "Hilight",
+                                                    "Live Media",
                                                 ),
                                                 listOf(
                                                     "Notification snoozing",
@@ -834,6 +837,7 @@ fun FeatureSettingsScreen(
                                                             !isNotificationLightingAccessibilityEnabled ||
                                                             !isNotificationListenerEnabled
                                                     "Flashlight pulse" -> !isNotificationListenerEnabled
+                                                    "Live Media" -> !isNotificationListenerEnabled || !isPostNotificationsEnabled || !isAccessibilityEnabled
                                                     "Hilight", "Hilight notifications", "Hilight live progress" -> !isNotificationListenerEnabled || !isShizukuPermissionGranted
                                                     "Button remap" -> !isAccessibilityEnabled
                                                     "Face unlock brightness" -> !isAccessibilityEnabled
@@ -1480,6 +1484,14 @@ fun FeatureSettingsScreen(
 
                             "Shut-Up!" -> {
                                 ShutUpSettingsUI(
+                                    viewModel = viewModel,
+                                    modifier = Modifier.padding(top = 16.dp),
+                                    highlightSetting = highlightSetting,
+                                )
+                            }
+
+                            "Live Media" -> {
+                                LiveMediaSettingsUI(
                                     viewModel = viewModel,
                                     modifier = Modifier.padding(top = 16.dp),
                                     highlightSetting = highlightSetting,

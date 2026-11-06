@@ -361,6 +361,7 @@ class NotificationListener : NotificationListenerService() {
         super.onListenerConnected()
         instance = this
         populateActiveUnreadNotifications()
+        com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(this).maybeUpdateMediaController()
         try {
             val pm = getSystemService(POWER_SERVICE) as PowerManager
             isScreenLocked = !pm.isInteractive
@@ -580,6 +581,7 @@ class NotificationListener : NotificationListenerService() {
     }
 
     override fun onDestroy() {
+        com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(this).cancelNotification()
         super.onDestroy()
         instance = null
         progressDestroyed = true
@@ -1086,6 +1088,12 @@ class NotificationListener : NotificationListenerService() {
         handleRespectNotifications(sbn)
         if (!isRepost) WatchNotificationSyncManager.onNotificationPosted(applicationContext, sbn, isSilentNotification(sbn, rankingMap))
 
+        if (sbn.notification.category == Notification.CATEGORY_TRANSPORT ||
+            sbn.notification.extras?.containsKey(Notification.EXTRA_MEDIA_SESSION) == true
+        ) {
+            com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(this).maybeUpdateMediaController()
+        }
+
         val extras = sbn.notification.extras
         if (extras != null && (extras.getInt(Notification.EXTRA_PROGRESS_MAX, 0) > 0 || extras.containsKey(Notification.EXTRA_PROGRESS_INDETERMINATE))) {
             scheduleProgressRefresh()
@@ -1491,6 +1499,11 @@ class NotificationListener : NotificationListenerService() {
         rankingMap: RankingMap,
         reason: Int,
     ) {
+        if (sbn.id == com.sameerasw.essentials.services.livemedia.LiveMediaManager.NOTIFICATION_ID && sbn.packageName == packageName) {
+            if (reason == REASON_CANCEL || reason == REASON_CANCEL_ALL) {
+                com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(this).onNotificationDismissed()
+            }
+        }
         LiveUpdateSnoozer.onRemoved(sbn.key, reason)
         super.onNotificationRemoved(sbn, rankingMap, reason)
     }
