@@ -4,88 +4,93 @@ import com.sameerasw.essentials.R
 
 enum class MusicProvider(
     val appName: String,
-    val packageName: String,
+    val packageNames: List<String>,
     val iconRes: Int
 ) {
     UNKNOWN(
         "Unknown Player",
-        "unknown.package",
+        listOf("unknown.package"),
         R.drawable.apple_music
     ),
     SPOTIFY(
         "Spotify",
-        "com.spotify.music",
+        listOf("com.spotify.music"),
         R.drawable.spotify
     ),
     YOUTUBE(
         "YouTube",
-        "com.google.android.youtube",
+        listOf("com.google.android.youtube", "app.morphe.android.youtube"),
         R.drawable.youtube
     ),
     YOUTUBE_MUSIC(
         "YouTube Music",
-        "com.google.android.apps.youtube.music",
+        listOf("com.google.android.apps.youtube.music", "app.morphe.android.apps.youtube.music"),
         R.drawable.youtube_music
     ),
     SOUNDCLOUD(
         "SoundCloud",
-        "com.soundcloud.android",
+        listOf("com.soundcloud.android"),
         R.drawable.soundcloud
     ),
     APPLE_MUSIC(
         "Apple Music",
-        "com.apple.android.music",
+        listOf("com.apple.android.music"),
         R.drawable.apple_music
     ),
     DEEZER(
         "Deezer",
-        "deezer.android.app",
+        listOf("deezer.android.app"),
         R.drawable.deezer
     ),
     TIDAL(
         "TIDAL",
-        "com.aspiro.tidal",
+        listOf("com.aspiro.tidal"),
         R.drawable.tidal
     ),
     AMAZON_MUSIC(
         "Amazon Music",
-        "com.amazon.mp3",
+        listOf("com.amazon.mp3"),
         R.drawable.amazon_music
     ),
     TELEGRAM(
         "Telegram",
-        "org.telegram.messenger",
+        listOf("org.telegram.messenger"),
         R.drawable.telegram
     ),
     NETFLIX(
         "Netflix",
-        "com.netflix.mediaclient",
+        listOf("com.netflix.mediaclient"),
         R.drawable.netflix
     ),
     TWITCH(
         "Twitch",
-        "tv.twitch.android.app",
+        listOf("tv.twitch.android.app"),
         R.drawable.twitch
     ),
     NOTEBOOK_LM(
         "NotebookLM",
-        "com.google.android.apps.labs.language.tailwind",
+        listOf("com.google.android.apps.labs.language.tailwind"),
         R.drawable.notebook_lm
     ),
     QOBUZ(
         "Qobuz",
-        "com.qobuz.music",
+        listOf("com.qobuz.music"),
         R.drawable.qobuz_com
     ),
     UAPP(
         "USB Audio Player PRO",
-        "com.extreamsd.usbaudioplayerpro",
+        listOf("com.extreamsd.usbaudioplayerpro"),
         R.drawable.usb_audio_player_pro
     );
 
+    val packageName: String
+        get() = packageNames.firstOrNull() ?: ""
+
     companion object {
         fun getByAppNameOrPackage(appName: String, appPackage: String): MusicProvider {
-            return entries.firstOrNull { it.appName == appName || it.packageName == appPackage } ?: UNKNOWN
+            return entries.firstOrNull {
+                it.packageNames.contains(appPackage) || it.appName.equals(appName, ignoreCase = true)
+            } ?: UNKNOWN
         }
     }
 }
