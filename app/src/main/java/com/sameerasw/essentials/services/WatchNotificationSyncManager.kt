@@ -109,10 +109,11 @@ object WatchNotificationSyncManager {
         sbn: StatusBarNotification,
         isSilent: Boolean,
     ) {
-        ensureListenerServiceRunning(context)
         val enabled = isSyncEnabled(context)
-        Log.d(TAG, "onNotificationPosted: pkg=${sbn.packageName}, isSyncEnabled=$enabled, isOngoing=${sbn.isOngoing}, isSilent=$isSilent")
         if (!enabled) return
+
+        ensureListenerServiceRunning(context)
+        Log.d(TAG, "onNotificationPosted: pkg=${sbn.packageName}, isSyncEnabled=$enabled, isOngoing=${sbn.isOngoing}, isSilent=$isSilent")
 
         val isMedia = isMediaNotification(sbn)
 

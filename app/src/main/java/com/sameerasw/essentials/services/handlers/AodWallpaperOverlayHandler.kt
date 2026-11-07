@@ -616,7 +616,10 @@ class AodWallpaperOverlayHandler(
     }
 
     fun onUserPresent() {
-        if (!prefs.getBoolean(SettingsRepository.KEY_AOD_WALLPAPER_ENABLED, false)) return
+        if (!prefs.getBoolean(SettingsRepository.KEY_AOD_WALLPAPER_ENABLED, false)) {
+            if (isOverlayAdded) runPendingRemoval()
+            return
+        }
         onScreenOn()
     }
 

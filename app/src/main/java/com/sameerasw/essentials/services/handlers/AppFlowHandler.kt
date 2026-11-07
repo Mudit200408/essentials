@@ -222,9 +222,6 @@ class AppFlowHandler private constructor(
     private var cachedRefreshRateConfigs: List<AppRefreshRateConfig>? = null
     private val mediaPlayingPackages = ConcurrentHashMap<String, Boolean>()
 
-    // App Automation State
-    private val activeAppAutomationIds = mutableSetOf<String>()
-
     // --- Config caches: avoid JSON parse + SharedPrefs read on every package switch ---
     private val gson = Gson()
     private var cachedAppLockApps: List<AppSelection>? = null

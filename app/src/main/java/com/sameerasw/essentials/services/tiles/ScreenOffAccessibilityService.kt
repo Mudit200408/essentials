@@ -466,7 +466,6 @@ class ScreenOffAccessibilityService :
                             shadeExpandedNow = false
                             appFlowHandler.clearAuthenticated()
                             appFlowHandler.clearConsciousGate()
-                            appFlowHandler.onScreenOff()
                             scheduleFreeze()
                             updateInputEventListener()
                             ambientGlanceHandler.checkAndShowOnScreenOff()
@@ -479,7 +478,6 @@ class ScreenOffAccessibilityService :
                             pocketModeHandler.onScreenOff()
                             faceUnlockBrightnessHandler.onScreenOff()
                             updatePocketModeSensors()
-                            com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(this@ScreenOffAccessibilityService).onKeyguardStateChanged(true)
                         }
 
                         Intent.ACTION_USER_PRESENT -> {
@@ -494,8 +492,6 @@ class ScreenOffAccessibilityService :
                             lockscreenShortcutsHandler.onUserPresent()
                             duoOverlayHandler.onUserPresent()
                             islandOverlayHandler.updateState()
-                            com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(this@ScreenOffAccessibilityService).onKeyguardStateChanged(false)
-                            appFlowHandler.onScreenOn()
                             val currentApp = appFlowHandler.currentPackage
                             if (pocketModeHandler.pocketModeLockScreenOnly || isAppBypassedForPocketMode(currentApp)) {
                                 pocketModeHandler.onScreenOff() // cancel pending timer + remove overlay + reset isBypassed
@@ -851,7 +847,6 @@ class ScreenOffAccessibilityService :
             if (shadeExpandedNow != shadeExpanded) {
                 shadeExpandedNow = shadeExpanded
                 updateOmniOverlay()
-                com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(this@ScreenOffAccessibilityService).onQuickSettingsStateChanged(shadeExpanded)
             }
             buttonRemapHandler.isVolumeDialogVisible = volumeDialogVisible
             appVolumeOverlayHandler.onWindowsChanged()
