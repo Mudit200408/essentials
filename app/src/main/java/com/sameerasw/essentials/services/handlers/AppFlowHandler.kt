@@ -1630,13 +1630,18 @@ class AppFlowHandler private constructor(
                 Log.d("AppFlowHandler", "per-app refresh rate: applying $targetRate Hz (isFixed=${config.isFixed}) for $packageName")
                 applyRefreshRateForConfig(config, targetRate)
 
-                // Re-apply after a short delay to beat OEM adaptive display controllers that
-                // fire asynchronously after window transitions (e.g. resuming from recents).
+                // Re-apply after a short delay only if the OEM adaptive display controller
+                // overrode the refresh rate during window transitions.
                 delay(400L)
                 if (perAppCurrentPackage == packageName) {
                     val delayedRate = getTargetRefreshRateForConfig(config)
-                    Log.d("AppFlowHandler", "per-app refresh rate: delayed re-apply $delayedRate Hz (isFixed=${config.isFixed}) for $packageName")
-                    applyRefreshRateForConfig(config, delayedRate)
+                    val currentState = RefreshRateUtils.getCurrentState(context)
+                    val expectedMin = if (config.isFixed) delayedRate.toInt() else 0
+                    val expectedPeak = delayedRate.toInt()
+                    if (currentState.peak.toInt() != expectedPeak || currentState.min.toInt() != expectedMin) {
+                        Log.d("AppFlowHandler", "per-app refresh rate: display overridden by OEM, re-applying $delayedRate Hz (isFixed=${config.isFixed}) for $packageName")
+                        applyRefreshRateForConfig(config, delayedRate)
+                    }
                 }
             }
         } else {

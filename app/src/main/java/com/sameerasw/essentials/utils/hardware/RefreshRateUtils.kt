@@ -81,12 +81,21 @@ object RefreshRateUtils {
         if (!ShellUtils.hasPermission(context)) return false
 
         val clamped = normalizeRate(context, value)
+        val currentState = getCurrentState(context)
+        if (!currentState.isSystemManaged &&
+            currentState.peak.roundToInt() == clamped.roundToInt() &&
+            currentState.min.roundToInt() == clamped.roundToInt()
+        ) {
+            return true
+        }
+
         val formatted = formatRate(clamped)
         val featureName = context.getString(R.string.feat_screen_refresh_rate_title)
-        ShellUtils.runCommand(context, "settings put system $KEY_PEAK_REFRESH_RATE $formatted", featureName = featureName)
-        ShellUtils.runCommand(context, "settings put system $KEY_MIN_REFRESH_RATE $formatted", featureName = featureName)
-        ShellUtils.runCommand(context, "settings put global $KEY_PEAK_REFRESH_RATE $formatted", featureName = featureName)
-        ShellUtils.runCommand(context, "settings put global $KEY_MIN_REFRESH_RATE $formatted", featureName = featureName)
+        val batchCommand = "settings put system $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put system $KEY_MIN_REFRESH_RATE $formatted; " +
+            "settings put global $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put global $KEY_MIN_REFRESH_RATE $formatted"
+        ShellUtils.runCommand(context, batchCommand, featureName = featureName)
         return true
     }
 
@@ -99,25 +108,22 @@ object RefreshRateUtils {
 
         val safeMin = normalizeRate(context, minValue)
         val safePeak = normalizeRate(context, maxOf(minValue, peakValue))
+        val currentState = getCurrentState(context)
+        if (!currentState.isSystemManaged &&
+            currentState.min.roundToInt() == safeMin.roundToInt() &&
+            currentState.peak.roundToInt() == safePeak.roundToInt()
+        ) {
+            return true
+        }
+
         val featureName = context.getString(R.string.feat_screen_refresh_rate_title)
-        ShellUtils.runCommand(
-            context,
-            "settings put system $KEY_MIN_REFRESH_RATE ${formatRate(safeMin)}",
-            featureName = featureName,
-        )
-        ShellUtils.runCommand(
-            context,
-            "settings put system $KEY_PEAK_REFRESH_RATE ${formatRate(safePeak)}",
-            featureName = featureName,
-        )
-        ShellUtils.runCommand(
-            context,
-            "settings put global $KEY_MIN_REFRESH_RATE ${formatRate(safeMin)}"
-        )
-        ShellUtils.runCommand(
-            context,
-            "settings put global $KEY_PEAK_REFRESH_RATE ${formatRate(safePeak)}"
-        )
+        val minFormatted = formatRate(safeMin)
+        val peakFormatted = formatRate(safePeak)
+        val batchCommand = "settings put system $KEY_MIN_REFRESH_RATE $minFormatted; " +
+            "settings put system $KEY_PEAK_REFRESH_RATE $peakFormatted; " +
+            "settings put global $KEY_MIN_REFRESH_RATE $minFormatted; " +
+            "settings put global $KEY_PEAK_REFRESH_RATE $peakFormatted"
+        ShellUtils.runCommand(context, batchCommand, featureName = featureName)
         return true
     }
 
@@ -127,15 +133,22 @@ object RefreshRateUtils {
     ): Boolean {
         if (!ShellUtils.hasPermission(context)) return false
 
-        val featureName = context.getString(R.string.feat_screen_refresh_rate_title)
-        // Clear both namespaces first, then restore the original system-managed peak behavior.
-        ShellUtils.runCommand(context, "settings delete system $KEY_MIN_REFRESH_RATE", featureName = featureName)
-        ShellUtils.runCommand(context, "settings delete system $KEY_PEAK_REFRESH_RATE", featureName = featureName)
-        ShellUtils.runCommand(context, "settings delete global $KEY_PEAK_REFRESH_RATE", featureName = featureName)
-        ShellUtils.runCommand(context, "settings delete global $KEY_MIN_REFRESH_RATE", featureName = featureName)
-        if (restoreInfinityPeak) {
-            ShellUtils.runCommand(context, "settings put system $KEY_PEAK_REFRESH_RATE Infinity", featureName = featureName)
+        val currentState = getCurrentState(context)
+        if (currentState.isSystemManaged && currentState.usesInfinityDefaultPeak == restoreInfinityPeak) {
+            return true
         }
+
+        val featureName = context.getString(R.string.feat_screen_refresh_rate_title)
+        val deleteCmd = "settings delete system $KEY_MIN_REFRESH_RATE; " +
+            "settings delete system $KEY_PEAK_REFRESH_RATE; " +
+            "settings delete global $KEY_PEAK_REFRESH_RATE; " +
+            "settings delete global $KEY_MIN_REFRESH_RATE"
+        val batchCommand = if (restoreInfinityPeak) {
+            "$deleteCmd; settings put system $KEY_PEAK_REFRESH_RATE Infinity"
+        } else {
+            deleteCmd
+        }
+        ShellUtils.runCommand(context, batchCommand, featureName = featureName)
         return true
     }
 
@@ -271,11 +284,20 @@ object RefreshRateUtils {
         if (!ShellUtils.hasPermission(context)) return false
 
         val clamped = normalizeRate(context, value)
+        val currentState = getCurrentState(context)
+        if (!currentState.isSystemManaged &&
+            currentState.peak.roundToInt() == clamped.roundToInt() &&
+            currentState.min <= 0f
+        ) {
+            return true
+        }
+
         val formatted = formatRate(clamped)
-        ShellUtils.runCommand(context, "settings put system $KEY_PEAK_REFRESH_RATE $formatted")
-        ShellUtils.runCommand(context, "settings put system $KEY_MIN_REFRESH_RATE 0")
-        ShellUtils.runCommand(context, "settings put global $KEY_PEAK_REFRESH_RATE $formatted")
-        ShellUtils.runCommand(context, "settings put global $KEY_MIN_REFRESH_RATE 0")
+        val batchCommand = "settings put system $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put system $KEY_MIN_REFRESH_RATE 0; " +
+            "settings put global $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put global $KEY_MIN_REFRESH_RATE 0"
+        ShellUtils.runCommand(context, batchCommand)
         return true
     }
 
