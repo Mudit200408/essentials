@@ -291,20 +291,6 @@ object ShutUpManager {
             } catch (e: Exception) {
                 Log.w(TAG, "preApplyShutUpSettings: failed to disable accessibility services", e)
             }
-
-            // Pin min refresh rate to peak to prevent Android's LTPO governor from dropping to 60Hz idle
-            val perAppConfig = repository.loadPerAppRefreshRateConfigs()
-                .find { it.packageName == config.packageName && it.isEnabled }
-            if (perAppConfig == null) {
-                val peakRate = RefreshRateUtils.getHighestSupportedRefreshRate(context)
-                val formatted = String.format(java.util.Locale.US, "%.0f", peakRate)
-                try {
-                    Settings.System.putString(resolver, "peak_refresh_rate", formatted)
-                    Settings.System.putString(resolver, "min_refresh_rate", formatted)
-                    Settings.Global.putString(resolver, "peak_refresh_rate", formatted)
-                    Settings.Global.putString(resolver, "min_refresh_rate", formatted)
-                } catch (_: Exception) {}
-            }
         }
 
         settingsCurrentlyApplied = true
@@ -388,13 +374,6 @@ object ShutUpManager {
             if (disableAccessibility) {
                 isAccessibilityMuted = true
                 safeWriteSettingSync(context, "SECURE", Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, "")
-
-                val perAppConfig = repo.loadPerAppRefreshRateConfigs()
-                    .find { it.packageName == config.packageName && it.isEnabled }
-                if (perAppConfig == null) {
-                    val peakRate = RefreshRateUtils.getHighestSupportedRefreshRate(context)
-                    RefreshRateUtils.applyFixedRefreshRate(context, peakRate)
-                }
             }
             settingsCurrentlyApplied = true
         }

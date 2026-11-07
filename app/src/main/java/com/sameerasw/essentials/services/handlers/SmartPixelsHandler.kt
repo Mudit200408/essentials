@@ -12,10 +12,12 @@ package com.sameerasw.essentials.services.handlers
 import android.accessibilityservice.AccessibilityService
 import android.animation.ObjectAnimator
 import android.graphics.Bitmap
+import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PixelFormat
+import android.graphics.Shader
 import android.hardware.display.DisplayManager
 import android.os.Handler
 import android.os.Looper
@@ -212,62 +214,31 @@ class SmartPixelsHandler(
         context: AccessibilityService,
     ) : View(context) {
         private val paint = Paint()
-        private var cachedPatternBitmap: Bitmap? = null
-        private var lastWidth = 0
-        private var lastHeight = 0
+        private var cachedBitmap: Bitmap? = null
         private var currentIntensity = 50f
         private var patternOffset = 0
-
-        init {
-            setLayerType(LAYER_TYPE_HARDWARE, null)
-        }
 
         fun setIntensity(intensity: Float) {
             if (currentIntensity != intensity) {
                 currentIntensity = intensity
-                cachedPatternBitmap?.recycle()
-                cachedPatternBitmap = null
+                recycleCache()
                 invalidate()
             }
         }
 
         fun shiftPattern() {
             patternOffset = (patternOffset + 1) % 4
-            cachedPatternBitmap?.recycle()
-            cachedPatternBitmap = null
+            recycleCache()
             invalidate()
         }
 
-        override fun onSizeChanged(
-            w: Int,
-            h: Int,
-            oldw: Int,
-            oldh: Int,
-        ) {
-            super.onSizeChanged(w, h, oldw, oldh)
-            if (w != lastWidth || h != lastHeight) {
-                lastWidth = w
-                lastHeight = h
-                cachedPatternBitmap?.recycle()
-                cachedPatternBitmap = null
-            }
+        private fun recycleCache() {
+            paint.shader = null
+            cachedBitmap?.recycle()
+            cachedBitmap = null
         }
 
-        private fun createPatternBitmap(
-            w: Int,
-            h: Int,
-        ): Bitmap {
-            val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bmp)
-            val p =
-                Paint().apply {
-                    color = Color.BLACK
-                    style = Paint.Style.FILL
-                    isAntiAlias = false
-                }
-            val alphaValue = (currentIntensity / 100f * 255).toInt().coerceIn(20, 230)
-            p.alpha = alphaValue
-
+        private fun updateShader() {
             val step =
                 when {
                     currentIntensity >= 75f -> 2
@@ -276,25 +247,32 @@ class SmartPixelsHandler(
                     else -> 6
                 }
 
+            val tileSize = step * 2
+            val bmp = Bitmap.createBitmap(tileSize, tileSize, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bmp)
+            val alphaValue = (currentIntensity / 100f * 255).toInt().coerceIn(20, 230)
+            val p =
+                Paint().apply {
+                    color = Color.BLACK
+                    style = Paint.Style.FILL
+                    isAntiAlias = false
+                    alpha = alphaValue
+                }
+
             val offsetX = (patternOffset % 2) * step
             val offsetY = (patternOffset / 2) * step
 
-            var y = 0
-            while (y < h) {
-                var x = ((y / step % 2) * step + offsetX) % (step * 2)
-                while (x < w) {
-                    canvas.drawRect(
-                        x.toFloat(),
-                        (y + offsetY).toFloat(),
-                        (x + step).toFloat(),
-                        (y + offsetY + step).toFloat(),
-                        p,
-                    )
-                    x += step * 2
-                }
-                y += step
-            }
-            return bmp
+            val r1x = offsetX.toFloat()
+            val r1y = offsetY.toFloat()
+            canvas.drawRect(r1x, r1y, r1x + step, r1y + step, p)
+
+            val r2x = ((step + offsetX) % tileSize).toFloat()
+            val r2y = ((step + offsetY) % tileSize).toFloat()
+            canvas.drawRect(r2x, r2y, r2x + step, r2y + step, p)
+
+            cachedBitmap?.recycle()
+            cachedBitmap = bmp
+            paint.shader = BitmapShader(bmp, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         }
 
         override fun onDraw(canvas: Canvas) {
@@ -303,18 +281,15 @@ class SmartPixelsHandler(
             val h = height
             if (w <= 0 || h <= 0) return
 
-            var bitmap = cachedPatternBitmap
-            if (bitmap == null || bitmap.isRecycled || bitmap.width != w || bitmap.height != h) {
-                bitmap = createPatternBitmap(w, h)
-                cachedPatternBitmap = bitmap
+            if (paint.shader == null) {
+                updateShader()
             }
-            canvas.drawBitmap(bitmap, 0f, 0f, paint)
+            canvas.drawRect(0f, 0f, w.toFloat(), h.toFloat(), paint)
         }
 
         override fun onDetachedFromWindow() {
             super.onDetachedFromWindow()
-            cachedPatternBitmap?.recycle()
-            cachedPatternBitmap = null
+            recycleCache()
         }
     }
 }
