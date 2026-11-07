@@ -106,6 +106,7 @@ class AppFlowHandler private constructor(
             "app_lock_selected_apps" -> cachedAppLockApps = null
             "conscious_gate_selected_apps" -> cachedConsciousGateApps = null
             "dynamic_night_light_selected_apps" -> cachedNightLightApps = null
+            SettingsRepository.KEY_SHUT_UP_SELECTED_APPS -> cachedShutUpConfigs = null
         }
     }
 
@@ -226,6 +227,11 @@ class AppFlowHandler private constructor(
     private var cachedAppLockApps: List<AppSelection>? = null
     private var cachedConsciousGateApps: List<AppSelection>? = null
     private var cachedNightLightApps: List<AppSelection>? = null
+    @Volatile private var cachedShutUpConfigs: List<ShutUpAppConfig>? = null
+
+    private fun getShutUpConfigs(repo: SettingsRepository = settingsRepository): List<ShutUpAppConfig> {
+        return cachedShutUpConfigs ?: repo.loadShutUpConfigs().also { cachedShutUpConfigs = it }
+    }
     // Launcher package cache: rebuilt on first use, cleared in destroy()
     @Volatile private var cachedLauncherPackages: Set<String>? = null
     // AudioManager.mode cache (100ms TTL) to avoid blocking binder in isIgnoredPackage
@@ -265,7 +271,7 @@ class AppFlowHandler private constructor(
                         val settingsRepo = settingsRepository
                         val config =
                             if (pkgName != null) {
-                                settingsRepo.loadShutUpConfigs().find { it.packageName == pkgName }
+                                getShutUpConfigs(settingsRepo).find { it.packageName == pkgName }
                             } else {
                                 null
                             }
@@ -601,7 +607,7 @@ class AppFlowHandler private constructor(
         val serviceEnabled = settingsRepository.isShutUpServiceEnabled()
         if (!serviceEnabled) return
 
-        val configs = settingsRepository.loadShutUpConfigs()
+        val configs = getShutUpConfigs()
         val config = configs.find { it.packageName == packageName && it.isEnabled } ?: return
 
         // If settings are already applied and currentPackage hasn't transitioned to this app
@@ -1020,7 +1026,7 @@ class AppFlowHandler private constructor(
             return
         }
 
-        val shutUpConfigs = settingsRepository.loadShutUpConfigs()
+        val shutUpConfigs = getShutUpConfigs()
 
         val wasShutUpConfig = shutUpConfigs.find { it.packageName == oldPackage && it.isEnabled }
 
@@ -1435,7 +1441,7 @@ class AppFlowHandler private constructor(
                     delay(delaySeconds * 1000L)
                 }
                 val current = currentPackage
-                val isCurrentShutUp = repository.loadShutUpConfigs().any { it.packageName == current && it.isEnabled }
+                val isCurrentShutUp = getShutUpConfigs(repository).any { it.packageName == current && it.isEnabled }
                 if (!isCurrentShutUp) {
                     showRestoreNotification(wasShutUpConfig, autoArchivePackage)
                 }
@@ -1456,7 +1462,7 @@ class AppFlowHandler private constructor(
 
             // Check if user is currently inside a Shut-Up app before restoring
             val current = currentPackage
-            val isCurrentShutUp = repository.loadShutUpConfigs().any { it.packageName == current && it.isEnabled }
+            val isCurrentShutUp = getShutUpConfigs(repository).any { it.packageName == current && it.isEnabled }
             if (isCurrentShutUp && !forceRestore) {
                 Log.d("AppFlowHandler", "restoreShutUpSettings: User is currently in Shut-Up app $current — skipping restore")
                 pendingShutUpRestoreJob = null

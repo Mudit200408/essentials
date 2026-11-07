@@ -74,25 +74,7 @@ object ShutUpManager {
     }
 
     fun isAppRunning(context: Context, packageName: String): Boolean {
-        if (ShellUtils.isAvailable(context) && ShellUtils.hasPermission(context)) {
-            try {
-                val output = ShellUtils.runCommandWithOutput(context, "pidof $packageName")
-                if (!output.isNullOrBlank()) {
-                    return true
-                }
-            } catch (e: Exception) {
-                Log.w(TAG, "pidof check failed for $packageName", e)
-            }
-            try {
-                val output = ShellUtils.runCommandWithOutput(context, "pgrep -f $packageName")
-                if (!output.isNullOrBlank()) {
-                    return true
-                }
-            } catch (e: Exception) {
-                Log.w(TAG, "pgrep check failed for $packageName", e)
-            }
-        }
-
+        // Fast path: Check ActivityManager first without spawning a shell process
         try {
             val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             val processes = am.runningAppProcesses
@@ -105,6 +87,18 @@ object ShutUpManager {
             }
         } catch (e: Exception) {
             Log.w(TAG, "ActivityManager check failed for $packageName", e)
+        }
+
+        // Fallback: Check via shell if available
+        if (ShellUtils.isAvailable(context) && ShellUtils.hasPermission(context)) {
+            try {
+                val output = ShellUtils.runCommandWithOutput(context, "pidof $packageName")
+                if (!output.isNullOrBlank()) {
+                    return true
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "pidof check failed for $packageName", e)
+            }
         }
 
         return false
@@ -142,6 +136,11 @@ object ShutUpManager {
             try {
                 Settings.Global.putString(resolver, key, value)
             } catch (e: Exception) { }
+        }
+
+        // If ContentResolver write succeeded, do not spawn expensive shell processes
+        if (resolverSuccess) {
+            return true
         }
 
         var shellSuccess = false
