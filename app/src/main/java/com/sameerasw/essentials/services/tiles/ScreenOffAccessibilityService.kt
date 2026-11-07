@@ -759,7 +759,6 @@ class ScreenOffAccessibilityService :
             windowHandler.postDelayed(shadeRecheckRunnable, 300)
             faceUnlockBrightnessHandler.onWindowsChanged()
             lockscreenShortcutsHandler.onWindowsChanged()
-            appVolumeOverlayHandler.onWindowsChanged()
         }
     }
 
