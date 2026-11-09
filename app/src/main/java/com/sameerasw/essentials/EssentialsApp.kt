@@ -36,6 +36,8 @@ class EssentialsApp : Application() {
     companion object {
         lateinit var context: Context
             private set
+
+        fun getAppContext(): Context? = if (::context.isInitialized) context else null
     }
 
     private val securityReceiver = SecurityReceiver()
