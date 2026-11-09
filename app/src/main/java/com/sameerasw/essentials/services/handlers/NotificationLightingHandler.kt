@@ -247,7 +247,7 @@ class NotificationLightingHandler(
                     rippleConfig = rippleConfig,
                     dashConfig = dashConfig,
                 )
-            val params = OverlayHelper.createOverlayLayoutParams(overlayType)
+            val params = OverlayHelper.createOverlayLayoutParams(overlayType, showWhenLocked = true)
 
             val isScreenOn = powerManager.isInteractive
             val showBackground =
@@ -270,7 +270,7 @@ class NotificationLightingHandler(
                             dashConfig = dashConfig,
                         )
                     val ambientParams =
-                        OverlayHelper.createOverlayLayoutParams(overlayType, isTouchable = true)
+                        OverlayHelper.createOverlayLayoutParams(overlayType, isTouchable = true, showWhenLocked = true)
 
                     ambientOverlay.setOnTouchListener { _, _ ->
                         isInterrupted = true

@@ -603,13 +603,23 @@ class AodWallpaperOverlayHandler(
         }
     }
 
+    private val delayedShowOverlayRunnable = Runnable {
+        if (isScreenOff) {
+            updateState()
+        }
+    }
+
     fun onScreenOff() {
         isScreenOff = true
-        updateState()
+        handler.removeCallbacks(delayedShowOverlayRunnable)
+        // Delay adding the AOD wallpaper overlay until the screen-off collapse animation (~350-400ms) has fully finished.
+        // Adding windows during the transition interrupts SystemUI's LightReveal animation.
+        handler.postDelayed(delayedShowOverlayRunnable, 450L)
     }
 
     fun onScreenOn() {
         isScreenOff = false
+        handler.removeCallbacks(delayedShowOverlayRunnable)
         if (isShareLockActive()) restoreIfNotPlaying()
         handler.removeCallbacks(timeoutRunnable)
         hideOverlay()
@@ -1015,7 +1025,6 @@ class AodWallpaperOverlayHandler(
                         WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
                         WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
                         WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                        WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or
                         WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                     PixelFormat.TRANSLUCENT,
                 ).apply {
