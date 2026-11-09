@@ -125,6 +125,35 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            val localFile = rootProject.file("local.properties")
+            val localProps = Properties().apply {
+                if (localFile.exists()) {
+                    localFile.inputStream().use { load(it) }
+                }
+            }
+            val storeFilePath = localProps.getProperty("RELEASE_STORE_FILE")
+                ?: System.getenv("RELEASE_STORE_FILE")
+            val storePass = localProps.getProperty("RELEASE_STORE_PASSWORD")
+                ?: System.getenv("RELEASE_STORE_PASSWORD")
+            val keyAliasVal = localProps.getProperty("RELEASE_KEY_ALIAS")
+                ?: System.getenv("RELEASE_KEY_ALIAS")
+            val keyPass = localProps.getProperty("RELEASE_KEY_PASSWORD")
+                ?: System.getenv("RELEASE_KEY_PASSWORD")
+
+            if (!storeFilePath.isNullOrBlank() && !storePass.isNullOrBlank() && !keyAliasVal.isNullOrBlank() && !keyPass.isNullOrBlank()) {
+                val kFile = file(storeFilePath)
+                if (kFile.exists()) {
+                    storeFile = kFile
+                    storePassword = storePass
+                    keyAlias = keyAliasVal
+                    keyPassword = keyPass
+                }
+            }
+        }
+    }
+
     buildTypes {
 //        optimized dev build
 //           debug {
@@ -139,6 +168,9 @@ android {
 //        end
 
         release {
+            signingConfigs.findByName("release")?.takeIf { it.storeFile?.exists() == true }?.let {
+                signingConfig = it
+            }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
