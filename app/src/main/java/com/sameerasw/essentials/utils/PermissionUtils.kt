@@ -41,13 +41,16 @@ object PermissionUtils {
      * @return The resulting Boolean data.
      */
     fun isAccessibilityServiceEnabled(context: Context): Boolean {
+        if (ScreenOffAccessibilityService.instance != null) return true
         val enabledServices =
             Settings.Secure.getString(
                 context.contentResolver,
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
             )
         val serviceName = "${context.packageName}/${ScreenOffAccessibilityService::class.java.name}"
-        return enabledServices?.contains(serviceName) == true
+        val shortServiceName = "${context.packageName}/.${ScreenOffAccessibilityService::class.java.simpleName}"
+        return enabledServices?.contains(serviceName) == true ||
+            enabledServices?.contains(shortServiceName) == true
     }
 
     /**
@@ -150,6 +153,7 @@ object PermissionUtils {
      */
     fun isNotificationLightingAccessibilityServiceEnabled(context: Context): Boolean =
         try {
+            if (ScreenOffAccessibilityService.instance != null) return true
             val enabledServices =
                 Settings.Secure.getString(
                     context.contentResolver,
@@ -157,7 +161,10 @@ object PermissionUtils {
                 )
             val serviceName =
                 "${context.packageName}/${ScreenOffAccessibilityService::class.java.name}"
-            enabledServices?.contains(serviceName) == true
+            val shortServiceName =
+                "${context.packageName}/.${ScreenOffAccessibilityService::class.java.simpleName}"
+            enabledServices?.contains(serviceName) == true ||
+                enabledServices?.contains(shortServiceName) == true
         } catch (e: Exception) {
             false
         }

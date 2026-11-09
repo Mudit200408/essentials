@@ -239,6 +239,19 @@ class SettingsRepository(
         const val KEY_DAILY_WALLPAPER_APPLY_LOCK = "daily_wallpaper_apply_lock"
         const val KEY_DAILY_WALLPAPER_RETRY_COUNT = "daily_wallpaper_retry_count"
 
+        const val KEY_DOUBLE_TAP_TO_SLEEP_ENABLED = "double_tap_to_sleep_enabled"
+        const val KEY_DOUBLE_TAP_TO_SLEEP_VIBRATE = "double_tap_to_sleep_vibrate"
+        const val KEY_DOUBLE_TAP_TO_SLEEP_HAPTIC_TYPE = "double_tap_to_sleep_haptic_type"
+        const val KEY_DOUBLE_TAP_TO_SLEEP_ON_HOME = "double_tap_to_sleep_on_home"
+        const val KEY_DOUBLE_TAP_TO_SLEEP_ON_LOCKSCREEN = "double_tap_to_sleep_on_lockscreen"
+        const val KEY_DOUBLE_TAP_TO_SLEEP_TIMEOUT = "double_tap_to_sleep_timeout"
+        const val KEY_DOUBLE_TAP_TO_SLEEP_JUMP_HOME = "double_tap_to_sleep_jump_home"
+        const val KEY_DOUBLE_TAP_TO_SLEEP_FLICKER_PROTECTION = "double_tap_to_sleep_flicker_protection"
+        const val KEY_RECENTS_CLEAR_ALL_ENABLED = "recents_clear_all_enabled"
+        const val KEY_RECENTS_CLEAR_ALL_VIBRATE = "recents_clear_all_vibrate"
+        const val KEY_RECENTS_CLEAR_ALL_HAPTIC_TYPE = "recents_clear_all_haptic_type"
+        const val KEY_RECENTS_CLEAR_ALL_QUICK_CLOSE = "recents_clear_all_quick_close"
+
         const val KEY_WIDGET_ENABLED = "widget_enabled"
         const val KEY_STATUS_BAR_ICON_CONTROL_ENABLED = "status_bar_icon_control_enabled"
         const val KEY_MAPS_POWER_SAVING_ENABLED = "maps_power_saving_enabled"
@@ -1571,6 +1584,68 @@ class SettingsRepository(
     fun getHilightProgressDurationMs(): Long = getLong(KEY_HILIGHT_PROGRESS_DURATION_MS, HilightEffect.DEFAULT_DURATION_MS)
 
     fun setHilightProgressDurationMs(durationMs: Long) = putLong(KEY_HILIGHT_PROGRESS_DURATION_MS, durationMs)
+
+    fun isDoubleTapToSleepEnabled(): Boolean = getBoolean(KEY_DOUBLE_TAP_TO_SLEEP_ENABLED, false)
+
+    fun setDoubleTapToSleepEnabled(enabled: Boolean) = putBoolean(KEY_DOUBLE_TAP_TO_SLEEP_ENABLED, enabled)
+
+    fun isDoubleTapToSleepVibrateEnabled(): Boolean = getBoolean(KEY_DOUBLE_TAP_TO_SLEEP_VIBRATE, true)
+
+    fun setDoubleTapToSleepVibrateEnabled(enabled: Boolean) = putBoolean(KEY_DOUBLE_TAP_TO_SLEEP_VIBRATE, enabled)
+
+    fun getDoubleTapToSleepHapticType(): HapticFeedbackType {
+        val name = prefs.getString(KEY_DOUBLE_TAP_TO_SLEEP_HAPTIC_TYPE, HapticFeedbackType.SUBTLE.name)
+        return try {
+            HapticFeedbackType.valueOf(name ?: HapticFeedbackType.SUBTLE.name)
+        } catch (_: Exception) {
+            HapticFeedbackType.SUBTLE
+        }
+    }
+
+    fun setDoubleTapToSleepHapticType(type: HapticFeedbackType) = putString(KEY_DOUBLE_TAP_TO_SLEEP_HAPTIC_TYPE, type.name)
+
+    fun isDoubleTapOnHomeEnabled(): Boolean = getBoolean(KEY_DOUBLE_TAP_TO_SLEEP_ON_HOME, true)
+
+    fun setDoubleTapOnHomeEnabled(enabled: Boolean) = putBoolean(KEY_DOUBLE_TAP_TO_SLEEP_ON_HOME, enabled)
+
+    fun isDoubleTapOnLockscreenEnabled(): Boolean = getBoolean(KEY_DOUBLE_TAP_TO_SLEEP_ON_LOCKSCREEN, true)
+
+    fun setDoubleTapOnLockscreenEnabled(enabled: Boolean) = putBoolean(KEY_DOUBLE_TAP_TO_SLEEP_ON_LOCKSCREEN, enabled)
+
+    fun getDoubleTapTimeout(): Long = getLong(KEY_DOUBLE_TAP_TO_SLEEP_TIMEOUT, 250L)
+
+    fun setDoubleTapTimeout(timeout: Long) = putLong(KEY_DOUBLE_TAP_TO_SLEEP_TIMEOUT, timeout)
+
+    fun isDoubleTapJumpHomeEnabled(): Boolean = getBoolean(KEY_DOUBLE_TAP_TO_SLEEP_JUMP_HOME, false)
+
+    fun setDoubleTapJumpHomeEnabled(enabled: Boolean) = putBoolean(KEY_DOUBLE_TAP_TO_SLEEP_JUMP_HOME, enabled)
+
+    fun isDoubleTapFlickerProtectionEnabled(): Boolean = getBoolean(KEY_DOUBLE_TAP_TO_SLEEP_FLICKER_PROTECTION, false)
+
+    fun setDoubleTapFlickerProtectionEnabled(enabled: Boolean) = putBoolean(KEY_DOUBLE_TAP_TO_SLEEP_FLICKER_PROTECTION, enabled)
+
+    fun isRecentsClearAllEnabled(): Boolean = getBoolean(KEY_RECENTS_CLEAR_ALL_ENABLED, false)
+
+    fun setRecentsClearAllEnabled(enabled: Boolean) = putBoolean(KEY_RECENTS_CLEAR_ALL_ENABLED, enabled)
+
+    fun isRecentsClearAllVibrateEnabled(): Boolean = getBoolean(KEY_RECENTS_CLEAR_ALL_VIBRATE, true)
+
+    fun setRecentsClearAllVibrateEnabled(enabled: Boolean) = putBoolean(KEY_RECENTS_CLEAR_ALL_VIBRATE, enabled)
+
+    fun isRecentsQuickCloseEnabled(): Boolean = getBoolean(KEY_RECENTS_CLEAR_ALL_QUICK_CLOSE, false)
+
+    fun setRecentsQuickCloseEnabled(enabled: Boolean) = putBoolean(KEY_RECENTS_CLEAR_ALL_QUICK_CLOSE, enabled)
+
+    fun getRecentsClearAllHapticType(): HapticFeedbackType {
+        val name = prefs.getString(KEY_RECENTS_CLEAR_ALL_HAPTIC_TYPE, HapticFeedbackType.CLICK.name)
+        return try {
+            HapticFeedbackType.valueOf(name ?: HapticFeedbackType.CLICK.name)
+        } catch (_: Exception) {
+            HapticFeedbackType.CLICK
+        }
+    }
+
+    fun setRecentsClearAllHapticType(type: HapticFeedbackType) = putString(KEY_RECENTS_CLEAR_ALL_HAPTIC_TYPE, type.name)
 
     /**
      * Executes the save notification lighting selected apps operation.

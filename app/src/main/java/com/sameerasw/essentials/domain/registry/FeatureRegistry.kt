@@ -298,6 +298,56 @@ object FeatureRegistry {
                 ) {}
             },
             object : Feature(
+                id = "Double tap to sleep",
+                title = R.string.feat_double_tap_to_sleep_title,
+                iconRes = R.drawable.rounded_mobile_lock_portrait_24,
+                category = R.string.cat_interaction,
+                description = R.string.feat_double_tap_to_sleep_desc,
+                parentFeatureId = "Input",
+                permissionKeys = listOf("ACCESSIBILITY"),
+                showToggle = true,
+            ) {
+                override fun isEnabled(viewModel: MainViewModel) = viewModel.isDoubleTapToSleepEnabled.value
+
+                override fun isToggleEnabled(
+                    viewModel: MainViewModel,
+                    context: Context,
+                ) = viewModel.isAccessibilityEnabled.value
+
+                override fun onToggle(
+                    viewModel: MainViewModel,
+                    context: Context,
+                    enabled: Boolean,
+                ) {
+                    viewModel.setDoubleTapToSleepEnabled(enabled)
+                }
+            },
+            object : Feature(
+                id = "Recents clear all",
+                title = R.string.feat_recents_clear_all_title,
+                iconRes = R.drawable.rounded_clear_all_24,
+                category = R.string.cat_interaction,
+                description = R.string.feat_recents_clear_all_desc,
+                parentFeatureId = "Input",
+                permissionKeys = listOf("ACCESSIBILITY"),
+                showToggle = true,
+            ) {
+                override fun isEnabled(viewModel: MainViewModel) = viewModel.isRecentsClearAllEnabled.value
+
+                override fun isToggleEnabled(
+                    viewModel: MainViewModel,
+                    context: Context,
+                ) = viewModel.isAccessibilityEnabled.value
+
+                override fun onToggle(
+                    viewModel: MainViewModel,
+                    context: Context,
+                    enabled: Boolean,
+                ) {
+                    viewModel.setRecentsClearAllEnabled(enabled)
+                }
+            },
+            object : Feature(
                 id = BACK_GESTURE_FEATURE_ID,
                 contributors = listOf("jawzf"),
                 title = R.string.feat_back_gesture_title,

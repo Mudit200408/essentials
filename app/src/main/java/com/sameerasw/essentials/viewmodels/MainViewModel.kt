@@ -124,10 +124,20 @@ import java.io.FileOutputStream
 import java.time.LocalDateTime
 
 class MainViewModel : ViewModel() {
-    val isAccessibilityEnabled = mutableStateOf(false)
+    val isAccessibilityEnabled = mutableStateOf(
+        try {
+            val ctx = com.sameerasw.essentials.EssentialsApp.getAppContext()
+            if (ctx != null) PermissionUtils.isAccessibilityServiceEnabled(ctx) else false
+        } catch (_: Exception) { false }
+    )
     val isWidgetEnabled = mutableStateOf(false)
     val isStatusBarIconControlEnabled = mutableStateOf(false)
-    val isWriteSecureSettingsEnabled = mutableStateOf(false)
+    val isWriteSecureSettingsEnabled = mutableStateOf(
+        try {
+            val ctx = com.sameerasw.essentials.EssentialsApp.getAppContext()
+            if (ctx != null) PermissionUtils.canWriteSecureSettings(ctx) else false
+        } catch (_: Exception) { false }
+    )
     val isReadPhoneStateEnabled = mutableStateOf(false)
     val isPostNotificationsEnabled = mutableStateOf(false)
     val isCaffeinateActive = mutableStateOf(false)
@@ -168,6 +178,18 @@ class MainViewModel : ViewModel() {
     val lockscreenSystemShortcutsState = mutableStateOf(SystemShortcutsState.UNKNOWN)
     val isVolumeStepsEnabled = mutableStateOf(false)
     val volumeStepsPerPress = mutableIntStateOf(2)
+    val isDoubleTapToSleepEnabled = mutableStateOf(false)
+    val isDoubleTapToSleepVibrateEnabled = mutableStateOf(true)
+    val doubleTapToSleepHapticType = mutableStateOf(HapticFeedbackType.SUBTLE)
+    val isDoubleTapOnHomeEnabled = mutableStateOf(true)
+    val isDoubleTapOnLockscreenEnabled = mutableStateOf(true)
+    val doubleTapToSleepTimeout = mutableLongStateOf(250L)
+    val isDoubleTapJumpHomeEnabled = mutableStateOf(false)
+    val isDoubleTapFlickerProtectionEnabled = mutableStateOf(false)
+    val isRecentsClearAllEnabled = mutableStateOf(false)
+    val isRecentsClearAllVibrateEnabled = mutableStateOf(true)
+    val recentsClearAllHapticType = mutableStateOf(HapticFeedbackType.CLICK)
+    val isRecentsQuickCloseEnabled = mutableStateOf(false)
     val isAppVolumeEnabled = mutableStateOf(false)
     val isAppVolumeOverlayEnabled = mutableStateOf(false)
     val appVolumeLevels = mutableStateOf<Map<String, Float>>(emptyMap())
@@ -2542,6 +2564,18 @@ class MainViewModel : ViewModel() {
         hilightAppEffects.clear()
         hilightAppEffects.putAll(settingsRepository.getHilightAppEffects())
         isLockscreenShortcutsEnabled.value = settingsRepository.isLockscreenShortcutsEnabled()
+        isDoubleTapToSleepEnabled.value = settingsRepository.isDoubleTapToSleepEnabled()
+        isDoubleTapToSleepVibrateEnabled.value = settingsRepository.isDoubleTapToSleepVibrateEnabled()
+        doubleTapToSleepHapticType.value = settingsRepository.getDoubleTapToSleepHapticType()
+        isDoubleTapOnHomeEnabled.value = settingsRepository.isDoubleTapOnHomeEnabled()
+        isDoubleTapOnLockscreenEnabled.value = settingsRepository.isDoubleTapOnLockscreenEnabled()
+        doubleTapToSleepTimeout.longValue = settingsRepository.getDoubleTapTimeout()
+        isDoubleTapJumpHomeEnabled.value = settingsRepository.isDoubleTapJumpHomeEnabled()
+        isDoubleTapFlickerProtectionEnabled.value = settingsRepository.isDoubleTapFlickerProtectionEnabled()
+        isRecentsClearAllEnabled.value = settingsRepository.isRecentsClearAllEnabled()
+        isRecentsClearAllVibrateEnabled.value = settingsRepository.isRecentsClearAllVibrateEnabled()
+        recentsClearAllHapticType.value = settingsRepository.getRecentsClearAllHapticType()
+        isRecentsQuickCloseEnabled.value = settingsRepository.isRecentsQuickCloseEnabled()
         isVolumeStepsEnabled.value = settingsRepository.isVolumeStepsEnabled()
         volumeStepsPerPress.intValue = settingsRepository.getVolumeStepsPerPress()
         isAppVolumeEnabled.value = settingsRepository.isAppVolumeEnabled()
@@ -5515,6 +5549,66 @@ class MainViewModel : ViewModel() {
     fun setLockscreenShortcutsEnabled(enabled: Boolean) {
         isLockscreenShortcutsEnabled.value = enabled
         settingsRepository.setLockscreenShortcutsEnabled(enabled)
+    }
+
+    fun setDoubleTapToSleepEnabled(enabled: Boolean) {
+        isDoubleTapToSleepEnabled.value = enabled
+        settingsRepository.setDoubleTapToSleepEnabled(enabled)
+    }
+
+    fun setDoubleTapToSleepVibrateEnabled(enabled: Boolean) {
+        isDoubleTapToSleepVibrateEnabled.value = enabled
+        settingsRepository.setDoubleTapToSleepVibrateEnabled(enabled)
+    }
+
+    fun setDoubleTapToSleepHapticType(type: HapticFeedbackType) {
+        doubleTapToSleepHapticType.value = type
+        settingsRepository.setDoubleTapToSleepHapticType(type)
+    }
+
+    fun setDoubleTapOnHomeEnabled(enabled: Boolean) {
+        isDoubleTapOnHomeEnabled.value = enabled
+        settingsRepository.setDoubleTapOnHomeEnabled(enabled)
+    }
+
+    fun setDoubleTapOnLockscreenEnabled(enabled: Boolean) {
+        isDoubleTapOnLockscreenEnabled.value = enabled
+        settingsRepository.setDoubleTapOnLockscreenEnabled(enabled)
+    }
+
+    fun setDoubleTapToSleepTimeout(timeout: Long) {
+        doubleTapToSleepTimeout.longValue = timeout
+        settingsRepository.setDoubleTapTimeout(timeout)
+    }
+
+    fun setDoubleTapJumpHomeEnabled(enabled: Boolean) {
+        isDoubleTapJumpHomeEnabled.value = enabled
+        settingsRepository.setDoubleTapJumpHomeEnabled(enabled)
+    }
+
+    fun setDoubleTapFlickerProtectionEnabled(enabled: Boolean) {
+        isDoubleTapFlickerProtectionEnabled.value = enabled
+        settingsRepository.setDoubleTapFlickerProtectionEnabled(enabled)
+    }
+
+    fun setRecentsClearAllEnabled(enabled: Boolean) {
+        isRecentsClearAllEnabled.value = enabled
+        settingsRepository.setRecentsClearAllEnabled(enabled)
+    }
+
+    fun setRecentsClearAllVibrateEnabled(enabled: Boolean) {
+        isRecentsClearAllVibrateEnabled.value = enabled
+        settingsRepository.setRecentsClearAllVibrateEnabled(enabled)
+    }
+
+    fun setRecentsClearAllHapticType(type: HapticFeedbackType) {
+        recentsClearAllHapticType.value = type
+        settingsRepository.setRecentsClearAllHapticType(type)
+    }
+
+    fun setRecentsQuickCloseEnabled(enabled: Boolean) {
+        isRecentsQuickCloseEnabled.value = enabled
+        settingsRepository.setRecentsQuickCloseEnabled(enabled)
     }
 
     fun setLockscreenShortcutActions(

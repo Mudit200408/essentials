@@ -64,6 +64,8 @@ import com.sameerasw.essentials.services.handlers.StatusBarIconHandler
 import com.sameerasw.essentials.services.handlers.LockscreenShortcutsHandler
 import com.sameerasw.essentials.services.handlers.StatusGlanceHandler
 import com.sameerasw.essentials.services.handlers.VolumeStepsHandler
+import com.sameerasw.essentials.services.handlers.DoubleTapToSleepHandler
+import com.sameerasw.essentials.services.handlers.RecentsClearAllHandler
 import com.sameerasw.essentials.services.receivers.FlashlightActionReceiver
 import com.sameerasw.essentials.utils.CameraSession
 import com.sameerasw.essentials.utils.AppUtil
@@ -112,6 +114,8 @@ class ScreenOffAccessibilityService :
     private lateinit var lockscreenShortcutsHandler: LockscreenShortcutsHandler
     private lateinit var appVolumeOverlayHandler: AppVolumeOverlayHandler
     private lateinit var statusBarSectionsDebugHandler: com.sameerasw.essentials.services.handlers.StatusBarSectionsDebugHandler
+    private lateinit var doubleTapToSleepHandler: DoubleTapToSleepHandler
+    private lateinit var recentsClearAllHandler: RecentsClearAllHandler
 
     private var lightSensor: Sensor? = null
     private var lightSensorLux: Float = 100f
@@ -366,6 +370,12 @@ class ScreenOffAccessibilityService :
                 key == SettingsRepository.KEY_APP_VOLUME_LEVELS
             ) {
                 AppVolumeController.updateState(this)
+            } else if (key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_ENABLED ||
+                key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_VIBRATE
+            ) {
+                doubleTapToSleepHandler.updateState()
+            } else if (key == SettingsRepository.KEY_RECENTS_CLEAR_ALL_ENABLED) {
+                recentsClearAllHandler.updateState()
             } else if (key == "button_remap_enabled" ||
                 key == "button_remap_use_shizuku" ||
                 key == SettingsRepository.KEY_BUTTON_REMAP_POWER_HOLD_CHOICE_OFF ||
@@ -413,6 +423,17 @@ class ScreenOffAccessibilityService :
         appVolumeOverlayHandler = AppVolumeOverlayHandler(this)
         screenshotShareCleanupHandler = ScreenshotShareCleanupHandler(this, serviceScope)
         screenshotAutoCleanHandler = ScreenshotAutoCleanHandler(this, serviceScope)
+        doubleTapToSleepHandler =
+            DoubleTapToSleepHandler(
+                service = this,
+                currentPackageProvider = { appFlowHandler.currentPackage },
+                isScreenOnProvider = { isScreenOn },
+            )
+        recentsClearAllHandler =
+            RecentsClearAllHandler(
+                service = this,
+                onClearAllTriggered = { doubleTapToSleepHandler.suppressTaps(2500L) },
+            )
 
         flashlightHandler.register()
         statusBarIconHandler.register()
@@ -420,6 +441,8 @@ class ScreenOffAccessibilityService :
         smartPixelsHandler.init()
         duoOverlayHandler.init()
         statusGlanceHandler.init()
+        doubleTapToSleepHandler.init()
+        recentsClearAllHandler.init()
         AppVolumeController.updateState(this)
         setupReceivers()
     }
@@ -439,6 +462,7 @@ class ScreenOffAccessibilityService :
                             isScreenOn = true
                             isKeyguardLocked = keyguardManager.isKeyguardLocked
                             invalidateBypassCache()
+                            doubleTapToSleepHandler.onScreenOn()
                             notificationLightingHandler.onScreenOn()
                             ambientGlanceHandler.dismissImmediately()
                             aodForceTurnOffHandler.removeOverlay()
@@ -458,6 +482,8 @@ class ScreenOffAccessibilityService :
                             isScreenOn = false
                             isKeyguardLocked = true
                             invalidateBypassCache()
+                            doubleTapToSleepHandler.onScreenOff()
+                            recentsClearAllHandler.onScreenOff()
                             volumeStepsHandler.stop()
                             screenshotShareCleanupHandler.onScreenOff()
                             statusGlanceHandler.setShadeExpanded(false)
@@ -530,6 +556,13 @@ class ScreenOffAccessibilityService :
                             islandOverlayHandler.updateConsciousGateState()
                         }
 
+                        @Suppress("DEPRECATION")
+                        Intent.ACTION_CLOSE_SYSTEM_DIALOGS -> {
+                            if (intent?.getStringExtra("reason") == "recentapps") {
+                                recentsClearAllHandler.onRecentAppsBroadcast()
+                            }
+                        }
+
                         FlashlightActionReceiver.ACTION_TOGGLE,
                         FlashlightActionReceiver.ACTION_OFF,
                         FlashlightActionReceiver.ACTION_SET_INTENSITY,
@@ -547,6 +580,8 @@ class ScreenOffAccessibilityService :
                 addAction(Intent.ACTION_SCREEN_ON)
                 addAction(Intent.ACTION_SCREEN_OFF)
                 addAction(Intent.ACTION_USER_PRESENT)
+                @Suppress("DEPRECATION")
+                addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
                 addAction("com.sameerasw.essentials.MEDIA_PLAYBACK_CHANGED")
                 addAction(InputEventListenerService.ACTION_VOLUME_LONG_PRESSED)
                 addAction("SHOW_AMBIENT_GLANCE")
@@ -633,6 +668,8 @@ class ScreenOffAccessibilityService :
         statusGlanceHandler.restart()
         islandOverlayHandler.restart()
         statusBarSectionsDebugHandler.start()
+        doubleTapToSleepHandler.updateLauncherPackage()
+        doubleTapToSleepHandler.updateState()
         Shizuku.addBinderReceivedListenerSticky(shizukuBinderListener)
         restartInputEventListenerIfScreenOff()
     }
@@ -701,6 +738,8 @@ class ScreenOffAccessibilityService :
         statusBarSectionsDebugHandler.destroy()
         statusBarIconHandler.unregister()
         screenshotAutoCleanHandler.unregister()
+        doubleTapToSleepHandler.onDestroy()
+        recentsClearAllHandler.onDestroy()
         stopInputEventListener()
         cancelPocketFlashlightTurnOff()
         if (isProximityRegistered) {
@@ -752,6 +791,8 @@ class ScreenOffAccessibilityService :
         if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED) {
             screenshotShareCleanupHandler.onViewClicked(event, appFlowHandler.currentPackage)
         }
+
+        recentsClearAllHandler.onAccessibilityEvent(event)
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED ||
             event.eventType == AccessibilityEvent.TYPE_WINDOWS_CHANGED

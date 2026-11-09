@@ -126,6 +126,8 @@ import com.sameerasw.essentials.ui.features.system.NotificationLightingSettingsU
 import com.sameerasw.essentials.ui.features.system.NotificationSnoozingSettingsUI
 import com.sameerasw.essentials.ui.features.system.OtherCustomizationsSettingsUI
 import com.sameerasw.essentials.ui.features.system.FaceUnlockBrightnessSettingsUI
+import com.sameerasw.essentials.ui.features.system.DoubleTapToSleepSettingsUI
+import com.sameerasw.essentials.ui.features.system.RecentsClearAllSettingsUI
 import com.sameerasw.essentials.ui.features.display.PerAppRefreshRateSettingsUI
 import com.sameerasw.essentials.ui.features.livemedia.LiveMediaSettingsUI
 import com.sameerasw.essentials.utils.ShellUtils
@@ -369,6 +371,7 @@ fun FeatureSettingsScreen(
                 val hasMissingPermissions =
                     when (featureId) {
                         "Screen off widget" -> !isAccessibilityEnabled
+                        "Double tap to sleep", "Recents clear all" -> !isAccessibilityEnabled
                         "Widget stack" -> !isOverlayPermissionGranted
                         "Statusbar icons" -> !isWriteSecureSettingsEnabled
                         "Notification lighting" ->
@@ -449,9 +452,7 @@ fun FeatureSettingsScreen(
 
                         else -> false
                     }
-                if (hasMissingPermissions) {
-                    showPermissionSheet = true
-                }
+                showPermissionSheet = hasMissingPermissions
             }
 
             if (showPermissionSheet) {
@@ -738,6 +739,8 @@ fun FeatureSettingsScreen(
                                             listOf(
                                                 listOf(
                                                     "Button remap",
+                                                    "Double tap to sleep",
+                                                    "Recents clear all",
                                                     "Flashlight",
                                                     "Activity launcher",
                                                     "Lock screen shortcuts",
@@ -837,6 +840,7 @@ fun FeatureSettingsScreen(
                                             val missingPermission =
                                                 when (child.id) {
                                                     "Screen off widget" -> !isAccessibilityEnabled
+                                                    "Double tap to sleep", "Recents clear all" -> !isAccessibilityEnabled
                                                     "Statusbar icons" -> !isWriteSecureSettingsEnabled
                                                     "Notification lighting" ->
                                                         !isOverlayPermissionGranted ||
@@ -1029,6 +1033,22 @@ fun FeatureSettingsScreen(
                         }
                     } else {
                         when (featureId) {
+                            "Double tap to sleep" -> {
+                                DoubleTapToSleepSettingsUI(
+                                    viewModel = viewModel,
+                                    modifier = Modifier.padding(top = 16.dp),
+                                    highlightSetting = highlightSetting,
+                                )
+                            }
+
+                            "Recents clear all" -> {
+                                RecentsClearAllSettingsUI(
+                                    viewModel = viewModel,
+                                    modifier = Modifier.padding(top = 16.dp),
+                                    highlightSetting = highlightSetting,
+                                )
+                            }
+
                             "Screen off widget" -> {
                                 ScreenOffWidgetSettingsUI(
                                     viewModel = viewModel,
