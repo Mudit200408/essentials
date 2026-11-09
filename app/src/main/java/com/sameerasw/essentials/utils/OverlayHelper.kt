@@ -484,16 +484,19 @@ object OverlayHelper {
         overlayType: Int,
         flags: Int = 0,
         isTouchable: Boolean = false,
+        showWhenLocked: Boolean = false,
     ): WindowManager.LayoutParams {
         var baseFlags =
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 
         if (!isTouchable) {
             baseFlags = baseFlags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        }
+
+        if (showWhenLocked) {
+            baseFlags = baseFlags or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
         }
 
         val params =

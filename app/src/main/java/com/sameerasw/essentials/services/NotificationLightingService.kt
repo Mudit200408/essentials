@@ -373,7 +373,7 @@ class NotificationLightingService : Service() {
                     rippleConfig = rippleConfig,
                     dashConfig = dashConfig,
                 )
-            val params = OverlayHelper.createOverlayLayoutParams(getOverlayType())
+            val params = OverlayHelper.createOverlayLayoutParams(getOverlayType(), showWhenLocked = true)
 
             if (OverlayHelper.addOverlayView(windowManager, overlay, params)) {
                 overlayViews.add(overlay)

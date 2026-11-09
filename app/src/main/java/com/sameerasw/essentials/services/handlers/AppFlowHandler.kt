@@ -49,7 +49,7 @@ import com.sameerasw.essentials.domain.model.AppRefreshRateConfig
 import com.sameerasw.essentials.domain.model.AppSelection
 import com.sameerasw.essentials.domain.model.BackGestureAppConfig
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
-import com.sameerasw.essentials.R
+
 import com.sameerasw.essentials.services.AppDetectionService
 import com.sameerasw.essentials.services.NotificationListener
 import com.sameerasw.essentials.services.ShutUpForegroundService

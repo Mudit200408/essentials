@@ -4188,4 +4188,27 @@
     <string name="diy_import_needs_setup">Personal details like locations, devices, networks, calendars or tags aren\'t shared. It will be imported disabled, set them up first.</string>
     <string name="diy_import_risky">This automation changes system settings. Only import it if you trust the source.</string>
     <string name="diy_import_error_conflict">You already have this kind of shortcut or all its slots are used</string>
+    <string name="feat_double_tap_to_sleep_title">Double tap to sleep</string>
+    <string name="feat_double_tap_to_sleep_desc">Double tap on home screen or lock screen to lock and sleep</string>
+    <string name="dt2s_enable_home_title">Enable on home screen</string>
+    <string name="dt2s_enable_home_desc">Double tap on empty launcher space to sleep</string>
+    <string name="dt2s_enable_lockscreen_title">Enable on lock screen</string>
+    <string name="dt2s_enable_lockscreen_desc">Double tap on lock screen to turn off display</string>
+    <string name="dt2s_vibrate_title">Haptic feedback</string>
+    <string name="dt2s_vibrate_desc">Vibrate when double tap is recognized</string>
+    <string name="dt2s_speed_title">Double tap speed</string>
+    <string name="dt2s_speed_desc">Maximum time allowed between taps</string>
+    <string name="dt2s_jump_home_title">Jump to main page</string>
+    <string name="dt2s_jump_home_desc">Return to the primary home screen page on sleep</string>
+    <string name="dt2s_flicker_title">Flicker protection</string>
+    <string name="dt2s_flicker_desc">Smooth fade transition before locking to prevent screen flicker</string>
+    <string name="dt2s_info_desc">A transparent 1×1 pixel listener detects double taps only on the home launcher and lock screen. It does not intercept touches in other apps or while typing.</string>
+    <string name="feat_recents_clear_all_title">Recents clear all button</string>
+    <string name="feat_recents_clear_all_desc">Show a quick clear all button in the recents overview</string>
+    <string name="recents_clear_all_vibrate_title">Haptic feedback</string>
+    <string name="recents_clear_all_vibrate_desc">Vibrate when tapping the clear all button</string>
+    <string name="recents_clear_all_quick_title">Quick close</string>
+    <string name="recents_clear_all_quick_desc">Immediately close all apps without waiting for carousel scroll animation</string>
+    <string name="recents_clear_all_info_desc">Adds a convenient floating clear all button matching your system overview style. When tapped, it automatically navigates and clears all background tasks.</string>
+    <string name="clear_all_recents_button">Clear all</string>
 </resources>

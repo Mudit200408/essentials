@@ -285,6 +285,7 @@ class PocketModeHandler(
                 overlayType = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
                 flags = 0,
                 isTouchable = true,
+                showWhenLocked = true,
             )
 
         try {

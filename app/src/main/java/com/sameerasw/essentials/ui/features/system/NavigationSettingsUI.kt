@@ -363,6 +363,36 @@ fun NavigationSettingsUI(
             cornerRadius = 24.dp,
         ) {
             FeatureCard(
+                title = R.string.feat_recents_clear_all_title,
+                description = R.string.feat_recents_clear_all_desc,
+                iconRes = R.drawable.rounded_clear_all_24,
+                isEnabled = viewModel.isRecentsClearAllEnabled.value,
+                showToggle = true,
+                hasMoreSettings = true,
+                isToggleEnabled = isAccessibilityEnabled,
+                onDisabledToggleClick = {
+                    PermissionUtils.openAccessibilitySettings(context)
+                },
+                onToggle = { enabled ->
+                    HapticUtil.performUIHaptic(view)
+                    if (isAccessibilityEnabled) {
+                        viewModel.setRecentsClearAllEnabled(enabled)
+                    } else {
+                        PermissionUtils.openAccessibilitySettings(context)
+                    }
+                },
+                onClick = {
+                    HapticUtil.performVirtualKeyHaptic(view)
+                    context.startActivity(
+                        Intent(context, FeatureSettingsActivity::class.java).apply {
+                            putExtra("feature", "Recents clear all")
+                        },
+                    )
+                },
+                modifier = Modifier.highlight(highlightSetting == "recents_clear_all_toggle"),
+            )
+
+            FeatureCard(
                 title = R.string.feat_back_gesture_title,
                 description = R.string.feat_back_gesture_desc,
                 iconRes = R.drawable.rounded_arrow_back_24,
