@@ -94,7 +94,9 @@ object RefreshRateUtils {
         val batchCommand = "settings put system $KEY_PEAK_REFRESH_RATE $formatted; " +
             "settings put system $KEY_MIN_REFRESH_RATE $formatted; " +
             "settings put global $KEY_PEAK_REFRESH_RATE $formatted; " +
-            "settings put global $KEY_MIN_REFRESH_RATE $formatted"
+            "settings put global $KEY_MIN_REFRESH_RATE $formatted; " +
+            "settings put secure $KEY_PEAK_REFRESH_RATE $formatted; " +
+            "settings put secure $KEY_MIN_REFRESH_RATE $formatted"
         ShellUtils.runCommand(context, batchCommand, featureName = featureName)
         return true
     }
@@ -122,7 +124,9 @@ object RefreshRateUtils {
         val batchCommand = "settings put system $KEY_MIN_REFRESH_RATE $minFormatted; " +
             "settings put system $KEY_PEAK_REFRESH_RATE $peakFormatted; " +
             "settings put global $KEY_MIN_REFRESH_RATE $minFormatted; " +
-            "settings put global $KEY_PEAK_REFRESH_RATE $peakFormatted"
+            "settings put global $KEY_PEAK_REFRESH_RATE $peakFormatted; " +
+            "settings put secure $KEY_MIN_REFRESH_RATE $minFormatted; " +
+            "settings put secure $KEY_PEAK_REFRESH_RATE $peakFormatted"
         ShellUtils.runCommand(context, batchCommand, featureName = featureName)
         return true
     }
