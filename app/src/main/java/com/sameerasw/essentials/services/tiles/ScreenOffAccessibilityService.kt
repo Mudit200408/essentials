@@ -686,6 +686,7 @@ class ScreenOffAccessibilityService :
         updateAccessibilityThrottling(isScreenOn)
         Shizuku.addBinderReceivedListenerSticky(shizukuBinderListener)
         restartInputEventListenerIfScreenOff()
+        resolveActivePackageAsync()
     }
 
     private fun updateAccessibilityThrottling(screenOn: Boolean) {
@@ -819,12 +820,23 @@ class ScreenOffAccessibilityService :
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
 
-        val trustsEventPackage = event.eventType != AccessibilityEvent.TYPE_WINDOWS_CHANGED
-        val detectedPackage = if (trustsEventPackage) event.packageName?.toString() else null
-        if (detectedPackage == null || detectedPackage == "android") {
-            resolveActivePackageAsync()
-        } else {
-            applyDetectedPackage(detectedPackage)
+        val isWindowChange = event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED ||
+                event.eventType == AccessibilityEvent.TYPE_WINDOWS_CHANGED
+
+        if (isWindowChange) {
+            val className = event.className?.toString() ?: ""
+            val isToast = className.contains("Toast") || className.contains("TransientNotification")
+            val isOwnNonActivity = event.packageName?.toString() == packageName && !className.endsWith("Activity")
+
+            if (!isToast && !isOwnNonActivity) {
+                val trustsEventPackage = event.eventType != AccessibilityEvent.TYPE_WINDOWS_CHANGED
+                val detectedPackage = if (trustsEventPackage) event.packageName?.toString() else null
+                if (detectedPackage == null || detectedPackage == "android") {
+                    resolveActivePackageAsync()
+                } else {
+                    applyDetectedPackage(detectedPackage)
+                }
+            }
         }
 
         if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED) {

@@ -130,6 +130,7 @@ import com.sameerasw.essentials.ui.features.system.NotificationSnoozingSettingsU
 import com.sameerasw.essentials.ui.features.system.OtherCustomizationsSettingsUI
 import com.sameerasw.essentials.ui.features.system.FaceUnlockBrightnessSettingsUI
 import com.sameerasw.essentials.ui.features.system.DoubleTapToSleepSettingsUI
+import com.sameerasw.essentials.ui.features.system.GameModeSettingsUI
 import com.sameerasw.essentials.ui.features.system.RecentsClearAllSettingsUI
 import com.sameerasw.essentials.ui.features.display.PerAppRefreshRateSettingsUI
 import com.sameerasw.essentials.ui.features.livemedia.LiveMediaSettingsUI
@@ -446,6 +447,7 @@ fun FeatureSettingsScreen(
                             )
 
                         "Shut-Up!" -> !isWriteSecureSettingsEnabled || !isWriteSettingsEnabled || !isUsageStatsPermissionGranted || !isPostNotificationsEnabled
+                        "Game Mode",
                         "Per app refresh rate" ->
                             (if (viewModel.isUseUsageAccess.value) !viewModel.isUsageStatsPermissionGranted.value else !isAccessibilityEnabled) ||
                                 !ShellUtils.hasPermission(context)
@@ -928,6 +930,7 @@ fun FeatureSettingsScreen(
                                                             context,
                                                         )
 
+                                                    "Game Mode",
                                                     "Per app refresh rate" ->
                                                         (if (viewModel.isUseUsageAccess.value) !viewModel.isUsageStatsPermissionGranted.value else !isAccessibilityEnabled) ||
                                                             !ShellUtils.hasPermission(context)
@@ -1538,6 +1541,14 @@ fun FeatureSettingsScreen(
 
                             "Shut-Up!" -> {
                                 ShutUpSettingsUI(
+                                    viewModel = viewModel,
+                                    modifier = Modifier.padding(top = 16.dp),
+                                    highlightSetting = highlightSetting,
+                                )
+                            }
+
+                            "Game Mode" -> {
+                                GameModeSettingsUI(
                                     viewModel = viewModel,
                                     modifier = Modifier.padding(top = 16.dp),
                                     highlightSetting = highlightSetting,

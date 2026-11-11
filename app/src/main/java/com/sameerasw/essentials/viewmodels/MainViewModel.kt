@@ -536,6 +536,29 @@ class MainViewModel : ViewModel() {
     val isStandbyAppsLoading = mutableStateOf(false)
     val isPixelSearchbarEnabled = mutableStateOf(false)
     val pixelSearchbarType = mutableStateOf("empty")
+
+    val isGameModeEnabled = mutableStateOf(false)
+    val gameModeApps = mutableStateOf<Set<String>>(emptySet())
+    val isGameModeBoostRamEnabled = mutableStateOf(true)
+    val isGameModeCachedFreezerEnabled = mutableStateOf(true)
+    val isGameModePauseAiEnabled = mutableStateOf(true)
+    val isGameModeSuspendHealthServicesEnabled = mutableStateOf(true)
+    val isGameModeLockRefreshRateEnabled = mutableStateOf(true)
+    val isGameModeDisableAutoBrightnessEnabled = mutableStateOf(true)
+    val isGameModeDisableQuickTapEnabled = mutableStateOf(true)
+    val isGameModeStabilizeWifiEnabled = mutableStateOf(true)
+    val isGameModePauseAirSyncEnabled = mutableStateOf(true)
+    val isGameModeDisablePrivateDnsEnabled = mutableStateOf(false)
+    val isGameModeBlockBatterySaverEnabled = mutableStateOf(true)
+    val isGameModePauseAutoSyncEnabled = mutableStateOf(true)
+    val gameModeFpsOverride = mutableIntStateOf(120)
+    val gameModeRestoreDelay = mutableIntStateOf(60)
+    val gameModeInterventionMode = mutableIntStateOf(2)
+    val gameModeSuspendedServices = mutableStateOf<Set<String>>(com.sameerasw.essentials.data.repository.SettingsRepository.DEFAULT_GAME_MODE_SUSPENDED_SERVICES)
+    val isGameModeWifiLowLatencyEnabled = mutableStateOf(true)
+    val isGameModeWifiSuppressScansEnabled = mutableStateOf(true)
+    val isGameModeWifiLockSufficiencyEnabled = mutableStateOf(true)
+    val isGameModeWifiPreventArpDisconnectEnabled = mutableStateOf(true)
     val pixelSearchbarDateFormat = mutableStateOf("EEEE, MMMM d")
     val pixelSearchbarBackgroundPill = mutableStateOf(false)
     val pixelSearchbarWidgetId =
@@ -1703,6 +1726,15 @@ class MainViewModel : ViewModel() {
                         loadPerAppRefreshRateConfigs()
                     }
 
+                    SettingsRepository.KEY_GAME_MODE_ENABLED -> {
+                        isGameModeEnabled.value = settingsRepository.isGameModeEnabled()
+                        appContext?.let { updateAppDetectionService(it) }
+                    }
+
+                    SettingsRepository.KEY_GAME_MODE_APPS -> {
+                        gameModeApps.value = settingsRepository.getGameModeApps()
+                    }
+
                     SettingsRepository.KEY_LIVE_WALLPAPER_SELECTED_VIDEO -> {
                         liveWallpaperSelectedVideo.value =
                             settingsRepository.getLiveWallpaperSelectedVideo()
@@ -1903,6 +1935,165 @@ class MainViewModel : ViewModel() {
         isLiveMediaEnabled.value = enabled
         settingsRepository.putBoolean(SettingsRepository.KEY_LIVE_MEDIA_ENABLED, enabled)
         com.sameerasw.essentials.services.livemedia.LiveMediaManager.getInstance(context).onEnabledChanged(enabled)
+    }
+
+    fun loadGameModeSettings() {
+        isGameModeEnabled.value = settingsRepository.isGameModeEnabled()
+        gameModeApps.value = settingsRepository.getGameModeApps()
+        isGameModeBoostRamEnabled.value = settingsRepository.isGameModeBoostRamEnabled()
+        isGameModeCachedFreezerEnabled.value = settingsRepository.isGameModeCachedFreezerEnabled()
+        isGameModePauseAiEnabled.value = settingsRepository.isGameModePauseAiEnabled()
+        isGameModeSuspendHealthServicesEnabled.value = settingsRepository.isGameModeSuspendHealthServicesEnabled()
+        isGameModeLockRefreshRateEnabled.value = settingsRepository.isGameModeLockRefreshRateEnabled()
+        isGameModeDisableAutoBrightnessEnabled.value = settingsRepository.isGameModeDisableAutoBrightnessEnabled()
+        isGameModeDisableQuickTapEnabled.value = settingsRepository.isGameModeDisableQuickTapEnabled()
+        isGameModeStabilizeWifiEnabled.value = settingsRepository.isGameModeStabilizeWifiEnabled()
+        isGameModePauseAirSyncEnabled.value = settingsRepository.isGameModePauseAirSyncEnabled()
+        isGameModeDisablePrivateDnsEnabled.value = settingsRepository.isGameModeDisablePrivateDnsEnabled()
+        isGameModeBlockBatterySaverEnabled.value = settingsRepository.isGameModeBlockBatterySaverEnabled()
+        isGameModePauseAutoSyncEnabled.value = settingsRepository.isGameModePauseAutoSyncEnabled()
+        gameModeFpsOverride.intValue = settingsRepository.getGameModeFpsOverride()
+        gameModeRestoreDelay.intValue = settingsRepository.getGameModeRestoreDelay()
+        gameModeInterventionMode.intValue = settingsRepository.getGameModeInterventionMode()
+        gameModeSuspendedServices.value = settingsRepository.getGameModeSuspendedServices()
+        isGameModeWifiLowLatencyEnabled.value = settingsRepository.isGameModeWifiLowLatencyEnabled()
+        isGameModeWifiSuppressScansEnabled.value = settingsRepository.isGameModeWifiSuppressScansEnabled()
+        isGameModeWifiLockSufficiencyEnabled.value = settingsRepository.isGameModeWifiLockSufficiencyEnabled()
+        isGameModeWifiPreventArpDisconnectEnabled.value = settingsRepository.isGameModeWifiPreventArpDisconnectEnabled()
+    }
+
+    fun setGameModeEnabled(enabled: Boolean, context: Context) {
+        isGameModeEnabled.value = enabled
+        settingsRepository.setGameModeEnabled(enabled)
+        if (!enabled && com.sameerasw.essentials.utils.GameModeManager.isGameModeActive) {
+            com.sameerasw.essentials.utils.GameModeManager.restoreGameMode(
+                context,
+                com.sameerasw.essentials.utils.GameModeManager.activeGamePackage ?: "",
+                settingsRepository,
+            )
+        }
+        updateAppDetectionService(context)
+    }
+
+    fun addGameModeApp(packageName: String) {
+        val current = settingsRepository.getGameModeApps().toMutableSet()
+        current.add(packageName)
+        settingsRepository.saveGameModeApps(current)
+        gameModeApps.value = current
+    }
+
+    fun removeGameModeApp(packageName: String) {
+        val current = settingsRepository.getGameModeApps().toMutableSet()
+        current.remove(packageName)
+        settingsRepository.saveGameModeApps(current)
+        gameModeApps.value = current
+    }
+
+    fun setGameModeBoostRamEnabled(enabled: Boolean) {
+        isGameModeBoostRamEnabled.value = enabled
+        settingsRepository.setGameModeBoostRamEnabled(enabled)
+    }
+
+    fun setGameModeCachedFreezerEnabled(enabled: Boolean) {
+        isGameModeCachedFreezerEnabled.value = enabled
+        settingsRepository.setGameModeCachedFreezerEnabled(enabled)
+    }
+
+    fun setGameModePauseAiEnabled(enabled: Boolean) {
+        isGameModePauseAiEnabled.value = enabled
+        settingsRepository.setGameModePauseAiEnabled(enabled)
+    }
+
+    fun setGameModeSuspendHealthServicesEnabled(enabled: Boolean) {
+        isGameModeSuspendHealthServicesEnabled.value = enabled
+        settingsRepository.setGameModeSuspendHealthServicesEnabled(enabled)
+    }
+
+    fun setGameModeLockRefreshRateEnabled(enabled: Boolean) {
+        isGameModeLockRefreshRateEnabled.value = enabled
+        settingsRepository.setGameModeLockRefreshRateEnabled(enabled)
+    }
+
+    fun setGameModeDisableAutoBrightnessEnabled(enabled: Boolean) {
+        isGameModeDisableAutoBrightnessEnabled.value = enabled
+        settingsRepository.setGameModeDisableAutoBrightnessEnabled(enabled)
+    }
+
+    fun setGameModeDisableQuickTapEnabled(enabled: Boolean) {
+        isGameModeDisableQuickTapEnabled.value = enabled
+        settingsRepository.setGameModeDisableQuickTapEnabled(enabled)
+    }
+
+    fun setGameModeStabilizeWifiEnabled(enabled: Boolean) {
+        isGameModeStabilizeWifiEnabled.value = enabled
+        settingsRepository.setGameModeStabilizeWifiEnabled(enabled)
+    }
+
+    fun setGameModePauseAirSyncEnabled(enabled: Boolean) {
+        isGameModePauseAirSyncEnabled.value = enabled
+        settingsRepository.setGameModePauseAirSyncEnabled(enabled)
+    }
+
+    fun setGameModeDisablePrivateDnsEnabled(enabled: Boolean) {
+        isGameModeDisablePrivateDnsEnabled.value = enabled
+        settingsRepository.setGameModeDisablePrivateDnsEnabled(enabled)
+        if (!enabled && com.sameerasw.essentials.utils.GameModeManager.isGameModeActive) {
+            appContext?.let { ctx ->
+                com.sameerasw.essentials.utils.GameModeManager.restorePrivateDnsIfDisabled(ctx, settingsRepository)
+            }
+        }
+    }
+
+    fun setGameModeBlockBatterySaverEnabled(enabled: Boolean) {
+        isGameModeBlockBatterySaverEnabled.value = enabled
+        settingsRepository.setGameModeBlockBatterySaverEnabled(enabled)
+    }
+
+    fun setGameModePauseAutoSyncEnabled(enabled: Boolean) {
+        isGameModePauseAutoSyncEnabled.value = enabled
+        settingsRepository.setGameModePauseAutoSyncEnabled(enabled)
+    }
+
+    fun setGameModeFpsOverride(fps: Int) {
+        gameModeFpsOverride.intValue = fps
+        settingsRepository.setGameModeFpsOverride(fps)
+    }
+
+    fun setGameModeRestoreDelay(seconds: Int) {
+        gameModeRestoreDelay.intValue = seconds
+        settingsRepository.setGameModeRestoreDelay(seconds)
+    }
+
+    fun setGameModeInterventionMode(mode: Int) {
+        gameModeInterventionMode.intValue = mode
+        settingsRepository.setGameModeInterventionMode(mode)
+    }
+
+    fun setGameModeServiceSuspended(packageName: String, suspend: Boolean) {
+        val current = gameModeSuspendedServices.value.toMutableSet()
+        if (suspend) current.add(packageName) else current.remove(packageName)
+        gameModeSuspendedServices.value = current
+        settingsRepository.setGameModeSuspendedServices(current)
+    }
+
+    fun setGameModeWifiLowLatencyEnabled(enabled: Boolean) {
+        isGameModeWifiLowLatencyEnabled.value = enabled
+        settingsRepository.setGameModeWifiLowLatencyEnabled(enabled)
+    }
+
+    fun setGameModeWifiSuppressScansEnabled(enabled: Boolean) {
+        isGameModeWifiSuppressScansEnabled.value = enabled
+        settingsRepository.setGameModeWifiSuppressScansEnabled(enabled)
+    }
+
+    fun setGameModeWifiLockSufficiencyEnabled(enabled: Boolean) {
+        isGameModeWifiLockSufficiencyEnabled.value = enabled
+        settingsRepository.setGameModeWifiLockSufficiencyEnabled(enabled)
+    }
+
+    fun setGameModeWifiPreventArpDisconnectEnabled(enabled: Boolean) {
+        isGameModeWifiPreventArpDisconnectEnabled.value = enabled
+        settingsRepository.setGameModeWifiPreventArpDisconnectEnabled(enabled)
     }
 
 
@@ -2177,6 +2368,7 @@ class MainViewModel : ViewModel() {
         isLiveMediaEnabled.value =
             settingsRepository.getBoolean(SettingsRepository.KEY_LIVE_MEDIA_ENABLED, false)
         loadPerAppRefreshRateConfigs()
+        loadGameModeSettings()
         recentSearches.value = settingsRepository.getRecentSearches()
         loadCachedWallpaper()
         isDailyWallpaperAutoUpdateEnabled.value =
