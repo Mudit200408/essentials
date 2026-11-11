@@ -46,6 +46,7 @@ import com.sameerasw.essentials.domain.model.AppRefreshRateConfig
 import com.sameerasw.essentials.domain.model.AppSelection
 import com.sameerasw.essentials.domain.model.BackGestureAppConfig
 import com.sameerasw.essentials.domain.model.ShutUpAppConfig
+import com.sameerasw.essentials.utils.GameModeManager
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.services.AppDetectionService
 import com.sameerasw.essentials.services.NotificationListener
@@ -383,7 +384,8 @@ class AppFlowHandler private constructor(
         "com.android.systemui",
         "com.google.android.inputmethod.latin",
         "com.google.android.gms",
-        "com.android.pixeldisplayservice"
+        "com.android.pixeldisplayservice",
+        "android.service.games",
     )
 
     // Conscious Gate State
@@ -504,6 +506,12 @@ class AppFlowHandler private constructor(
         // are filtered inside checkShutUp via the ShutUpManager.settingsCurrentlyApplied + currentPackage guard.
 
         if (packageName == currentPackage) {
+            if (settingsRepository.isGameModeEnabled() &&
+                !GameModeManager.isGameModeActive &&
+                settingsRepository.getGameModeApps().contains(packageName)
+            ) {
+                checkGameMode(packageName)
+            }
             return
         }
         val oldPackage = currentPackage
@@ -537,6 +545,7 @@ class AppFlowHandler private constructor(
                 s.islandOverlayHandler.updateConsciousGateState()
             }
             checkShutUpRestore(oldPackage, packageName)
+            checkGameModeRestore(oldPackage, packageName)
         }
 
         if (pendingGateLeaveRunnables.containsKey(packageName)) {
@@ -570,6 +579,7 @@ class AppFlowHandler private constructor(
         // Accessibility events are the fastest automatic launch signal. The manager serializes
         // this with the foreground-service fallback and periodic enforcement.
         checkShutUp(packageName)
+        checkGameMode(packageName)
 
     }
 
@@ -641,6 +651,18 @@ class AppFlowHandler private constructor(
                 reinforcement = true,
             )
         }
+    }
+
+    private fun checkGameMode(packageName: String) {
+        GameModeManager.onGameForeground(context, packageName, settingsRepository)
+    }
+
+    private fun checkGameModeRestore(oldPackage: String?, newPackage: String?) {
+        if (newPackage == context.packageName) return
+        if (newPackage != null && (isIgnoredPackage(newPackage) || newPackage == "com.android.vending" || newPackage.startsWith("android.service.games"))) return
+        val gameApps = settingsRepository.getGameModeApps()
+        if (oldPackage != null && !gameApps.contains(oldPackage)) return
+        GameModeManager.onGameBackground(context, oldPackage, newPackage, settingsRepository)
     }
 
     private fun checkAppLock(packageName: String) {

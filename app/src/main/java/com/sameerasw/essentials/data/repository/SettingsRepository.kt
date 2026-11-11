@@ -972,6 +972,22 @@ class SettingsRepository(
         const val KEY_UNSPLASH_ACCESS_KEY = "unsplash_access_key"
         const val KEY_EXTERNAL_CONTROL_TOKEN = "external_control_token"
         const val KEY_SHUT_UP_SERVICE_ENABLED = "shutup_service_enabled"
+        const val KEY_GAME_MODE_ENABLED = "game_mode_enabled"
+        const val KEY_GAME_MODE_APPS = "game_mode_apps"
+        const val KEY_GAME_MODE_BOOST_RAM = "game_mode_boost_ram"
+        const val KEY_GAME_MODE_CACHED_FREEZER = "game_mode_cached_freezer"
+        const val KEY_GAME_MODE_PAUSE_AI = "game_mode_pause_ai"
+        const val KEY_GAME_MODE_SUSPEND_HEALTH_SERVICES = "game_mode_suspend_health_services"
+        const val KEY_GAME_MODE_LOCK_REFRESH_RATE = "game_mode_lock_refresh_rate"
+        const val KEY_GAME_MODE_DISABLE_AUTO_BRIGHTNESS = "game_mode_disable_auto_brightness"
+        const val KEY_GAME_MODE_STABILIZE_WIFI = "game_mode_stabilize_wifi"
+        const val KEY_GAME_MODE_PAUSE_AIRSYNC = "game_mode_pause_airsync"
+        const val KEY_GAME_MODE_DISABLE_PRIVATE_DNS = "game_mode_disable_private_dns"
+        const val KEY_GAME_MODE_SNAP_PRIVATE_DNS_MODE = "game_mode_snap_private_dns_mode"
+        const val KEY_GAME_MODE_SNAP_PRIVATE_DNS_SPECIFIER = "game_mode_snap_private_dns_specifier"
+        const val KEY_GAME_MODE_DID_DISABLE_PRIVATE_DNS = "game_mode_did_disable_private_dns"
+        const val KEY_GAME_MODE_FPS_OVERRIDE = "game_mode_fps_override"
+        const val KEY_GAME_MODE_RESTORE_DELAY = "game_mode_restore_delay"
     }
 
     fun getExternalControlToken(): String? = prefs.getString(KEY_EXTERNAL_CONTROL_TOKEN, null)?.takeIf { it.isNotBlank() }
@@ -1003,6 +1019,76 @@ class SettingsRepository(
     fun getWifiAutoOffTimeout(): Float = getFloat(KEY_WIFI_AUTO_OFF_TIMEOUT, 60f)
 
     fun setWifiAutoOffTimeout(timeout: Float) = putFloat(KEY_WIFI_AUTO_OFF_TIMEOUT, timeout)
+
+    fun isGameModeEnabled(): Boolean = getBoolean(KEY_GAME_MODE_ENABLED, false)
+
+    fun setGameModeEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_ENABLED, enabled)
+
+    fun getGameModeApps(): Set<String> = getStringSet(KEY_GAME_MODE_APPS, emptySet())
+
+    fun saveGameModeApps(apps: Set<String>) = putStringSet(KEY_GAME_MODE_APPS, apps)
+
+    fun isGameModeBoostRamEnabled(): Boolean = getBoolean(KEY_GAME_MODE_BOOST_RAM, true)
+
+    fun setGameModeBoostRamEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_BOOST_RAM, enabled)
+
+    fun isGameModeCachedFreezerEnabled(): Boolean = getBoolean(KEY_GAME_MODE_CACHED_FREEZER, true)
+
+    fun setGameModeCachedFreezerEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_CACHED_FREEZER, enabled)
+
+    fun isGameModePauseAiEnabled(): Boolean = getBoolean(KEY_GAME_MODE_PAUSE_AI, true)
+
+    fun setGameModePauseAiEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_PAUSE_AI, enabled)
+
+    fun isGameModeSuspendHealthServicesEnabled(): Boolean = getBoolean(KEY_GAME_MODE_SUSPEND_HEALTH_SERVICES, true)
+
+    fun setGameModeSuspendHealthServicesEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_SUSPEND_HEALTH_SERVICES, enabled)
+
+    fun isGameModeLockRefreshRateEnabled(): Boolean = getBoolean(KEY_GAME_MODE_LOCK_REFRESH_RATE, true)
+
+    fun setGameModeLockRefreshRateEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_LOCK_REFRESH_RATE, enabled)
+
+    fun isGameModeDisableAutoBrightnessEnabled(): Boolean = getBoolean(KEY_GAME_MODE_DISABLE_AUTO_BRIGHTNESS, true)
+
+    fun setGameModeDisableAutoBrightnessEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_DISABLE_AUTO_BRIGHTNESS, enabled)
+
+    fun isGameModeStabilizeWifiEnabled(): Boolean = getBoolean(KEY_GAME_MODE_STABILIZE_WIFI, true)
+
+    fun setGameModeStabilizeWifiEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_STABILIZE_WIFI, enabled)
+
+    fun isGameModePauseAirSyncEnabled(): Boolean = getBoolean(KEY_GAME_MODE_PAUSE_AIRSYNC, true)
+
+    fun setGameModePauseAirSyncEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_PAUSE_AIRSYNC, enabled)
+
+    fun isGameModeDisablePrivateDnsEnabled(): Boolean = getBoolean(KEY_GAME_MODE_DISABLE_PRIVATE_DNS, true)
+
+    fun setGameModeDisablePrivateDnsEnabled(enabled: Boolean) = putBoolean(KEY_GAME_MODE_DISABLE_PRIVATE_DNS, enabled)
+
+    fun getGameModeSnapPrivateDnsMode(): String? = getString(KEY_GAME_MODE_SNAP_PRIVATE_DNS_MODE, null)
+
+    fun setGameModeSnapPrivateDnsMode(mode: String?) {
+        if (mode == null) prefs.edit().remove(KEY_GAME_MODE_SNAP_PRIVATE_DNS_MODE).apply()
+        else putString(KEY_GAME_MODE_SNAP_PRIVATE_DNS_MODE, mode)
+    }
+
+    fun getGameModeSnapPrivateDnsSpecifier(): String? = getString(KEY_GAME_MODE_SNAP_PRIVATE_DNS_SPECIFIER, null)
+
+    fun setGameModeSnapPrivateDnsSpecifier(specifier: String?) {
+        if (specifier == null) prefs.edit().remove(KEY_GAME_MODE_SNAP_PRIVATE_DNS_SPECIFIER).apply()
+        else putString(KEY_GAME_MODE_SNAP_PRIVATE_DNS_SPECIFIER, specifier)
+    }
+
+    fun didGameModeDisablePrivateDns(): Boolean = getBoolean(KEY_GAME_MODE_DID_DISABLE_PRIVATE_DNS, false)
+
+    fun setGameModeDidDisablePrivateDns(disabled: Boolean) = putBoolean(KEY_GAME_MODE_DID_DISABLE_PRIVATE_DNS, disabled)
+
+    fun getGameModeFpsOverride(): Int = getInt(KEY_GAME_MODE_FPS_OVERRIDE, 120)
+
+    fun setGameModeFpsOverride(fps: Int) = putInt(KEY_GAME_MODE_FPS_OVERRIDE, fps)
+
+    fun getGameModeRestoreDelay(): Int = getInt(KEY_GAME_MODE_RESTORE_DELAY, 30)
+
+    fun setGameModeRestoreDelay(seconds: Int) = putInt(KEY_GAME_MODE_RESTORE_DELAY, seconds)
 
     /**
      * Executes the is translation mode warning suppressed operation.

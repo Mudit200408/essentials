@@ -2507,6 +2507,40 @@ object FeatureRegistry {
                 ) {}
             },
             object : Feature(
+                id = "Game Mode",
+                title = R.string.feat_game_mode_title,
+                iconRes = R.drawable.rounded_sports_esports_24,
+                category = R.string.cat_tools,
+                description = R.string.feat_game_mode_desc,
+                aboutDescription = R.string.about_desc_game_mode,
+                permissionKeys =
+                    if (ShellUtils.isRootEnabled(EssentialsApp.context)) {
+                        listOf("ROOT", "USAGE_STATS")
+                    } else {
+                        listOf("SHIZUKU", "USAGE_STATS")
+                    },
+                showToggle = true,
+                hasMoreSettings = true,
+                contributors = listOf("Mudit200408"),
+            ) {
+                override fun isEnabled(viewModel: MainViewModel) = viewModel.isGameModeEnabled.value
+
+                override fun isToggleEnabled(viewModel: MainViewModel, context: Context): Boolean {
+                    val hasDetection = if (viewModel.isUseUsageAccess.value) {
+                        viewModel.isUsageStatsPermissionGranted.value
+                    } else {
+                        viewModel.isAccessibilityEnabled.value
+                    }
+                    return hasDetection && ShellUtils.hasPermission(context)
+                }
+
+                override fun onToggle(
+                    viewModel: MainViewModel,
+                    context: Context,
+                    enabled: Boolean,
+                ) = viewModel.setGameModeEnabled(enabled, context)
+            },
+            object : Feature(
                 id = "Freeze",
                 title = R.string.feat_freeze_title,
                 iconRes = R.drawable.rounded_mode_cool_24,

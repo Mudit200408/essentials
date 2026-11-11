@@ -115,6 +115,7 @@ object ServiceUtils {
             settingsRepository.getBoolean(SettingsRepository.KEY_POCKET_MODE_ENABLED)
         val hasPocketModeExcludedApps = isPocketModeEnabled &&
                 settingsRepository.loadPocketModeExcludedApps().any { it.isEnabled }
+        val isGameModeEnabled = settingsRepository.isGameModeEnabled()
 
         val hasAppAutomations =
             DIYRepository.automations.value.any {
@@ -129,7 +130,7 @@ object ServiceUtils {
                 isUseUsageAccess &&
                     (isAppLockEnabled || isConsciousGateEnabled || isDynamicNightLightEnabled ||
                         isHideGestureBarOnLauncherEnabled || hasBackGestureApps || hasAppAutomations ||
-                        isPerAppRefreshRateEnabled || hasPocketModeExcludedApps)
+                        isPerAppRefreshRateEnabled || hasPocketModeExcludedApps || isGameModeEnabled)
             ) ||
                 hasShutUpApps
 

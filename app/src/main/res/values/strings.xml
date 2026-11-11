@@ -4095,4 +4095,40 @@
     <string name="recents_clear_all_quick_desc">Immediately close all apps without waiting for carousel scroll animation</string>
     <string name="recents_clear_all_info_desc">Adds a convenient floating clear all button matching your system overview style. When tapped, it automatically navigates and clears all background tasks.</string>
     <string name="clear_all_recents_button">Clear all</string>
+
+    <!-- Game Mode -->
+    <string name="feat_game_mode_title">Game Mode</string>
+    <string name="feat_game_mode_desc">Automatically optimize system performance, display refresh rate, and thermals when gaming</string>
+    <string name="about_desc_game_mode">Optimizes your device when games are launched by purging cached background memory, pausing heavy on-device AI tasks, locking optimal refresh rate, and turning off auto-brightness.</string>
+    <string name="game_mode_master_title">Enable Game Mode</string>
+    <string name="game_mode_master_desc">Auto-boost system performance when selected games enter foreground</string>
+    <string name="game_mode_add_game">Add game</string>
+    <string name="game_mode_add_game_desc">Select games to be optimized automatically</string>
+    <string name="game_mode_no_games">No games added yet. Tap above to add games like Call of Duty Mobile.</string>
+    <string name="game_mode_boost_ram_title">Boost RAM &amp; ZRAM</string>
+    <string name="game_mode_boost_ram_desc">Purge inactive background processes to free memory and prevent CPU thrashing</string>
+    <string name="game_mode_cached_freezer_title">Freeze background apps</string>
+    <string name="game_mode_cached_freezer_desc">Suspend cached applications in kernel cgroups to eliminate background CPU wakeups</string>
+    <string name="game_mode_pause_ai_title">Pause on-device AI</string>
+    <string name="game_mode_pause_ai_desc">Temporarily freeze AICore / Gemini Nano tasks while gaming to cool TPU and free RAM</string>
+    <string name="game_mode_suspend_health_services_title">Pause background device health jobs</string>
+    <string name="game_mode_suspend_health_services_desc">Temporarily freeze Device Health Services (Turbo) background battery diagnostics during gameplay to eliminate micro-stutters</string>
+    <string name="game_mode_lock_refresh_rate_title">Unlock high refresh rate (120Hz)</string>
+    <string name="game_mode_lock_refresh_rate_desc">Allow games to run at up to 90 or 120 FPS without being clamped to 60Hz by the system display</string>
+    <string name="game_mode_disable_auto_brightness_title">Disable auto-brightness</string>
+    <string name="game_mode_disable_auto_brightness_desc">Turn off adaptive brightness while playing to prevent accidental dimming from hand placement</string>
+    <string name="game_mode_stabilize_wifi_title">Stabilize Wi-Fi latency</string>
+    <string name="game_mode_stabilize_wifi_desc">Disable background Wi-Fi roaming scans, disable Wi-Fi power-save sleep, and suppress reachability dropouts while gaming</string>
+    <string name="game_mode_pause_airsync_title">Pause AirSync transfers</string>
+    <string name="game_mode_pause_airsync_desc">Temporarily freeze AirSync WebDAV and WebSocket background transfers while gaming to eliminate local network contention</string>
+    <string name="game_mode_disable_private_dns_title">Disable Private DNS</string>
+    <string name="game_mode_disable_private_dns_desc">Temporarily turn off encrypted Private DNS (DoT) while gaming to avoid DNS latency stalls</string>
+    <string name="game_mode_fps_override_title">Game FPS target</string>
+    <string name="game_mode_fps_override_desc">Apply Android Game Manager frame pacing intervention</string>
+    <string name="game_mode_restore_delay_title">Restore delay</string>
+    <string name="game_mode_restore_delay_desc">Wait time before restoring settings when minimizing games</string>
+    <string name="game_mode_options_header">Optimization Options</string>
+    <string name="game_mode_games_header">Games</string>
+    <string name="game_mode_toast_activated">Game Mode activated</string>
+    <string name="game_mode_toast_restored">Game Mode deactivated</string>
 </resources>

@@ -39,6 +39,15 @@ class AppDetectionService : Service() {
     private val handler = Handler(Looper.getMainLooper())
     private var isPolling = false
     private var lastPackageName: String? = null
+    private var cachedForegroundPackage: String? = null
+
+    private val ignoredForegroundPackages = setOf(
+        "android",
+        "com.android.systemui",
+        "com.google.android.inputmethod.latin",
+        "com.google.android.gms",
+        "com.android.pixeldisplayservice",
+    )
 
     companion object {
         private const val CHANNEL_ID = "app_detection_service_channel"
@@ -83,6 +92,7 @@ class AppDetectionService : Service() {
                     Intent.ACTION_SCREEN_OFF -> {
                         appFlowHandler.clearAuthenticated()
                         appFlowHandler.clearConsciousGate()
+                        cachedForegroundPackage = null
                     }
                 }
             }
@@ -154,9 +164,21 @@ class AppDetectionService : Service() {
                     //     Accessibility Service is not active to provide window events).
                     if (!shouldYieldToShutUp && (useUsageAccess || !accessibilityRunning)) {
                         val currentPackage = getForegroundPackage()
-                        if (currentPackage != null && currentPackage != lastPackageName) {
-                            lastPackageName = currentPackage
-                            appFlowHandler.onPackageChanged(currentPackage, isFromUsageStats = true)
+                        if (currentPackage != null) {
+                            if (currentPackage != lastPackageName) {
+                                lastPackageName = currentPackage
+                                appFlowHandler.onPackageChanged(currentPackage, isFromUsageStats = true)
+                            } else if (settingsRepository.isGameModeEnabled() &&
+                                !com.sameerasw.essentials.utils.GameModeManager.isGameModeActive &&
+                                settingsRepository.getGameModeApps().contains(currentPackage)
+                            ) {
+                                // Self-healing: Game in foreground but Game Mode was interrupted/restored
+                                com.sameerasw.essentials.utils.GameModeManager.onGameForeground(
+                                    this@AppDetectionService,
+                                    currentPackage,
+                                    settingsRepository,
+                                )
+                            }
                         }
                     }
 
@@ -171,43 +193,59 @@ class AppDetectionService : Service() {
         val usageStatsManager = getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
         val time = System.currentTimeMillis()
 
-        // 1. Try to find the last resumed activity using queryEvents (real-time & accurate)
+        // 1. Try to find the last resumed activity using queryEvents (look back 10 minutes)
         try {
-            val events = usageStatsManager.queryEvents(time - 1000 * 30, time)
+            val events = usageStatsManager.queryEvents(time - 1000 * 60 * 10, time)
             val event = UsageEvents.Event()
             var lastResumedPackage: String? = null
             var lastEventTime = 0L
+            val packagePausedOrStoppedTime = mutableMapOf<String, Long>()
             while (events.hasNextEvent()) {
                 events.getNextEvent(event)
                 val type = event.eventType
-                if (type == UsageEvents.Event.ACTIVITY_RESUMED ||
-                    type == UsageEvents.Event.MOVE_TO_FOREGROUND
-                ) {
+                val pkg = event.packageName ?: continue
+                if (ignoredForegroundPackages.contains(pkg)) continue
+
+                if (type == UsageEvents.Event.ACTIVITY_RESUMED) {
                     if (event.timeStamp >= lastEventTime) {
-                        lastResumedPackage = event.packageName
+                        lastResumedPackage = pkg
                         lastEventTime = event.timeStamp
                     }
+                } else if (type == UsageEvents.Event.ACTIVITY_PAUSED || type == UsageEvents.Event.ACTIVITY_STOPPED) {
+                    packagePausedOrStoppedTime[pkg] = maxOf(packagePausedOrStoppedTime[pkg] ?: 0L, event.timeStamp)
                 }
             }
             if (lastResumedPackage != null) {
-                return lastResumedPackage
+                val pausedTime = packagePausedOrStoppedTime[lastResumedPackage] ?: 0L
+                if (pausedTime <= lastEventTime) {
+                    cachedForegroundPackage = lastResumedPackage
+                    return lastResumedPackage
+                }
             }
         } catch (e: Exception) {
             Log.e("AppDetectionService", "Failed to query usage events", e)
         }
 
-        // 2. Fallback to queryUsageStats
+        // 2. If no new events or activity is still resumed from before, keep the cached foreground package
+        if (cachedForegroundPackage != null) {
+            return cachedForegroundPackage
+        }
+
+        // 3. Fallback on cold start if cached package is null
         try {
             val stats =
                 usageStatsManager.queryUsageStats(
                     UsageStatsManager.INTERVAL_BEST,
-                    time - 1000 * 30,
+                    time - 1000 * 60 * 10,
                     time,
                 )
 
             if (!stats.isNullOrEmpty()) {
-                val recentStats = stats.maxByOrNull { it.lastTimeUsed }
+                val recentStats = stats
+                    .filter { !ignoredForegroundPackages.contains(it.packageName) }
+                    .maxByOrNull { it.lastTimeUsed }
                 if (recentStats != null && recentStats.lastTimeUsed > 0) {
+                    cachedForegroundPackage = recentStats.packageName
                     return recentStats.packageName
                 }
             }
