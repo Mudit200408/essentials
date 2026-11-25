@@ -375,7 +375,11 @@ class ScreenOffAccessibilityService :
             ) {
                 AppVolumeController.updateState(this)
             } else if (key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_ENABLED ||
-                key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_VIBRATE
+                key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_VIBRATE ||
+                key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_ON_HOME ||
+                key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_ON_LOCKSCREEN ||
+                key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_TIMEOUT ||
+                key == SettingsRepository.KEY_DOUBLE_TAP_TO_SLEEP_FLICKER_PROTECTION
             ) {
                 doubleTapToSleepHandler.updateState()
             } else if (key == SettingsRepository.KEY_RECENTS_CLEAR_ALL_ENABLED) {
@@ -838,8 +842,9 @@ class ScreenOffAccessibilityService :
         // Jamworks K-flag equivalent: pulse the DT2S debounce on user-interaction events so
         // lockscreen sleep is refused while the keyguard is churning (e.g. AOD tap-pulse wake).
         // Jamworks pulses on eventType 4096 (VIEW_SCROLLED) and 1 (VIEW_CLICKED).
-        if (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED ||
-            event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED
+        if (doubleTapToSleepHandler.isListeningForTaps &&
+            (event.eventType == AccessibilityEvent.TYPE_VIEW_CLICKED ||
+                event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED)
         ) {
             doubleTapToSleepHandler.onAccessibilityEventPulse()
         }
@@ -864,6 +869,7 @@ class ScreenOffAccessibilityService :
         screenshotShareCleanupHandler.onForegroundPackage(appFlowHandler.currentPackage)
         islandOverlayHandler.onForegroundPackage(detectedPackage)
         islandOverlayHandler.updateConsciousGateState()
+        doubleTapToSleepHandler.onForegroundPackageChanged(detectedPackage)
     }
 
     private val isResolvingPackage = AtomicBoolean(false)

@@ -69,13 +69,16 @@ class DoubleTapToSleepHandler(
     // Jamworks PixelService equivalence:
     //   K flag — any VIEW_CLICKED / VIEW_SCROLLED accessibility event in the last 300ms
     //   blocks DT2S. Prevents firing lockNow() into a busy/unsettled keyguard (flicker source).
-    private var isA11yBusy: Boolean = false
-    private val clearA11yBusyRunnable = Runnable { isA11yBusy = false }
+    @Volatile
+    private var lastA11yPulseTime: Long = 0L
+
+    val isListeningForTaps: Boolean
+        get() = overlayView != null
 
     fun onAccessibilityEventPulse() {
-        isA11yBusy = true
-        mainHandler.removeCallbacks(clearA11yBusyRunnable)
-        mainHandler.postDelayed(clearA11yBusyRunnable, 300L)
+        if (overlayView != null) {
+            lastA11yPulseTime = SystemClock.uptimeMillis()
+        }
     }
 
     private var suppressUntil: Long = 0L
@@ -109,12 +112,13 @@ class DoubleTapToSleepHandler(
     fun updateState() {
         mainHandler.post {
             cachedMaxTimeout = settingsRepository.getDoubleTapTimeout().coerceIn(100L, 750L)
-            val enabled = settingsRepository.isDoubleTapToSleepEnabled()
-            if (enabled) {
-                ensureOverlays()
-            } else {
-                removeOverlays()
-            }
+            updateOverlaysForContext()
+        }
+    }
+
+    fun onForegroundPackageChanged(packageName: String?) {
+        mainHandler.post {
+            updateOverlaysForContext(currentPackage = packageName)
         }
     }
 
@@ -127,6 +131,7 @@ class DoubleTapToSleepHandler(
             if (cachedLauncherPackage == null) {
                 updateLauncherPackage()
             }
+            updateOverlaysForContext()
         }
     }
 
@@ -141,12 +146,13 @@ class DoubleTapToSleepHandler(
             if (cachedLauncherPackage == null) {
                 updateLauncherPackage()
             }
+            updateOverlaysForContext(isKeyguard = false)
         }
     }
 
     fun onScreenOff() {
-        // Zero window churn during screen-off transition.
-        // Do NOT touch or relayout flickerOverlayView here - matching Jamworks PixelService.
+        // Zero window churn during screen-off transition, and keep touch overlay attached
+        // so it is immediately ready on next screen-on without waiting for a window event.
     }
 
     fun onDestroy() {
@@ -156,12 +162,48 @@ class DoubleTapToSleepHandler(
         }
     }
 
-    private fun ensureOverlays() {
-        ensureTouchOverlay()
-        if (settingsRepository.isDoubleTapFlickerProtectionEnabled()) {
-            ensureFlickerOverlay()
+    private fun updateOverlaysForContext(
+        isKeyguard: Boolean = keyguardManager.isKeyguardLocked,
+        currentPackage: String? = currentPackageProvider(),
+    ) {
+        if (!settingsRepository.isDoubleTapToSleepEnabled()) {
+            removeOverlays()
+            return
+        }
+
+        if (cachedLauncherPackage == null) {
+            updateLauncherPackage()
+        }
+
+        val resolvedPackage = currentPackage ?: runCatching {
+            service.rootInActiveWindow?.packageName?.toString()
+        }.getOrNull()
+
+        // Only detach the touch overlay when we are certain a non-launcher, non-SystemUI app is active.
+        // Keeping it attached when package is unknown/SystemUI prevents missing taps after screen-on/unlock.
+        val isKnownOtherApp = !isKeyguard &&
+            resolvedPackage != null &&
+            resolvedPackage != cachedLauncherPackage &&
+            resolvedPackage != "com.android.systemui" &&
+            resolvedPackage != service.packageName
+
+        val isEligibleContext = !isKnownOtherApp && (
+            (isKeyguard && settingsRepository.isDoubleTapOnLockscreenEnabled()) ||
+                (!isKeyguard && settingsRepository.isDoubleTapOnHomeEnabled())
+            )
+
+        if (isEligibleContext) {
+            ensureTouchOverlay()
+            if (settingsRepository.isDoubleTapFlickerProtectionEnabled() && !ShellUtils.hasPermission(service)) {
+                ensureFlickerOverlay()
+            } else if (flickerOverlayView?.visibility != View.VISIBLE) {
+                removeFlickerOverlayFromWm()
+            }
         } else {
-            removeFlickerOverlayFromWm()
+            removeTouchOverlay()
+            if (flickerOverlayView?.visibility != View.VISIBLE) {
+                removeFlickerOverlayFromWm()
+            }
         }
     }
 
@@ -425,6 +467,10 @@ class DoubleTapToSleepHandler(
     private fun isOverviewOrNonWorkspace(): Boolean {
         return try {
             val root = service.rootInActiveWindow ?: return false
+            val rootPkg = root.packageName?.toString()
+            if (rootPkg != null && cachedLauncherPackage != null && rootPkg != cachedLauncherPackage) {
+                return false
+            }
             val overviewIds = listOf(
                 "com.google.android.apps.nexuslauncher:id/overview_panel",
                 "com.android.launcher3:id/overview_panel",
@@ -453,11 +499,36 @@ class DoubleTapToSleepHandler(
         }
     }
 
-    private fun isPictureInPictureActive(): Boolean {
+    private fun hasVisiblePasswordOrBouncerNode(root: android.view.accessibility.AccessibilityNodeInfo): Boolean {
+        val queue = ArrayDeque<android.view.accessibility.AccessibilityNodeInfo>(64)
+        queue.add(root)
+        var visited = 0
+        while (queue.isNotEmpty() && visited < 80) {
+            val node = queue.removeFirst()
+            visited++
+            if (node.isVisibleToUser) {
+                if (node.isPassword) return true
+                val viewId = node.viewIdResourceName
+                if (viewId != null && (
+                        viewId.contains("bouncer", ignoreCase = true) ||
+                            viewId.contains("pin_pad", ignoreCase = true) ||
+                            viewId.contains("pinEntry", ignoreCase = true)
+                        )
+                ) {
+                    return true
+                }
+            }
+            val childCount = node.childCount
+            for (i in 0 until childCount) {
+                node.getChild(i)?.let { queue.addLast(it) }
+            }
+        }
+        return false
+    }
+
+    private fun isPictureInPictureActive(windowsSnapshot: List<AccessibilityWindowInfo>?): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return false
-        return runCatching {
-            service.windows?.any { it.isInPictureInPictureMode } == true
-        }.getOrDefault(false)
+        return windowsSnapshot?.any { it.isInPictureInPictureMode } == true
     }
 
     private fun triggerVibrationIfEnabled() {
@@ -470,8 +541,20 @@ class DoubleTapToSleepHandler(
         }
     }
 
+    private fun sleepViaPowerKey() {
+        android.util.Log.d("DoubleTapToSleepHandler", "sleeping via shell KEYCODE_POWER")
+        ShellUtils.runCommand(
+            service,
+            "input keyevent ${KeyEvent.KEYCODE_POWER}",
+            notifyOnError = false,
+        )
+    }
+
     private fun handleDoubleTap() {
-        if (!isScreenOnProvider()) return
+        if (!isScreenOnProvider()) {
+            android.util.Log.d("DoubleTapToSleepHandler", "gate: screen off")
+            return
+        }
 
         val now = SystemClock.uptimeMillis()
         // Jamworks d30 gate (m > 200): 200ms cooldown since last successful sleep trigger
@@ -480,25 +563,22 @@ class DoubleTapToSleepHandler(
         if (now < suppressUntil) return
 
         // Jamworks d30 outer gate (K flag): refuse while accessibility interaction events are churning
-        if (isA11yBusy) {
+        if (now - lastA11yPulseTime < 300L) {
             android.util.Log.d("DoubleTapToSleepHandler", "gate: a11y busy")
             return
         }
 
-        // Ignore double taps if software keyboard (IME) is currently open
-        val isImeOpen = runCatching {
-            service.windows?.any { it.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD } == true
-        }.getOrDefault(false)
-        if (isImeOpen) return
-
         val isKeyguard = keyguardManager.isKeyguardLocked
         if (isKeyguard) {
-            val allowLockscreen = settingsRepository.isDoubleTapOnLockscreenEnabled()
-            if (!allowLockscreen) return
+            if (!settingsRepository.isDoubleTapOnLockscreenEnabled()) return
+
+            val windowsSnapshot = runCatching { service.windows }.getOrNull()
+            // Ignore double taps if software keyboard (IME) is currently open
+            if (windowsSnapshot?.any { it.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD } == true) return
 
             // Jamworks d30.onTouch gate: the lockscreen (SystemUI) must be the focused window.
             val focusedPkg = runCatching {
-                service.windows
+                windowsSnapshot
                     ?.firstOrNull {
                         (it.type == AccessibilityWindowInfo.TYPE_APPLICATION ||
                             it.type == AccessibilityWindowInfo.TYPE_SYSTEM) && it.isFocused
@@ -510,31 +590,47 @@ class DoubleTapToSleepHandler(
                 return
             }
 
-            // Jamworks e()-faithful node lookup: search ALL focused APPLICATION/SYSTEM windows
-            fun findVisibleNode(viewId: String): Boolean = runCatching {
-                service.windows?.any { win ->
-                    (win.type == AccessibilityWindowInfo.TYPE_APPLICATION ||
-                        win.type == AccessibilityWindowInfo.TYPE_SYSTEM) &&
-                        win.isFocused &&
-                        win.root?.let { root ->
-                            root.refresh()
-                            root.findAccessibilityNodeInfosByViewId(viewId)
-                                ?.any { it.isVisibleToUser } == true
-                        } == true
+            // Ignore double taps on lockscreen if PIN/password/pattern bouncer or QS panel are active
+            val hasBouncerOrQs = runCatching {
+                val blockedIds = listOf(
+                    "com.android.systemui:id/keyguard_bouncer_container",
+                    "com.android.systemui:id/bouncer_container",
+                    "com.android.systemui:id/keyguard_pin_view",
+                    "com.android.systemui:id/keyguard_password_view",
+                    "com.android.systemui:id/keyguard_pattern_view",
+                    "com.android.systemui:id/pinEntry",
+                    "com.android.systemui:id/passwordEntry",
+                    "com.android.systemui:id/lockPatternView",
+                    "com.android.systemui:id/quick_qs_panel",
+                )
+                windowsSnapshot?.any { win ->
+                    if ((win.type != AccessibilityWindowInfo.TYPE_APPLICATION &&
+                            win.type != AccessibilityWindowInfo.TYPE_SYSTEM) ||
+                        !win.isFocused
+                    ) {
+                        return@any false
+                    }
+                    val root = win.root ?: return@any false
+                    root.refresh()
+                    if (blockedIds.any { id ->
+                            root.findAccessibilityNodeInfosByViewId(id)?.any { it.isVisibleToUser } == true
+                        }
+                    ) {
+                        return@any true
+                    }
+                    // Compose Bouncer (Android 15/16 SceneContainer) may not expose legacy XML IDs:
+                    // check a bounded BFS for visible password/bouncer nodes.
+                    hasVisiblePasswordOrBouncerNode(root)
                 } == true
             }.getOrDefault(false)
 
-            // Ignore double taps on lockscreen if PIN keypad or QS panel are active
-            if (findVisibleNode("com.android.systemui:id/keyguard_pin_view") ||
-                findVisibleNode("com.android.systemui:id/quick_qs_panel")
-            ) {
-                android.util.Log.d("DoubleTapToSleepHandler", "lockscreen gate: pin/qs visible")
+            if (hasBouncerOrQs) {
+                android.util.Log.d("DoubleTapToSleepHandler", "lockscreen gate: bouncer/qs visible")
                 return
             }
 
-            val isPip = isPictureInPictureActive()
-            val hasShell = if (isPip) ShellUtils.hasPermission(service) else false
-            if (isPip && !hasShell) {
+            val hasShell = ShellUtils.hasPermission(service)
+            if (!hasShell && isPictureInPictureActive(windowsSnapshot)) {
                 android.util.Log.d(
                     "DoubleTapToSleepHandler",
                     "gate: PiP active without shell permission on lockscreen, ignoring DT2S to protect screen-off animation",
@@ -546,13 +642,8 @@ class DoubleTapToSleepHandler(
             triggerVibrationIfEnabled()
             cancelPendingSleep()
 
-            if (isPip && hasShell) {
-                android.util.Log.d("DoubleTapToSleepHandler", "PiP active: sleeping via shell power key on lockscreen")
-                ShellUtils.runCommand(
-                    service,
-                    "input keyevent ${KeyEvent.KEYCODE_POWER}",
-                    notifyOnError = false,
-                )
+            if (hasShell) {
+                sleepViaPowerKey()
                 return
             }
 
@@ -565,9 +656,8 @@ class DoubleTapToSleepHandler(
             return
         }
 
-        // Home screen DT2S
-        val allowHome = settingsRepository.isDoubleTapOnHomeEnabled()
-        if (!allowHome) return
+        // Home screen DT2S: fail fast in-memory before any Binder IPC
+        if (!settingsRepository.isDoubleTapOnHomeEnabled()) return
 
         if (cachedLauncherPackage == null) {
             updateLauncherPackage()
@@ -577,13 +667,20 @@ class DoubleTapToSleepHandler(
         }.getOrNull()
 
         val isHome = currentPkg != null && currentPkg == cachedLauncherPackage
-        if (!isHome || isOverviewOrNonWorkspace()) {
+        val isOverview = if (isHome) isOverviewOrNonWorkspace() else false
+        if (!isHome || isOverview) {
+            android.util.Log.d(
+                "DoubleTapToSleepHandler",
+                "home gate: currentPkg=$currentPkg launcher=$cachedLauncherPackage isOverview=$isOverview",
+            )
             return
         }
 
-        val isPip = isPictureInPictureActive()
-        val hasShell = if (isPip) ShellUtils.hasPermission(service) else false
-        if (isPip && !hasShell) {
+        val windowsSnapshot = runCatching { service.windows }.getOrNull()
+        if (windowsSnapshot?.any { it.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD } == true) return
+
+        val hasShell = ShellUtils.hasPermission(service)
+        if (!hasShell && isPictureInPictureActive(windowsSnapshot)) {
             android.util.Log.d(
                 "DoubleTapToSleepHandler",
                 "gate: PiP active without shell permission on home screen, ignoring DT2S to protect screen-off animation",
@@ -595,17 +692,12 @@ class DoubleTapToSleepHandler(
         triggerVibrationIfEnabled()
 
         val shouldJumpHome = settingsRepository.isDoubleTapJumpHomeEnabled()
-        if (isPip && hasShell) {
+        if (hasShell) {
             cancelPendingSleep()
             if (shouldJumpHome) {
                 service.performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)
             }
-            android.util.Log.d("DoubleTapToSleepHandler", "PiP active: sleeping via shell power key on home screen")
-            ShellUtils.runCommand(
-                service,
-                "input keyevent ${KeyEvent.KEYCODE_POWER}",
-                notifyOnError = false,
-            )
+            sleepViaPowerKey()
             return
         }
 
