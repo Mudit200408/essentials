@@ -963,7 +963,17 @@ class ScreenOffAccessibilityService :
     private fun fullscreenOf(currentWindows: List<android.view.accessibility.AccessibilityWindowInfo>?): Boolean? {
         if (currentWindows.isNullOrEmpty()) return null
         return try {
-            val hasStatusBar = currentWindows.any { it.type == android.view.accessibility.AccessibilityWindowInfo.TYPE_SYSTEM }
+            val hasStatusBar = currentWindows.any { window ->
+                if (window.type != android.view.accessibility.AccessibilityWindowInfo.TYPE_SYSTEM) return@any false
+                val pkg = window.root?.packageName?.toString()
+                val title = window.title?.toString().orEmpty()
+                when {
+                    pkg != null && pkg != "com.android.systemui" -> false
+                    pkg == "com.android.systemui" -> true
+                    else -> title.contains("StatusBar", ignoreCase = true) ||
+                        title.contains("NavigationBar", ignoreCase = true)
+                }
+            }
             val appWindow = currentWindows.firstOrNull { it.type == android.view.accessibility.AccessibilityWindowInfo.TYPE_APPLICATION && it.isFocused }
                 ?: currentWindows.firstOrNull { it.type == android.view.accessibility.AccessibilityWindowInfo.TYPE_APPLICATION }
                 ?: return null
